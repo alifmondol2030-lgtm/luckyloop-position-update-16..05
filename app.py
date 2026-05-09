@@ -51,22 +51,32 @@ def init_db():
             block_reason TEXT
         )
     """)
-    # ── NEW: license_keys table ──────────────────────────
+    # license_keys table — bound_device এখন JSON list (multiple devices support)
     c.execute("""
         CREATE TABLE IF NOT EXISTS license_keys (
-            key_id       INTEGER PRIMARY KEY AUTOINCREMENT,
-            license_key  TEXT    UNIQUE NOT NULL,
-            label        TEXT,
-            max_devices  INTEGER DEFAULT 1,
-            bound_device TEXT,
-            created_at   TEXT,
-            activated_at TEXT,
-            is_active    INTEGER DEFAULT 1
+            key_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+            license_key   TEXT    UNIQUE NOT NULL,
+            label         TEXT,
+            max_devices   INTEGER DEFAULT 1,
+            bound_devices TEXT    DEFAULT '[]',
+            bound_device  TEXT,
+            created_at    TEXT,
+            activated_at  TEXT,
+            is_active     INTEGER DEFAULT 1
         )
     """)
-    cols = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
-    if "updated_at" not in cols:
+
+    # ── Migration: পুরনো DB তে bound_devices column না থাকলে add করো ──
+    cols = [row[1] for row in c.execute("PRAGMA table_info(license_keys)")]
+    if "bound_devices" not in cols:
+        c.execute("ALTER TABLE license_keys ADD COLUMN bound_devices TEXT DEFAULT '[]'")
+        # পুরনো bound_device data migrate করো
+        c.execute("UPDATE license_keys SET bound_devices = '[\"' || bound_device || '\"]' WHERE bound_device IS NOT NULL AND bound_device != ''")
+
+    cols2 = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
+    if "updated_at" not in cols2:
         c.execute("ALTER TABLE jobs ADD COLUMN updated_at TEXT")
+
     conn.commit()
     conn.close()
     print("[DB] Ready")
@@ -88,7 +98,6 @@ def check_admin(req):
 
 
 def generate_license_key(label=""):
-    """Generate a unique LuckyLoop license key."""
     chars  = string.ascii_uppercase + string.digits
     suffix = ''.join(secrets.choice(chars) for _ in range(16))
     prefix = label.replace(" ", "-")[:12].upper() if label else "USER"
@@ -150,14 +159,14 @@ def api_latest():
         scraper_ok  = status_row["status"] == "ok"
         scraper_msg = status_row["message"]
     return jsonify({
-        "jobs":       [dict(r) for r in rows],
-        "scraper_ok": scraper_ok,
+        "jobs":        [dict(r) for r in rows],
+        "scraper_ok":  scraper_ok,
         "scraper_msg": scraper_msg
     })
 
 
 # ══════════════════════════════════════════════════════════
-#  EXISTING ROUTES (unchanged)
+#  EXISTING ROUTES
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/scraper-status", methods=["POST"])
@@ -212,7 +221,7 @@ def save_job():
 
 
 # ══════════════════════════════════════════════════════════
-#  DEVICE MANAGEMENT ROUTES
+#  DEVICE MANAGEMENT
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/heartbeat", methods=["POST"])
@@ -286,15 +295,13 @@ def check_device(device_id):
 
 
 # ══════════════════════════════════════════════════════════
-#  ✅ NEW: LICENSE KEY API
+#  ✅ FIXED: LICENSE KEY VERIFY — Multi-device support
 # ══════════════════════════════════════════════════════════
+
+import json as _json
 
 @app.route("/api/license/verify", methods=["POST"])
 def license_verify():
-    """
-    App calls this to verify a license key and bind it to a device.
-    Returns: { ok, valid, message, license_type }
-    """
     data = request.get_json(silent=True) or {}
     license_key = str(data.get("license_key", "") or "").strip()
     device_id   = str(data.get("device_id",   "") or "").strip()
@@ -316,25 +323,44 @@ def license_verify():
         conn.close()
         return jsonify({"ok": False, "valid": False, "message": "❌ This license key has been deactivated!"})
 
-    bound = row["bound_device"]
-    now   = datetime.now().isoformat()
+    max_devices = int(row["max_devices"] or 1)
+    now         = datetime.now().isoformat()
 
-    # Key already bound to a DIFFERENT device
-    if bound and bound != device_id:
+    # bound_devices — JSON list of device IDs
+    try:
+        bound_devices = _json.loads(row["bound_devices"] or "[]")
+        if not isinstance(bound_devices, list):
+            bound_devices = []
+    except:
+        bound_devices = []
+
+    # এই device আগে থেকেই bound থাকলে — allow করো
+    if device_id in bound_devices:
+        label = row["label"] or "License Key Active"
         conn.close()
         return jsonify({
-            "ok":      False,
-            "valid":   False,
-            "message": "❌ This license key is already activated on another device! Contact admin."
+            "ok":           True,
+            "valid":        True,
+            "message":      f"✅ License Activated! ({label})",
+            "license_type": label
         })
 
-    # First activation — bind key to this device
-    if not bound:
-        conn.execute(
-            "UPDATE license_keys SET bound_device=?, activated_at=? WHERE license_key=?",
-            (device_id, now, license_key)
-        )
-        conn.commit()
+    # নতুন device — limit check করো
+    if len(bound_devices) >= max_devices:
+        conn.close()
+        return jsonify({
+            "ok":    False,
+            "valid": False,
+            "message": f"❌ Device limit reached! This key allows max {max_devices} device(s). Contact admin to increase limit."
+        })
+
+    # নতুন device add করো
+    bound_devices.append(device_id)
+    conn.execute(
+        "UPDATE license_keys SET bound_devices=?, bound_device=?, activated_at=? WHERE license_key=?",
+        (_json.dumps(bound_devices), device_id, now, license_key)
+    )
+    conn.commit()
 
     label = row["label"] or "License Key Active"
     conn.close()
@@ -349,25 +375,48 @@ def license_verify():
 
 @app.route("/api/license/unbind", methods=["POST"])
 def license_unbind():
-    """Admin: unbind a license key from its device (reset binding)."""
+    """Admin: unbind সব device অথবা specific device।"""
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     data = request.get_json(silent=True) or {}
     license_key = str(data.get("license_key", "") or "").strip()
+    device_id   = str(data.get("device_id",   "") or "").strip()  # optional
+
     if not license_key:
         return jsonify({"error": "license_key required"}), 400
+
     conn = get_db()
-    conn.execute(
-        "UPDATE license_keys SET bound_device=NULL, activated_at=NULL WHERE license_key=?",
-        (license_key,)
-    )
+
+    if device_id:
+        # Specific device unbind
+        row = conn.execute(
+            "SELECT bound_devices FROM license_keys WHERE license_key=?", (license_key,)
+        ).fetchone()
+        if row:
+            try:
+                bound = _json.loads(row["bound_devices"] or "[]")
+                if device_id in bound:
+                    bound.remove(device_id)
+            except:
+                bound = []
+            conn.execute(
+                "UPDATE license_keys SET bound_devices=? WHERE license_key=?",
+                (_json.dumps(bound), license_key)
+            )
+    else:
+        # সব device unbind
+        conn.execute(
+            "UPDATE license_keys SET bound_devices='[]', bound_device=NULL, activated_at=NULL WHERE license_key=?",
+            (license_key,)
+        )
+
     conn.commit()
     conn.close()
-    return jsonify({"ok": True, "message": "Key unbound successfully"})
+    return jsonify({"ok": True, "message": "Unbound successfully"})
 
 
 # ══════════════════════════════════════════════════════════
-#  ✅ NEW: ADMIN LICENSE ROUTES
+#  ADMIN LICENSE ROUTES
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/admin/licenses", methods=["GET"])
@@ -379,7 +428,19 @@ def admin_get_licenses():
         "SELECT * FROM license_keys ORDER BY created_at DESC"
     ).fetchall()
     conn.close()
-    return jsonify([dict(r) for r in rows])
+
+    result = []
+    for r in rows:
+        d = dict(r)
+        try:
+            bound = _json.loads(d.get("bound_devices") or "[]")
+        except:
+            bound = []
+        d["bound_devices_list"] = bound
+        d["bound_count"]        = len(bound)
+        result.append(d)
+
+    return jsonify(result)
 
 
 @app.route("/api/admin/licenses/generate", methods=["POST"])
@@ -389,24 +450,22 @@ def admin_generate_license():
     data = request.get_json(silent=True) or {}
     label       = str(data.get("label", "") or "").strip()
     max_devices = int(data.get("max_devices", 1))
-    count       = max(1, min(int(data.get("count", 1)), 50))  # max 50 at once
+    count       = max(1, min(int(data.get("count", 1)), 50))
 
     now  = datetime.now().isoformat()
     conn = get_db()
     generated = []
     for _ in range(count):
         key = generate_license_key(label)
-        # ensure uniqueness
         while conn.execute("SELECT 1 FROM license_keys WHERE license_key=?", (key,)).fetchone():
             key = generate_license_key(label)
         conn.execute(
-            "INSERT INTO license_keys (license_key, label, max_devices, created_at, is_active) VALUES (?,?,?,?,1)",
-            (key, label, max_devices, now)
+            "INSERT INTO license_keys (license_key, label, max_devices, bound_devices, created_at, is_active) VALUES (?,?,?,?,?,1)",
+            (key, label, max_devices, "[]", now)
         )
         generated.append(key)
     conn.commit()
     conn.close()
-    print(f"[LICENSE] Generated {count} key(s) — label: {label or 'none'}")
     return jsonify({"ok": True, "keys": generated})
 
 
@@ -429,6 +488,26 @@ def admin_toggle_license():
     return jsonify({"ok": True})
 
 
+@app.route("/api/admin/licenses/update-limit", methods=["POST"])
+def admin_update_limit():
+    """Admin: key এর max_devices limit বাড়ানো/কমানো।"""
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    license_key = str(data.get("license_key", "") or "").strip()
+    max_devices = int(data.get("max_devices", 1))
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+    conn = get_db()
+    conn.execute(
+        "UPDATE license_keys SET max_devices=? WHERE license_key=?",
+        (max_devices, license_key)
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True, "message": f"Limit updated to {max_devices} devices"})
+
+
 @app.route("/api/admin/licenses/delete", methods=["POST"])
 def admin_delete_license():
     if not check_admin(request):
@@ -445,7 +524,7 @@ def admin_delete_license():
 
 
 # ══════════════════════════════════════════════════════════
-#  ADMIN PANEL ROUTE
+#  ADMIN PANEL
 # ══════════════════════════════════════════════════════════
 
 @app.route("/admin")
