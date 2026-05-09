@@ -5,8 +5,9 @@ import os
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-SERVER_URL = "https://luckyloop-position-update-16-05.onrender.com/"
-PHPSESSID  = os.environ.get("MW_PHPSESSID", "tkbhj34s1lc5uu1pqaag4hevvk")
+SERVER_URL      = "https://luckyloop-position-update-16-05.onrender.com/"
+PHPSESSID       = os.environ.get("MW_PHPSESSID", "tkbhj34s1lc5uu1pqaag4hevvk")
+SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "5679a283515dfae539ac18d6f3715dd0")
 
 JOB_NAMES = [
     {"full": "TTV-Data Entry - PC required. Not for mobile phones. (E766-1470)", "short": "1470"},
@@ -45,7 +46,8 @@ def update_status(status, message):
 
 def scrape_jobs():
     try:
-        r = session.get(TARGET_URL, timeout=20)
+        api_url = f"http://api.scraperapi.com?api_key={SCRAPER_API_KEY}&url={TARGET_URL}"
+        r = session.get(api_url, timeout=60)
         soup = BeautifulSoup(r.text, "html.parser")
         listings = soup.select(".jobslist")
         count = len(listings)
@@ -69,7 +71,6 @@ def scrape_jobs():
                     link      = name_el.get("href", TARGET_URL)
                     push(job["short"], position, available, link)
                     break
-
     except Exception as e:
         print(f"[Scraper] Error: {e}")
         update_status("error", f"❌ Error: {str(e)[:80]}")
