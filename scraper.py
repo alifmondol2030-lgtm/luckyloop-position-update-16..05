@@ -40,21 +40,17 @@ def update_status(status, message):
 
 def scrape_jobs():
     try:
-        payload = {
-            "api_key": SCRAPER_API_KEY,
-            "url": TARGET_URL,
-            "keep_headers": "true",
-        }
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-            "Cookie": f"PHPSESSID={PHPSESSID}"
+            "Cookie": f"PHPSESSID={PHPSESSID}",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Referer": "https://www.microworkers.com/",
         }
-        r = requests.get(
-            "http://api.scraperapi.com",
-            params=payload,
-            headers=headers,
-            timeout=60
-        )
+        r = requests.get(TARGET_URL, headers=headers, timeout=30)
+        print(f"[Scraper] Status code: {r.status_code}")
+        print(f"[Scraper] Response length: {len(r.text)}")
+
         soup = BeautifulSoup(r.text, "html.parser")
         listings = soup.select(".jobslist")
         count = len(listings)
