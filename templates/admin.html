@@ -72,7 +72,6 @@
   /* ── MAIN APP ── */
   #app { display: none; }
 
-  /* Header */
   .header {
     background: var(--card);
     border-bottom: 1px solid var(--border);
@@ -101,7 +100,6 @@
   }
   .btn-logout:hover { border-color: var(--red); color: var(--red); }
 
-  /* ── TABS ── */
   .tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -110,16 +108,10 @@
   }
   .tab-btn {
     padding: 14px 22px;
-    font-family: inherit;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--muted);
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    transition: all .2s;
+    font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    color: var(--muted); background: transparent;
+    border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all .2s;
   }
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -134,10 +126,7 @@
     gap: 1px; background: var(--border);
     border-bottom: 1px solid var(--border);
   }
-  .stat-card {
-    background: var(--card);
-    padding: 20px 24px;
-  }
+  .stat-card { background: var(--card); padding: 20px 24px; }
   .stat-card .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
   .stat-card .value { font-size: 28px; font-weight: 700; }
   .stat-card .value.total   { color: var(--accent); }
@@ -145,7 +134,6 @@
   .stat-card .value.blocked { color: var(--red); }
   .stat-card .value.online  { color: var(--yellow); }
 
-  /* Toolbar */
   .toolbar {
     padding: 16px 28px;
     display: flex; align-items: center; gap: 12px;
@@ -168,13 +156,11 @@
   .btn-refresh {
     padding: 9px 18px; font-size: 11px; font-family: inherit; font-weight: 600;
     background: var(--accent); color: #000;
-    border: none; cursor: pointer; letter-spacing: 1px;
-    transition: opacity .2s;
+    border: none; cursor: pointer; letter-spacing: 1px; transition: opacity .2s;
   }
   .btn-refresh:hover { opacity: .85; }
   .auto-label { font-size: 10px; color: var(--muted); margin-left: auto; }
 
-  /* Table */
   .table-wrap { padding: 0 28px 40px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin-top: 20px; }
   thead tr { border-bottom: 1px solid var(--border); }
@@ -183,14 +169,10 @@
     font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
     color: var(--accent); font-weight: 600;
   }
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background .15s;
-  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
   tbody tr:hover { background: var(--card); }
   tbody td { padding: 14px 14px; font-size: 12px; vertical-align: middle; }
 
-  /* Status badge */
   .badge {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
@@ -203,24 +185,15 @@
   .badge.unbound  { background: #1a1a1a; color: var(--muted); }
   .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  .online-dot {
-    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
-  }
+  .online-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .online-dot.yes { background: var(--green); box-shadow: 0 0 6px var(--green); }
   .online-dot.no  { background: var(--muted); }
 
   .device-name { color: var(--white); font-weight: 600; font-size: 13px; }
   .device-alias {
-    display: inline-block;
-    background: #1a0f2e;
-    color: var(--purple);
-    border: 1px solid #3b1f6e;
-    font-size: 10px;
-    padding: 1px 7px;
-    margin-left: 6px;
-    border-radius: 2px;
-    letter-spacing: 1px;
-    vertical-align: middle;
+    display: inline-block; background: #1a0f2e; color: var(--purple);
+    border: 1px solid #3b1f6e; font-size: 10px; padding: 1px 7px;
+    margin-left: 6px; border-radius: 2px; letter-spacing: 1px; vertical-align: middle;
   }
   .device-id   { color: var(--muted); font-size: 10px; margin-top: 2px; font-family: monospace; }
   .device-ip   { color: var(--muted); font-size: 10px; }
@@ -234,171 +207,185 @@
   .btn-alias {
     padding: 3px 8px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid #3b1f6e;
-    color: var(--purple); cursor: pointer;
-    transition: all .2s; margin-left: 4px;
-    vertical-align: middle;
+    color: var(--purple); cursor: pointer; transition: all .2s; margin-left: 4px; vertical-align: middle;
   }
   .btn-alias:hover { background: #1a0f2e; border-color: var(--purple); }
 
   .btn-block {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-block:hover { background: var(--red); color: #000; }
   .btn-unblock {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-unblock:hover { background: var(--green); color: #000; }
   .btn-delete {
     padding: 6px 10px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid var(--border);
-    color: var(--muted); cursor: pointer;
-    transition: all .2s; margin-left: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s; margin-left: 4px;
   }
   .btn-delete:hover { border-color: var(--orange); color: var(--orange); }
 
-  .empty-row td {
-    text-align: center; padding: 60px; color: var(--muted); font-size: 12px;
-  }
+  .empty-row td { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; }
 
-  /* ── LICENSE TAB STYLES ── */
+  /* ── LICENSE TAB ── */
   .license-panel { padding: 28px; }
 
   .license-generator {
     background: var(--card);
     border: 1px solid var(--border);
     border-top: 2px solid var(--yellow);
-    padding: 28px;
-    margin-bottom: 28px;
+    padding: 28px; margin-bottom: 28px;
   }
-  .license-generator h2 {
-    font-size: 14px; font-weight: 700; color: var(--yellow);
-    letter-spacing: 2px; margin-bottom: 20px;
-  }
+  .license-generator h2 { font-size: 14px; font-weight: 700; color: var(--yellow); letter-spacing: 2px; margin-bottom: 20px; }
 
   .gen-form {
     display: grid;
     grid-template-columns: 1fr 140px 100px auto;
-    gap: 12px;
-    align-items: end;
+    gap: 12px; align-items: end;
   }
-
   .form-group label {
-    display: block;
-    font-size: 9px; letter-spacing: 1px; color: var(--muted);
+    display: block; font-size: 9px; letter-spacing: 1px; color: var(--muted);
     text-transform: uppercase; margin-bottom: 6px;
   }
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 10px 14px;
+  .form-group input, .form-group select {
+    width: 100%; padding: 10px 14px;
     background: var(--card2); border: 1px solid var(--border);
     color: var(--text); font-family: inherit; font-size: 12px;
     outline: none; transition: border-color .2s;
   }
-  .form-group input:focus,
-  .form-group select:focus { border-color: var(--yellow); }
+  .form-group input:focus, .form-group select:focus { border-color: var(--yellow); }
 
   .btn-generate {
-    padding: 10px 24px;
-    background: var(--yellow); color: #000;
+    padding: 10px 24px; background: var(--yellow); color: #000;
     font-family: inherit; font-size: 11px; font-weight: 700;
-    border: none; cursor: pointer; letter-spacing: 1px;
-    white-space: nowrap;
-    transition: opacity .2s;
-    height: 40px;
+    border: none; cursor: pointer; letter-spacing: 1px; white-space: nowrap;
+    transition: opacity .2s; height: 40px;
   }
   .btn-generate:hover { opacity: .85; }
 
-  /* Generated keys output */
   .generated-output {
-    display: none;
-    margin-top: 20px;
-    background: var(--card2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--yellow);
-    padding: 16px;
+    display: none; margin-top: 20px;
+    background: var(--card2); border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow); padding: 16px;
   }
-  .generated-output h3 {
-    font-size: 10px; color: var(--yellow); letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 12px;
-  }
+  .generated-output h3 { font-size: 10px; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
   .key-list { list-style: none; }
   .key-list li {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px; color: var(--green);
-    font-family: monospace;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-size: 12px; color: var(--green); font-family: monospace;
   }
   .key-list li:last-child { border-bottom: none; }
   .btn-copy-key {
     padding: 4px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer;
-    transition: all .2s; margin-left: 8px; white-space: nowrap;
+    color: var(--green); cursor: pointer; transition: all .2s; margin-left: 8px; white-space: nowrap;
   }
   .btn-copy-key:hover { background: var(--green); color: #000; }
   .btn-copy-all {
-    margin-top: 12px;
-    padding: 8px 18px; font-size: 10px; font-family: inherit; font-weight: 600;
+    margin-top: 12px; padding: 8px 18px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--yellow);
-    color: var(--yellow); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--yellow); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-copy-all:hover { background: var(--yellow); color: #000; }
 
-  /* License stats bar */
   .license-stats {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--border);
-    margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border); margin-bottom: 20px;
   }
-  .lic-stat {
-    background: var(--card);
-    padding: 16px 20px;
-  }
+  .lic-stat { background: var(--card); padding: 16px 20px; }
   .lic-stat .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
   .lic-stat .value { font-size: 24px; font-weight: 700; }
 
-  /* License table header accent */
   #license-thead th { color: var(--yellow); }
 
-  .key-text {
-    font-family: monospace;
-    font-size: 11px;
-    color: var(--green);
-    word-break: break-all;
-  }
+  .key-text { font-family: monospace; font-size: 11px; color: var(--green); word-break: break-all; }
 
   .btn-unbind {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--orange);
-    color: var(--orange); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--orange); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-unbind:hover { background: var(--orange); color: #000; }
 
   .btn-toggle-off {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-toggle-off:hover { background: var(--red); color: #fff; }
 
   .btn-toggle-on {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-toggle-on:hover { background: var(--green); color: #000; }
+
+  /* ── NEW: Bound Devices Expand Panel ── */
+  .btn-view-devices {
+    padding: 5px 10px; font-size: 9px; font-family: inherit;
+    background: transparent; border: 1px solid var(--accent);
+    color: var(--accent); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn-view-devices:hover { background: var(--accent); color: #000; }
+
+  .devices-expand-row td {
+    padding: 0 !important;
+    background: #050d10 !important;
+  }
+  .devices-expand-inner {
+    padding: 14px 28px 14px 60px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .devices-expand-inner h4 {
+    font-size: 10px; color: var(--accent); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .bound-device-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .bound-device-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 14px;
+    background: var(--card); border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+  }
+  .bound-device-item.device-blocked { border-left-color: var(--red); }
+  .bdi-name { font-size: 12px; font-weight: 600; color: var(--white); min-width: 160px; }
+  .bdi-id   { font-size: 10px; color: var(--muted); font-family: monospace; flex: 1; }
+  .bdi-seen { font-size: 10px; color: var(--muted); min-width: 100px; }
+  .btn-block-from-lic {
+    padding: 4px 10px; font-size: 9px; font-family: inherit;
+    background: transparent; border: 1px solid var(--red);
+    color: var(--red); cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .btn-block-from-lic:hover { background: var(--red); color: #fff; }
+  .btn-unblock-from-lic {
+    padding: 4px 10px; font-size: 9px; font-family: inherit;
+    background: transparent; border: 1px solid var(--green);
+    color: var(--green); cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .btn-unblock-from-lic:hover { background: var(--green); color: #000; }
+
+  /* Slot usage bar */
+  .slot-bar {
+    display: flex; align-items: center; gap: 8px; font-size: 10px;
+  }
+  .slot-pip {
+    width: 14px; height: 14px; border-radius: 2px;
+    border: 1px solid var(--border);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 8px;
+  }
+  .slot-pip.used   { background: #052e16; border-color: var(--green); color: var(--green); }
+  .slot-pip.free   { background: var(--card2); color: var(--muted); }
+  .slot-pip.blocked-pip { background: #2d0707; border-color: var(--red); color: var(--red); }
+  .slot-label { color: var(--muted); font-size: 10px; }
 
   /* Toast */
   #toast {
@@ -442,48 +429,36 @@
   #alias-modal .modal input:focus { border-color: var(--purple); }
   .btn-confirm-alias { background: var(--purple) !important; color: #000 !important; }
   .btn-clear-alias {
-    flex: 0 0 auto !important;
-    padding: 11px 14px !important;
-    background: transparent !important;
-    border: 1px solid var(--border) !important;
-    color: var(--muted) !important;
-    font-size: 10px !important;
-    cursor: pointer;
-    font-family: inherit;
-    letter-spacing: 1px;
+    flex: 0 0 auto !important; padding: 11px 14px !important;
+    background: transparent !important; border: 1px solid var(--border) !important;
+    color: var(--muted) !important; font-size: 10px !important;
+    cursor: pointer; font-family: inherit; letter-spacing: 1px;
   }
   .btn-clear-alias:hover { border-color: var(--orange) !important; color: var(--orange) !important; }
 
   .license-toolbar {
-    padding: 14px 0 14px 0;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
+    padding: 14px 0; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border); margin-bottom: 4px;
   }
   .license-toolbar input {
-    flex: 1; max-width: 280px;
-    padding: 8px 12px;
+    flex: 1; max-width: 280px; padding: 8px 12px;
     background: var(--card); border: 1px solid var(--border);
     color: var(--text); font-family: inherit; font-size: 11px;
     outline: none; transition: border-color .2s;
   }
   .license-toolbar input:focus { border-color: var(--yellow); }
   .license-toolbar select {
-    padding: 8px 12px;
-    background: var(--card); border: 1px solid var(--border);
-    color: var(--text); font-family: inherit; font-size: 11px;
-    outline: none; cursor: pointer;
+    padding: 8px 12px; background: var(--card); border: 1px solid var(--border);
+    color: var(--text); font-family: inherit; font-size: 11px; outline: none; cursor: pointer;
   }
   .btn-refresh-lic {
     padding: 8px 16px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: var(--yellow); color: #000;
-    border: none; cursor: pointer; letter-spacing: 1px;
-    transition: opacity .2s;
+    background: var(--yellow); color: #000; border: none; cursor: pointer; letter-spacing: 1px; transition: opacity .2s;
   }
   .btn-refresh-lic:hover { opacity: .85; }
 
   @media (max-width: 900px) {
-    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .stats-bar, .license-stats { grid-template-columns: repeat(2,1fr); }
     .gen-form { grid-template-columns: 1fr 1fr; }
     .table-wrap { padding: 0 12px 40px; }
     .toolbar, .license-panel { padding: 12px; }
@@ -493,7 +468,7 @@
 </head>
 <body>
 
-<!-- ══ LOGIN ══════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="icon">⚡</div>
@@ -505,10 +480,9 @@
   </div>
 </div>
 
-<!-- ══ MAIN APP ════════════════════════════════════════ -->
+<!-- MAIN APP -->
 <div id="app">
 
-  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <span style="color:var(--yellow);font-size:20px">⚡</span>
@@ -524,16 +498,13 @@
     </div>
   </div>
 
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('devices')">📱 Device Manager</button>
     <button class="tab-btn license-tab" onclick="switchTab('licenses')">🔑 License Keys</button>
   </div>
 
-  <!-- ══ TAB: DEVICES ══════════════════════════════════ -->
+  <!-- TAB: DEVICES -->
   <div id="tab-devices" class="tab-content active">
-
-    <!-- Stats -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="label">Total Devices</div>
@@ -552,8 +523,6 @@
         <div class="value online" id="stat-online">0</div>
       </div>
     </div>
-
-    <!-- Toolbar -->
     <div class="toolbar">
       <input type="text" id="search-box" placeholder="🔍  Device name বা ID দিয়ে খুঁজুন…" oninput="renderTable()"/>
       <select id="filter-status" onchange="renderTable()">
@@ -565,8 +534,6 @@
       <button class="btn-refresh" onclick="loadDevices()">↻ Refresh</button>
       <span class="auto-label" id="auto-label">Auto refresh: 15s</span>
     </div>
-
-    <!-- Table -->
     <div class="table-wrap">
       <table>
         <thead>
@@ -588,11 +555,11 @@
     </div>
   </div>
 
-  <!-- ══ TAB: LICENSES ══════════════════════════════════ -->
+  <!-- TAB: LICENSES -->
   <div id="tab-licenses" class="tab-content">
     <div class="license-panel">
 
-      <!-- Generator card -->
+      <!-- Generator -->
       <div class="license-generator">
         <h2>🔑 LICENSE KEY GENERATOR</h2>
         <div class="gen-form">
@@ -604,8 +571,10 @@
             <label>Max Devices</label>
             <select id="gen-max-devices">
               <option value="1">1 Device</option>
+              <option value="2">2 Devices</option>
               <option value="3">3 Devices</option>
               <option value="5">5 Devices</option>
+              <option value="10">10 Devices</option>
               <option value="999">Unlimited</option>
             </select>
           </div>
@@ -615,8 +584,6 @@
           </div>
           <button class="btn-generate" onclick="generateKeys()">⚡ Generate</button>
         </div>
-
-        <!-- Output -->
         <div class="generated-output" id="generated-output">
           <h3>✅ Generated Keys</h3>
           <ul class="key-list" id="key-list"></ul>
@@ -624,7 +591,7 @@
         </div>
       </div>
 
-      <!-- License stats -->
+      <!-- Stats — 4 columns now -->
       <div class="license-stats">
         <div class="lic-stat">
           <div class="label">Total Keys</div>
@@ -637,6 +604,10 @@
         <div class="lic-stat">
           <div class="label">Unused</div>
           <div class="value online" id="lic-unused">0</div>
+        </div>
+        <div class="lic-stat">
+          <div class="label">Total Slots Used</div>
+          <div class="value" style="color:var(--purple)" id="lic-slots">0</div>
         </div>
       </div>
 
@@ -661,9 +632,9 @@
               <th>#</th>
               <th>License Key</th>
               <th>Label</th>
-              <th>Bound Device</th>
+              <th>Slots</th>
+              <th>Bound Devices</th>
               <th>Created</th>
-              <th>Activated</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -709,6 +680,29 @@
   </div>
 </div>
 
+<!-- Edit Max Devices Modal -->
+<div class="modal-overlay" id="edit-maxdev-modal">
+  <div class="modal" style="border-top-color:var(--yellow)">
+    <h3>⚙️ Max Devices পরিবর্তন করুন</h3>
+    <p id="edit-maxdev-info" style="color:var(--muted);font-size:11px;margin-bottom:20px">Key: —</p>
+    <div style="margin-bottom:16px">
+      <label style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">New Max Devices</label>
+      <select id="edit-maxdev-select" style="width:100%;padding:12px 14px;background:var(--card2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:12px;outline:none;">
+        <option value="1">1 Device</option>
+        <option value="2">2 Devices</option>
+        <option value="3">3 Devices</option>
+        <option value="5">5 Devices</option>
+        <option value="10">10 Devices</option>
+        <option value="999">Unlimited</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeEditMaxDevModal()">বাতিল</button>
+      <button class="btn-confirm-block" style="background:var(--yellow);color:#000" onclick="confirmEditMaxDev()">✓ Save করুন</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -719,8 +713,11 @@
   let lastGenKeys = [];
   let pendingBlockId  = '';
   let pendingAliasId  = '';
+  let pendingEditMaxDevKey = '';
   let autoTimer  = null;
   let countdown  = 15;
+  // Track which license rows have expanded device panels
+  let expandedLicKeys = new Set();
 
   // ── TABS ──────────────────────────────────────────────
   function switchTab(name) {
@@ -801,7 +798,6 @@
     }, 1000);
   }
 
-  // ── STATS ─────────────────────────────────────────────
   function updateStats(devices) {
     const now = Date.now();
     const total   = devices.length;
@@ -946,7 +942,10 @@
       body: JSON.stringify({ device_id: deviceId, reason })
     }).then(r => r.json()).then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🚫 Device block করা হয়েছে'); loadDevices();
+      showToast('🚫 Device block করা হয়েছে');
+      loadDevices();
+      // Refresh license panel if open
+      if (document.getElementById('tab-licenses').classList.contains('active')) loadLicenses();
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
@@ -956,7 +955,9 @@
       body: JSON.stringify({ device_id: deviceId })
     }).then(r => r.json()).then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('✅ Device unblock করা হয়েছে'); loadDevices();
+      showToast('✅ Device unblock করা হয়েছে');
+      loadDevices();
+      if (document.getElementById('tab-licenses').classList.contains('active')) loadLicenses();
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
@@ -989,7 +990,7 @@
       const out = document.getElementById('generated-output');
       const ul  = document.getElementById('key-list');
       out.style.display = 'block';
-      ul.innerHTML = lastGenKeys.map((k, i) =>
+      ul.innerHTML = lastGenKeys.map((k) =>
         `<li>
           <span>${k}</span>
           <button class="btn-copy-key" onclick="copyKey('${k}', this)">📋 Copy</button>
@@ -1031,11 +1032,21 @@
 
   function updateLicenseStats(licenses) {
     const total     = licenses.length;
-    const activated = licenses.filter(l => l.bound_device).length;
-    const unused    = total - activated;
+    // Count licenses with at least one bound device
+    const activated = licenses.filter(l => {
+      if (Array.isArray(l.bound_devices)) return l.bound_devices.length > 0;
+      return !!l.bound_device;
+    }).length;
+    const unused = total - activated;
+    // Total device slots used across all licenses
+    const slotsUsed = licenses.reduce((acc, l) => {
+      if (Array.isArray(l.bound_devices)) return acc + l.bound_devices.length;
+      return acc + (l.bound_device ? 1 : 0);
+    }, 0);
     document.getElementById('lic-total').textContent     = total;
     document.getElementById('lic-activated').textContent = activated;
     document.getElementById('lic-unused').textContent    = unused;
+    document.getElementById('lic-slots').textContent     = slotsUsed;
   }
 
   let currentLicList = [];
@@ -1045,15 +1056,20 @@
     const filter = document.getElementById('lic-filter').value;
 
     currentLicList = allLicenses.filter(l => {
+      // Support both old single bound_device and new bound_devices array
+      const boundDevStr = Array.isArray(l.bound_devices)
+        ? l.bound_devices.map(d => d.device_id + ' ' + (d.device_name||'')).join(' ')
+        : (l.bound_device || '');
       const matchQ = !q ||
         (l.license_key  || '').toLowerCase().includes(q) ||
         (l.label        || '').toLowerCase().includes(q) ||
-        (l.bound_device || '').toLowerCase().includes(q);
+        boundDevStr.toLowerCase().includes(q);
       if (!matchQ) return false;
+      const hasBound = Array.isArray(l.bound_devices) ? l.bound_devices.length > 0 : !!l.bound_device;
       if (filter === 'active')   return l.is_active;
       if (filter === 'inactive') return !l.is_active;
-      if (filter === 'bound')    return l.bound_device;
-      if (filter === 'unbound')  return !l.bound_device;
+      if (filter === 'bound')    return hasBound;
+      if (filter === 'unbound')  return !hasBound;
       return true;
     });
 
@@ -1063,38 +1079,174 @@
       return;
     }
 
-    tbody.innerHTML = currentLicList.map((l, i) => {
+    const rows = [];
+    currentLicList.forEach((l, i) => {
+      // Normalise: support both old & new API shape
+      const boundDevices = Array.isArray(l.bound_devices)
+        ? l.bound_devices
+        : (l.bound_device ? [{ device_id: l.bound_device, device_name: l.bound_device }] : []);
+      const maxDev = l.max_devices || 1;
+      const usedSlots = boundDevices.length;
+      const isExpanded = expandedLicKeys.has(l.license_key);
+
       const statusBadge = l.is_active
         ? '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>'
         : '<span class="badge inactive"><span class="badge-dot"></span>INACTIVE</span>';
 
-      const boundBadge = l.bound_device
-        ? `<span class="badge bound" title="${escHtml(l.bound_device)}">🔗 BOUND</span><br><span style="font-size:9px;color:var(--muted)">${escHtml(l.bound_device.substring(0,12))}…</span>`
-        : '<span class="badge unbound">⚪ UNUSED</span>';
+      // Slot pips
+      const maxShow = Math.min(maxDev, 10);
+      let pipsHtml = '';
+      for (let s = 0; s < maxShow; s++) {
+        const dev = boundDevices[s];
+        if (dev) {
+          const cls = dev.is_blocked ? 'blocked-pip' : 'used';
+          const icon = dev.is_blocked ? '🚫' : '●';
+          pipsHtml += `<span class="slot-pip ${cls}" title="${escHtml(dev.device_name||dev.device_id)}">${icon}</span>`;
+        } else {
+          pipsHtml += `<span class="slot-pip free">○</span>`;
+        }
+      }
+      if (maxDev > 10) pipsHtml += `<span class="slot-label">+${maxDev-10} more</span>`;
+      const slotHtml = `<div class="slot-bar">${pipsHtml}
+        <span class="slot-label" style="margin-left:4px">${usedSlots}/${maxDev === 999 ? '∞' : maxDev}</span>
+        <button onclick="openEditMaxDevModal(${i})" title="Limit পরিবর্তন করুন"
+          style="padding:2px 6px;font-size:9px;font-family:inherit;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;margin-left:4px">✎</button>
+      </div>`;
 
       const toggleBtn = l.is_active
         ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, 0)">⛔ Deactivate</button>`
         : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, 1)">✅ Activate</button>`;
 
-      const unbindBtn = l.bound_device
-        ? `<button class="btn-unbind" onclick="unbindLicense(${i})" title="Unbind from device">🔓 Unbind</button>`
+      const viewBtn = boundDevices.length > 0
+        ? `<button class="btn-view-devices" onclick="toggleDeviceExpand('${escHtml(l.license_key)}', ${i})">${isExpanded ? '▲ Hide' : '▼ Devices'} (${usedSlots})</button>`
         : '';
 
-      return '<tr>'
+      const unbindAllBtn = boundDevices.length > 0
+        ? `<button class="btn-unbind" onclick="unbindAll(${i})" title="সব device unbind করুন">🔓 Unbind All</button>`
+        : '';
+
+      // Main row
+      rows.push('<tr id="lic-row-' + i + '">'
         + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
         + `<td><div class="key-text">${escHtml(l.license_key)}</div></td>`
         + `<td style="color:var(--yellow);font-size:11px">${escHtml(l.label||'—')}</td>`
-        + `<td>${boundBadge}</td>`
+        + `<td>${slotHtml}</td>`
+        + `<td>${boundDevices.length > 0
+            ? `<span style="color:var(--green);font-size:11px">🔗 ${usedSlots} device${usedSlots>1?'s':''} active</span>`
+            : '<span class="badge unbound">⚪ UNUSED</span>'}</td>`
         + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.created_at)}</td>`
-        + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.activated_at)}</td>`
         + `<td>${statusBadge}</td>`
         + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">`
-        + toggleBtn + unbindBtn
+        + toggleBtn + viewBtn + unbindAllBtn
         + `<button class="btn-copy-key" onclick="copyKeyDirect('${escHtml(l.license_key)}', this)" style="font-size:9px">📋</button>`
         + `<button class="btn-delete" onclick="deleteLicense(${i})" title="Delete">🗑</button>`
         + '</td>'
-        + '</tr>';
-    }).join('');
+        + '</tr>');
+
+      // Expandable bound-devices panel
+      if (isExpanded && boundDevices.length > 0) {
+        const devItems = boundDevices.map((dev, di) => {
+          const isBlocked = dev.is_blocked;
+          const blockBtn = isBlocked
+            ? `<button class="btn-unblock-from-lic" onclick="unblockFromLic('${escHtml(dev.device_id)}', ${i})">✓ Unblock</button>`
+            : `<button class="btn-block-from-lic"   onclick="blockFromLic('${escHtml(dev.device_id)}', '${escHtml(dev.device_name||dev.device_id)}', ${i})">✕ Block</button>`;
+          const unbindBtn = `<button class="btn-unbind" onclick="unbindSingle('${escHtml(l.license_key)}', '${escHtml(dev.device_id)}', ${i})" style="font-size:9px;padding:3px 8px">🔓 Unbind</button>`;
+          return `<li class="bound-device-item ${isBlocked?'device-blocked':''}">
+            <span class="online-dot ${dev.is_online?'yes':'no'}"></span>
+            <span class="bdi-name">${escHtml(dev.device_name||'Unknown')} ${isBlocked?'<span style="color:var(--red);font-size:9px">[BLOCKED]</span>':''}</span>
+            <span class="bdi-id">${escHtml(dev.device_id)}</span>
+            <span class="bdi-seen">${dev.last_seen ? fmtAgo(dev.last_seen) : '—'}</span>
+            ${blockBtn}
+            ${unbindBtn}
+          </li>`;
+        }).join('');
+
+        rows.push(`<tr class="devices-expand-row" id="expand-${i}">
+          <td colspan="8">
+            <div class="devices-expand-inner">
+              <h4>📱 এই License এর Bound Devices (${usedSlots}/${maxDev === 999 ? '∞' : maxDev})</h4>
+              <ul class="bound-device-list">${devItems}</ul>
+            </div>
+          </td>
+        </tr>`);
+      }
+    });
+
+    tbody.innerHTML = rows.join('');
+  }
+
+  // Toggle expand/collapse for a license's device list
+  function toggleDeviceExpand(licKey, i) {
+    if (expandedLicKeys.has(licKey)) {
+      expandedLicKeys.delete(licKey);
+    } else {
+      expandedLicKeys.add(licKey);
+    }
+    renderLicenseTable();
+  }
+
+  // Block a device directly from license panel
+  function blockFromLic(deviceId, deviceName, licIdx) {
+    openBlockModal(deviceId, deviceName);
+  }
+
+  function unblockFromLic(deviceId, licIdx) {
+    unblockDevice(deviceId);
+    setTimeout(() => loadLicenses(), 600);
+  }
+
+  // Unbind a single device from a license
+  function unbindSingle(licKey, deviceId, i) {
+    if (!confirm(`"${deviceId}" কে এই license থেকে unbind করবেন?`)) return;
+    fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ license_key: licKey, device_id: deviceId })
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('🔓 Device unbind হয়েছে');
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
+  }
+
+  // Unbind ALL devices from a license
+  function unbindAll(i) {
+    const l = currentLicList[i]; if (!l) return;
+    if (!confirm(`"${l.license_key}" এর সব device binding মুছে দেবেন?`)) return;
+    fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ license_key: l.license_key, unbind_all: true })
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('🔓 সব device unbind হয়েছে');
+      expandedLicKeys.delete(l.license_key);
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
+  }
+
+  // ── EDIT MAX DEVICES MODAL ────────────────────────────
+  function openEditMaxDevModal(i) {
+    const l = currentLicList[i]; if (!l) return;
+    pendingEditMaxDevKey = l.license_key;
+    document.getElementById('edit-maxdev-info').textContent = 'Key: ' + l.license_key;
+    document.getElementById('edit-maxdev-select').value = String(l.max_devices || 1);
+    document.getElementById('edit-maxdev-modal').classList.add('open');
+  }
+  function closeEditMaxDevModal() {
+    document.getElementById('edit-maxdev-modal').classList.remove('open');
+    pendingEditMaxDevKey = '';
+  }
+  function confirmEditMaxDev() {
+    const newMax = parseInt(document.getElementById('edit-maxdev-select').value);
+    if (!pendingEditMaxDevKey) { closeEditMaxDevModal(); return; }
+    fetch(`${BASE}/api/admin/licenses/update?password=${encodeURIComponent(adminPw)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ license_key: pendingEditMaxDevKey, max_devices: newMax })
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); closeEditMaxDevModal(); return; }
+      showToast(`✅ Max devices → ${newMax === 999 ? 'Unlimited' : newMax}`);
+      closeEditMaxDevModal();
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function toggleLicense(i, newState) {
@@ -1109,19 +1261,6 @@
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
-  function unbindLicense(i) {
-    const l = currentLicList[i]; if (!l) return;
-    if (!confirm(`"${l.license_key}" এর device binding মুছে দেবেন?\nএর পরে এই key অন্য device এ use করা যাবে।`)) return;
-    fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: l.license_key })
-    }).then(r => r.json()).then(d => {
-      if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🔓 Key unbound হয়েছে। এখন অন্য device এ use করা যাবে।');
-      loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
   function deleteLicense(i) {
     const l = currentLicList[i]; if (!l) return;
     if (!confirm('এই license key permanently delete করবেন?')) return;
@@ -1131,6 +1270,7 @@
     }).then(r => r.json()).then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
       showToast('🗑 License key delete হয়েছে');
+      expandedLicKeys.delete(l.license_key);
       loadLicenses();
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
