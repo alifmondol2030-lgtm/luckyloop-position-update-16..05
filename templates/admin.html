@@ -72,6 +72,7 @@
   /* ── MAIN APP ── */
   #app { display: none; }
 
+  /* Header */
   .header {
     background: var(--card);
     border-bottom: 1px solid var(--border);
@@ -100,33 +101,16 @@
   }
   .btn-logout:hover { border-color: var(--red); color: var(--red); }
 
-  .tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    background: var(--card);
-    padding: 0 28px;
-  }
-  .tab-btn {
-    padding: 14px 22px;
-    font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 1px;
-    color: var(--muted); background: transparent;
-    border: none; border-bottom: 2px solid transparent;
-    cursor: pointer; transition: all .2s;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab-btn.license-tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
   /* Stats bar */
   .stats-bar {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 1px; background: var(--border);
     border-bottom: 1px solid var(--border);
   }
-  .stat-card { background: var(--card); padding: 20px 24px; }
+  .stat-card {
+    background: var(--card);
+    padding: 20px 24px;
+  }
   .stat-card .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
   .stat-card .value { font-size: 28px; font-weight: 700; }
   .stat-card .value.total   { color: var(--accent); }
@@ -134,6 +118,7 @@
   .stat-card .value.blocked { color: var(--red); }
   .stat-card .value.online  { color: var(--yellow); }
 
+  /* Toolbar */
   .toolbar {
     padding: 16px 28px;
     display: flex; align-items: center; gap: 12px;
@@ -156,11 +141,13 @@
   .btn-refresh {
     padding: 9px 18px; font-size: 11px; font-family: inherit; font-weight: 600;
     background: var(--accent); color: #000;
-    border: none; cursor: pointer; letter-spacing: 1px; transition: opacity .2s;
+    border: none; cursor: pointer; letter-spacing: 1px;
+    transition: opacity .2s;
   }
   .btn-refresh:hover { opacity: .85; }
   .auto-label { font-size: 10px; color: var(--muted); margin-left: auto; }
 
+  /* Table */
   .table-wrap { padding: 0 28px 40px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin-top: 20px; }
   thead tr { border-bottom: 1px solid var(--border); }
@@ -169,31 +156,43 @@
     font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
     color: var(--accent); font-weight: 600;
   }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
   tbody tr:hover { background: var(--card); }
   tbody td { padding: 14px 14px; font-size: 12px; vertical-align: middle; }
 
+  /* Status badge */
   .badge {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
   }
-  .badge.active   { background: #052e16; color: var(--green); }
-  .badge.blocked  { background: #2d0707; color: var(--red); }
-  .badge.offline  { background: #1a1a1a; color: var(--muted); }
-  .badge.inactive { background: #1a1000; color: var(--orange); }
-  .badge.bound    { background: #0f1f14; color: var(--green); }
-  .badge.unbound  { background: #1a1a1a; color: var(--muted); }
+  .badge.active  { background: #052e16; color: var(--green); }
+  .badge.blocked { background: #2d0707; color: var(--red); }
+  .badge.offline { background: #1a1a1a; color: var(--muted); }
   .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  .online-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  /* Online indicator */
+  .online-dot {
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+  }
   .online-dot.yes { background: var(--green); box-shadow: 0 0 6px var(--green); }
   .online-dot.no  { background: var(--muted); }
 
+  /* Device info */
   .device-name { color: var(--white); font-weight: 600; font-size: 13px; }
   .device-alias {
-    display: inline-block; background: #1a0f2e; color: var(--purple);
-    border: 1px solid #3b1f6e; font-size: 10px; padding: 1px 7px;
-    margin-left: 6px; border-radius: 2px; letter-spacing: 1px; vertical-align: middle;
+    display: inline-block;
+    background: #1a0f2e;
+    color: var(--purple);
+    border: 1px solid #3b1f6e;
+    font-size: 10px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    vertical-align: middle;
   }
   .device-id   { color: var(--muted); font-size: 10px; margin-top: 2px; font-family: monospace; }
   .device-ip   { color: var(--muted); font-size: 10px; }
@@ -204,188 +203,43 @@
     background: #0f1f14; color: var(--green); border: 1px solid #1a3326;
   }
 
+  /* Edit alias button */
   .btn-alias {
     padding: 3px 8px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid #3b1f6e;
-    color: var(--purple); cursor: pointer; transition: all .2s; margin-left: 4px; vertical-align: middle;
+    color: var(--purple); cursor: pointer;
+    transition: all .2s; margin-left: 4px;
+    vertical-align: middle;
   }
   .btn-alias:hover { background: #1a0f2e; border-color: var(--purple); }
 
+  /* Action buttons */
   .btn-block {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-block:hover { background: var(--red); color: #000; }
   .btn-unblock {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-unblock:hover { background: var(--green); color: #000; }
   .btn-delete {
     padding: 6px 10px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid var(--border);
-    color: var(--muted); cursor: pointer; transition: all .2s; margin-left: 4px;
+    color: var(--muted); cursor: pointer;
+    transition: all .2s; margin-left: 4px;
   }
   .btn-delete:hover { border-color: var(--orange); color: var(--orange); }
 
-  .empty-row td { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; }
-
-  /* ── LICENSE TAB ── */
-  .license-panel { padding: 28px; }
-
-  .license-generator {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-top: 2px solid var(--yellow);
-    padding: 28px; margin-bottom: 28px;
+  /* Empty / loading */
+  .empty-row td {
+    text-align: center; padding: 60px; color: var(--muted); font-size: 12px;
   }
-  .license-generator h2 { font-size: 14px; font-weight: 700; color: var(--yellow); letter-spacing: 2px; margin-bottom: 20px; }
-
-  .gen-form {
-    display: grid;
-    grid-template-columns: 1fr 140px 100px auto;
-    gap: 12px; align-items: end;
-  }
-  .form-group label {
-    display: block; font-size: 9px; letter-spacing: 1px; color: var(--muted);
-    text-transform: uppercase; margin-bottom: 6px;
-  }
-  .form-group input, .form-group select {
-    width: 100%; padding: 10px 14px;
-    background: var(--card2); border: 1px solid var(--border);
-    color: var(--text); font-family: inherit; font-size: 12px;
-    outline: none; transition: border-color .2s;
-  }
-  .form-group input:focus, .form-group select:focus { border-color: var(--yellow); }
-
-  .btn-generate {
-    padding: 10px 24px; background: var(--yellow); color: #000;
-    font-family: inherit; font-size: 11px; font-weight: 700;
-    border: none; cursor: pointer; letter-spacing: 1px; white-space: nowrap;
-    transition: opacity .2s; height: 40px;
-  }
-  .btn-generate:hover { opacity: .85; }
-
-  .generated-output {
-    display: none; margin-top: 20px;
-    background: var(--card2); border: 1px solid var(--border);
-    border-left: 3px solid var(--yellow); padding: 16px;
-  }
-  .generated-output h3 { font-size: 10px; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-  .key-list { list-style: none; }
-  .key-list li {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    font-size: 12px; color: var(--green); font-family: monospace;
-  }
-  .key-list li:last-child { border-bottom: none; }
-  .btn-copy-key {
-    padding: 4px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; transition: all .2s; margin-left: 8px; white-space: nowrap;
-  }
-  .btn-copy-key:hover { background: var(--green); color: #000; }
-  .btn-copy-all {
-    margin-top: 12px; padding: 8px 18px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: transparent; border: 1px solid var(--yellow);
-    color: var(--yellow); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-  }
-  .btn-copy-all:hover { background: var(--yellow); color: #000; }
-
-  .license-stats {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--border); margin-bottom: 20px;
-  }
-  .lic-stat { background: var(--card); padding: 16px 20px; }
-  .lic-stat .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
-  .lic-stat .value { font-size: 24px; font-weight: 700; }
-
-  #license-thead th { color: var(--yellow); }
-
-  .key-text { font-family: monospace; font-size: 11px; color: var(--green); word-break: break-all; }
-
-  .btn-unbind {
-    padding: 5px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--orange);
-    color: var(--orange); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-  }
-  .btn-unbind:hover { background: var(--orange); color: #000; }
-
-  .btn-toggle-off {
-    padding: 5px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-  }
-  .btn-toggle-off:hover { background: var(--red); color: #fff; }
-
-  .btn-toggle-on {
-    padding: 5px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-  }
-  .btn-toggle-on:hover { background: var(--green); color: #000; }
-
-  /* ── NEW: Bound Devices Expand Panel ── */
-  .btn-view-devices {
-    padding: 5px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--accent);
-    color: var(--accent); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-    white-space: nowrap;
-  }
-  .btn-view-devices:hover { background: var(--accent); color: #000; }
-
-  .devices-expand-row td {
-    padding: 0 !important;
-    background: #050d10 !important;
-  }
-  .devices-expand-inner {
-    padding: 14px 28px 14px 60px;
-    border-bottom: 2px solid var(--accent);
-  }
-  .devices-expand-inner h4 {
-    font-size: 10px; color: var(--accent); letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 12px;
-  }
-  .bound-device-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .bound-device-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 10px 14px;
-    background: var(--card); border: 1px solid var(--border);
-    border-left: 3px solid var(--green);
-  }
-  .bound-device-item.device-blocked { border-left-color: var(--red); }
-  .bdi-name { font-size: 12px; font-weight: 600; color: var(--white); min-width: 160px; }
-  .bdi-id   { font-size: 10px; color: var(--muted); font-family: monospace; flex: 1; }
-  .bdi-seen { font-size: 10px; color: var(--muted); min-width: 100px; }
-  .btn-block-from-lic {
-    padding: 4px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; transition: all .2s; white-space: nowrap;
-  }
-  .btn-block-from-lic:hover { background: var(--red); color: #fff; }
-  .btn-unblock-from-lic {
-    padding: 4px 10px; font-size: 9px; font-family: inherit;
-    background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; transition: all .2s; white-space: nowrap;
-  }
-  .btn-unblock-from-lic:hover { background: var(--green); color: #000; }
-
-  /* Slot usage bar */
-  .slot-bar {
-    display: flex; align-items: center; gap: 8px; font-size: 10px;
-  }
-  .slot-pip {
-    width: 14px; height: 14px; border-radius: 2px;
-    border: 1px solid var(--border);
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 8px;
-  }
-  .slot-pip.used   { background: #052e16; border-color: var(--green); color: var(--green); }
-  .slot-pip.free   { background: var(--card2); color: var(--muted); }
-  .slot-pip.blocked-pip { background: #2d0707; border-color: var(--red); color: var(--red); }
-  .slot-label { color: var(--muted); font-size: 10px; }
 
   /* Toast */
   #toast {
@@ -399,7 +253,7 @@
   #toast.show { opacity: 1; transform: translateY(0); }
   #toast.error { border-left-color: var(--red); }
 
-  /* Modals */
+  /* Block reason modal */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,.8); z-index: 200;
@@ -425,50 +279,36 @@
   .btn-confirm-block { background: var(--red); color: #fff; }
   .btn-cancel { background: var(--card2); color: var(--muted); border: 1px solid var(--border) !important; }
 
-  #alias-modal .modal { border-top-color: var(--purple); }
+  /* Alias modal — purple theme */
+  #alias-modal .modal {
+    border-top-color: var(--purple);
+  }
   #alias-modal .modal input:focus { border-color: var(--purple); }
   .btn-confirm-alias { background: var(--purple) !important; color: #000 !important; }
   .btn-clear-alias {
-    flex: 0 0 auto !important; padding: 11px 14px !important;
-    background: transparent !important; border: 1px solid var(--border) !important;
-    color: var(--muted) !important; font-size: 10px !important;
-    cursor: pointer; font-family: inherit; letter-spacing: 1px;
+    flex: 0 0 auto !important;
+    padding: 11px 14px !important;
+    background: transparent !important;
+    border: 1px solid var(--border) !important;
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 1px;
   }
   .btn-clear-alias:hover { border-color: var(--orange) !important; color: var(--orange) !important; }
 
-  .license-toolbar {
-    padding: 14px 0; display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border); margin-bottom: 4px;
-  }
-  .license-toolbar input {
-    flex: 1; max-width: 280px; padding: 8px 12px;
-    background: var(--card); border: 1px solid var(--border);
-    color: var(--text); font-family: inherit; font-size: 11px;
-    outline: none; transition: border-color .2s;
-  }
-  .license-toolbar input:focus { border-color: var(--yellow); }
-  .license-toolbar select {
-    padding: 8px 12px; background: var(--card); border: 1px solid var(--border);
-    color: var(--text); font-family: inherit; font-size: 11px; outline: none; cursor: pointer;
-  }
-  .btn-refresh-lic {
-    padding: 8px 16px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: var(--yellow); color: #000; border: none; cursor: pointer; letter-spacing: 1px; transition: opacity .2s;
-  }
-  .btn-refresh-lic:hover { opacity: .85; }
-
   @media (max-width: 900px) {
-    .stats-bar, .license-stats { grid-template-columns: repeat(2,1fr); }
-    .gen-form { grid-template-columns: 1fr 1fr; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
     .table-wrap { padding: 0 12px 40px; }
-    .toolbar, .license-panel { padding: 12px; }
+    .toolbar { padding: 12px; }
     .header { padding: 0 14px; }
   }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
     <div class="icon">⚡</div>
@@ -480,9 +320,10 @@
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ══ MAIN APP ════════════════════════════════════════ -->
 <div id="app">
 
+  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <span style="color:var(--yellow);font-size:20px">⚡</span>
@@ -498,157 +339,60 @@
     </div>
   </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('devices')">📱 Device Manager</button>
-    <button class="tab-btn license-tab" onclick="switchTab('licenses')">🔑 License Keys</button>
-  </div>
-
-  <!-- TAB: DEVICES -->
-  <div id="tab-devices" class="tab-content active">
-    <div class="stats-bar">
-      <div class="stat-card">
-        <div class="label">Total Devices</div>
-        <div class="value total" id="stat-total">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Active</div>
-        <div class="value active" id="stat-active">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Blocked</div>
-        <div class="value blocked" id="stat-blocked">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Online (5 min)</div>
-        <div class="value online" id="stat-online">0</div>
-      </div>
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="label">Total Devices</div>
+      <div class="value total" id="stat-total">0</div>
     </div>
-    <div class="toolbar">
-      <input type="text" id="search-box" placeholder="🔍  Device name বা ID দিয়ে খুঁজুন…" oninput="renderTable()"/>
-      <select id="filter-status" onchange="renderTable()">
-        <option value="all">সব দেখান</option>
-        <option value="active">শুধু Active</option>
-        <option value="blocked">শুধু Blocked</option>
-        <option value="online">Online (5 min)</option>
-      </select>
-      <button class="btn-refresh" onclick="loadDevices()">↻ Refresh</button>
-      <span class="auto-label" id="auto-label">Auto refresh: 15s</span>
+    <div class="stat-card">
+      <div class="label">Active</div>
+      <div class="value active" id="stat-active">0</div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Device</th>
-            <th>License</th>
-            <th>IP Address</th>
-            <th>First Seen</th>
-            <th>Last Seen</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="device-table-body">
-          <tr class="empty-row"><td colspan="8">⏳ Loading…</td></tr>
-        </tbody>
-      </table>
+    <div class="stat-card">
+      <div class="label">Blocked</div>
+      <div class="value blocked" id="stat-blocked">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Online (5 min)</div>
+      <div class="value online" id="stat-online">0</div>
     </div>
   </div>
 
-  <!-- TAB: LICENSES -->
-  <div id="tab-licenses" class="tab-content">
-    <div class="license-panel">
-
-      <!-- Generator -->
-      <div class="license-generator">
-        <h2>🔑 LICENSE KEY GENERATOR</h2>
-        <div class="gen-form">
-          <div class="form-group">
-            <label>Label / Name (optional)</label>
-            <input type="text" id="gen-label" placeholder="যেমন: Rahim, Office01…" maxlength="40"/>
-          </div>
-          <div class="form-group">
-            <label>Max Devices</label>
-            <select id="gen-max-devices">
-              <option value="1">1 Device</option>
-              <option value="2">2 Devices</option>
-              <option value="3">3 Devices</option>
-              <option value="5">5 Devices</option>
-              <option value="10">10 Devices</option>
-              <option value="999">Unlimited</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Count</label>
-            <input type="number" id="gen-count" value="1" min="1" max="50" style="width:100%"/>
-          </div>
-          <button class="btn-generate" onclick="generateKeys()">⚡ Generate</button>
-        </div>
-        <div class="generated-output" id="generated-output">
-          <h3>✅ Generated Keys</h3>
-          <ul class="key-list" id="key-list"></ul>
-          <button class="btn-copy-all" onclick="copyAllKeys()">📋 সব Copy করুন</button>
-        </div>
-      </div>
-
-      <!-- Stats — 4 columns now -->
-      <div class="license-stats">
-        <div class="lic-stat">
-          <div class="label">Total Keys</div>
-          <div class="value total" id="lic-total">0</div>
-        </div>
-        <div class="lic-stat">
-          <div class="label">Activated</div>
-          <div class="value active" id="lic-activated">0</div>
-        </div>
-        <div class="lic-stat">
-          <div class="label">Unused</div>
-          <div class="value online" id="lic-unused">0</div>
-        </div>
-        <div class="lic-stat">
-          <div class="label">Total Slots Used</div>
-          <div class="value" style="color:var(--purple)" id="lic-slots">0</div>
-        </div>
-      </div>
-
-      <!-- License toolbar -->
-      <div class="license-toolbar">
-        <input type="text" id="lic-search" placeholder="🔍 Key বা Label খুঁজুন…" oninput="renderLicenseTable()"/>
-        <select id="lic-filter" onchange="renderLicenseTable()">
-          <option value="all">সব দেখান</option>
-          <option value="active">শুধু Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="bound">Activated (Bound)</option>
-          <option value="unbound">Unused (Unbound)</option>
-        </select>
-        <button class="btn-refresh-lic" onclick="loadLicenses()">↻ Refresh</button>
-      </div>
-
-      <!-- License table -->
-      <div style="overflow-x:auto">
-        <table>
-          <thead id="license-thead">
-            <tr>
-              <th>#</th>
-              <th>License Key</th>
-              <th>Label</th>
-              <th>Slots</th>
-              <th>Bound Devices</th>
-              <th>Created</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="license-table-body">
-            <tr class="empty-row"><td colspan="8">⏳ Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input type="text" id="search-box" placeholder="🔍  Device name বা ID দিয়ে খুঁজুন…" oninput="renderTable()"/>
+    <select id="filter-status" onchange="renderTable()">
+      <option value="all">সব দেখান</option>
+      <option value="active">শুধু Active</option>
+      <option value="blocked">শুধু Blocked</option>
+      <option value="online">Online (5 min)</option>
+    </select>
+    <button class="btn-refresh" onclick="loadDevices()">↻ Refresh</button>
+    <span class="auto-label" id="auto-label">Auto refresh: 15s</span>
   </div>
 
-</div><!-- /#app -->
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Device</th>
+          <th>License</th>
+          <th>IP Address</th>
+          <th>First Seen</th>
+          <th>Last Seen</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="device-table-body">
+        <tr class="empty-row"><td colspan="8">⏳ Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <!-- Block Reason Modal -->
 <div class="modal-overlay" id="block-modal">
@@ -663,14 +407,22 @@
   </div>
 </div>
 
-<!-- Alias Modal -->
+<!-- ══ ALIAS MODAL (নতুন) ══════════════════════════════ -->
 <div class="modal-overlay" id="alias-modal">
   <div class="modal" style="border-top-color:var(--purple)">
     <h3>✏️ Device Label দিন</h3>
     <p id="alias-modal-info" style="color:var(--muted);font-size:11px;margin-bottom:20px">Device: —</p>
-    <input type="text" id="alias-input" placeholder="যেমন: Alif, Rahim, Office PC…" maxlength="40"/>
+    <input
+      type="text"
+      id="alias-input"
+      placeholder="যেমন: Alif, Rahim, Office PC…"
+      maxlength="40"
+      style="border-color:var(--border)"
+      onfocus="this.style.borderColor='var(--purple)'"
+      onblur="this.style.borderColor='var(--border)'"
+    />
     <div style="font-size:10px;color:var(--muted);margin-top:-10px;margin-bottom:16px">
-      💡 এই label শুধু আপনার browser এ save হবে।
+      💡 এই label শুধু আপনার browser এ save হবে। কারো PC তে দেখাবে না।
     </div>
     <div class="modal-btns">
       <button class="btn-clear-alias" onclick="clearAlias()">🗑 Label মুছুন</button>
@@ -680,66 +432,36 @@
   </div>
 </div>
 
-<!-- Edit Max Devices Modal -->
-<div class="modal-overlay" id="edit-maxdev-modal">
-  <div class="modal" style="border-top-color:var(--yellow)">
-    <h3>⚙️ Max Devices পরিবর্তন করুন</h3>
-    <p id="edit-maxdev-info" style="color:var(--muted);font-size:11px;margin-bottom:20px">Key: —</p>
-    <div style="margin-bottom:16px">
-      <label style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">New Max Devices</label>
-      <select id="edit-maxdev-select" style="width:100%;padding:12px 14px;background:var(--card2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:12px;outline:none;">
-        <option value="1">1 Device</option>
-        <option value="2">2 Devices</option>
-        <option value="3">3 Devices</option>
-        <option value="5">5 Devices</option>
-        <option value="10">10 Devices</option>
-        <option value="999">Unlimited</option>
-      </select>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeEditMaxDevModal()">বাতিল</button>
-      <button class="btn-confirm-block" style="background:var(--yellow);color:#000" onclick="confirmEditMaxDev()">✓ Save করুন</button>
-    </div>
-  </div>
-</div>
-
 <div id="toast"></div>
 
 <script>
   const BASE = window.location.origin;
-  let adminPw   = '';
-  let allDevices  = [];
-  let allLicenses = [];
-  let lastGenKeys = [];
-  let pendingBlockId  = '';
-  let pendingAliasId  = '';
-  let pendingEditMaxDevKey = '';
-  let autoTimer  = null;
-  let countdown  = 15;
-  // Track which license rows have expanded device panels
-  let expandedLicKeys = new Set();
+  let adminPw = '';
+  let allDevices = [];
+  let pendingBlockId = '';
+  let pendingAliasId = '';
+  let autoTimer = null;
+  let countdown = 15;
 
-  // ── TABS ──────────────────────────────────────────────
-  function switchTab(name) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    const btns = document.querySelectorAll('.tab-btn');
-    if (name === 'devices')  btns[0].classList.add('active');
-    if (name === 'licenses') { btns[1].classList.add('active'); loadLicenses(); }
-  }
-
-  // ── ALIAS ─────────────────────────────────────────────
+  // ── ALIAS STORAGE (localStorage) ─────────────────────
   const ALIAS_KEY = 'luckyloop_aliases';
+
   function loadAliases() {
-    try { return JSON.parse(localStorage.getItem(ALIAS_KEY) || '{}'); } catch { return {}; }
+    try {
+      return JSON.parse(localStorage.getItem(ALIAS_KEY) || '{}');
+    } catch { return {}; }
   }
+
   function saveAlias(deviceId, alias) {
     const aliases = loadAliases();
-    if (alias) aliases[deviceId] = alias; else delete aliases[deviceId];
+    if (alias) aliases[deviceId] = alias;
+    else delete aliases[deviceId];
     localStorage.setItem(ALIAS_KEY, JSON.stringify(aliases));
   }
-  function getAlias(deviceId) { return loadAliases()[deviceId] || ''; }
+
+  function getAlias(deviceId) {
+    return loadAliases()[deviceId] || '';
+  }
 
   // ── LOGIN ─────────────────────────────────────────────
   document.getElementById('pw-input').addEventListener('keydown', e => {
@@ -776,7 +498,9 @@
 
   // ── LOAD DEVICES ──────────────────────────────────────
   function loadDevices() {
-    fetch(`${BASE}/api/admin/devices`, { headers: { 'X-Admin-Password': adminPw } })
+    fetch(`${BASE}/api/admin/devices`, {
+      headers: { 'X-Admin-Password': adminPw }
+    })
     .then(r => r.json())
     .then(data => {
       allDevices = data;
@@ -794,10 +518,14 @@
     autoTimer = setInterval(() => {
       countdown--;
       document.getElementById('auto-label').textContent = `Auto refresh: ${countdown}s`;
-      if (countdown <= 0) { loadDevices(); countdown = 15; }
+      if (countdown <= 0) {
+        loadDevices();
+        countdown = 15;
+      }
     }, 1000);
   }
 
+  // ── STATS ─────────────────────────────────────────────
   function updateStats(devices) {
     const now = Date.now();
     const total   = devices.length;
@@ -805,7 +533,8 @@
     const active  = total - blocked;
     const online  = devices.filter(d => {
       if (!d.last_seen) return false;
-      return (now - new Date(d.last_seen).getTime()) / 1000 < 300;
+      const diff = (now - new Date(d.last_seen).getTime()) / 1000;
+      return diff < 300;
     }).length;
     document.getElementById('stat-total').textContent   = total;
     document.getElementById('stat-active').textContent  = active;
@@ -813,7 +542,7 @@
     document.getElementById('stat-online').textContent  = online;
   }
 
-  // ── RENDER DEVICE TABLE ───────────────────────────────
+  // ── RENDER TABLE ──────────────────────────────────────
   let currentList = [];
 
   function renderTable() {
@@ -828,7 +557,7 @@
         (d.device_name || '').toLowerCase().includes(q) ||
         (d.device_id   || '').toLowerCase().includes(q) ||
         (d.license_key || '').toLowerCase().includes(q) ||
-        alias.toLowerCase().includes(q);
+        alias.toLowerCase().includes(q); // alias দিয়েও search হবে
       if (!matchQ) return false;
       if (filter === 'blocked') return d.is_blocked;
       if (filter === 'active')  return !d.is_blocked;
@@ -847,66 +576,106 @@
 
     tbody.innerHTML = currentList.map((d, i) => {
       const isOnline = d.last_seen
-        ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
+        ? (now - new Date(d.last_seen).getTime()) / 1000 < 300
+        : false;
+
       const alias = aliases[d.device_id] || '';
-      const aliasBadge = alias ? `<span class="device-alias">👤 ${escHtml(alias)}</span>` : '';
+      const aliasBadge = alias
+        ? `<span class="device-alias">👤 ${escHtml(alias)}</span>`
+        : '';
+
       const statusBadge = d.is_blocked
         ? '<span class="badge blocked"><span class="badge-dot"></span>BLOCKED</span>'
         : '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>';
+
       const actionBtn = d.is_blocked
-        ? `<button class="btn-unblock" onclick="unblockByIndex(${i})">✓ Unblock</button>`
-        : `<button class="btn-block"   onclick="openBlockByIndex(${i})">✕ Block</button>`;
+        ? '<button class="btn-unblock" onclick="unblockByIndex(' + i + ')">✓ Unblock</button>'
+        : '<button class="btn-block" onclick="openBlockByIndex(' + i + ')">✕ Block</button>';
+
       const blockReasonHtml = d.is_blocked && d.block_reason
-        ? `<div style="font-size:10px;color:var(--red);margin-top:3px">💬 ${escHtml(d.block_reason)}</div>`
+        ? '<div style="font-size:10px;color:var(--red);margin-top:3px">💬 ' + escHtml(d.block_reason) + '</div>'
         : '';
 
       return '<tr>'
         + '<td style="color:var(--muted);font-size:11px">' + (i+1) + '</td>'
         + '<td><div style="display:flex;align-items:flex-start;gap:8px">'
-        + `<span class="online-dot ${isOnline?'yes':'no'}" style="margin-top:3px"></span>`
+        + '<span class="online-dot ' + (isOnline?'yes':'no') + '" style="margin-top:3px"></span>'
         + '<div>'
-        + `<div class="device-name">${escHtml(d.device_name||'Unknown')}${aliasBadge}`
-        + `<button class="btn-alias" onclick="openAliasModal(${i})" title="Label">✏️</button></div>`
-        + `<div class="device-id">${escHtml(d.device_id||'—')}</div>`
+        + '<div class="device-name">'
+            + escHtml(d.device_name || 'Unknown')
+            + aliasBadge
+            + '<button class="btn-alias" onclick="openAliasModal(' + i + ')" title="Label দিন">✏️</button>'
+        + '</div>'
+        + '<div class="device-id">' + escHtml(d.device_id || '—') + '</div>'
         + blockReasonHtml
         + '</div></div></td>'
-        + `<td><span class="license-tag">${escHtml((d.license_type||'').split('(')[0].trim()||'Unknown')}</span></td>`
-        + `<td class="device-ip">${escHtml(d.ip_address||'—')}</td>`
-        + `<td style="color:var(--muted);font-size:11px">${fmtTime(d.first_seen)}</td>`
-        + `<td style="color:${isOnline?'var(--green)':'var(--muted)'};font-size:11px">${fmtAgo(d.last_seen)}</td>`
+        + '<td><span class="license-tag">' + escHtml((d.license_type||'').split('(')[0].trim() || 'Unknown') + '</span></td>'
+        + '<td class="device-ip">' + escHtml(d.ip_address || '—') + '</td>'
+        + '<td style="color:var(--muted);font-size:11px">' + fmtTime(d.first_seen) + '</td>'
+        + '<td style="color:' + (isOnline?'var(--green)':'var(--muted)') + ';font-size:11px">' + fmtAgo(d.last_seen) + '</td>'
         + '<td>' + statusBadge + '</td>'
-        + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">${actionBtn}`
-        + `<button class="btn-delete" onclick="deleteByIndex(${i})" title="Delete">🗑</button></td>`
+        + '<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">'
+        + actionBtn
+        + '<button class="btn-delete" onclick="deleteByIndex(' + i + ')" title="Delete">🗑</button>'
+        + '</td>'
         + '</tr>';
     }).join('');
   }
 
-  function openBlockByIndex(i) { const d = currentList[i]; if (d) openBlockModal(d.device_id, d.device_name); }
-  function unblockByIndex(i)   { const d = currentList[i]; if (d) unblockDevice(d.device_id); }
-  function deleteByIndex(i)    { const d = currentList[i]; if (d) deleteDevice(d.device_id); }
+  // ── INDEX-BASED WRAPPERS ──────────────────────────────
+  function openBlockByIndex(i) {
+    const d = currentList[i];
+    if (!d) { showToast('❌ Device not found!', true); return; }
+    openBlockModal(d.device_id, d.device_name);
+  }
+  function unblockByIndex(i) {
+    const d = currentList[i];
+    if (!d) { showToast('❌ Device not found!', true); return; }
+    unblockDevice(d.device_id);
+  }
+  function deleteByIndex(i) {
+    const d = currentList[i];
+    if (!d) { showToast('❌ Device not found!', true); return; }
+    deleteDevice(d.device_id);
+  }
 
   // ── ALIAS MODAL ───────────────────────────────────────
   function openAliasModal(i) {
-    const d = currentList[i]; if (!d) return;
+    const d = currentList[i];
+    if (!d) return;
     pendingAliasId = d.device_id;
-    document.getElementById('alias-modal-info').textContent = 'Device: ' + (d.device_name||'Unknown') + ' · ' + d.device_id;
-    document.getElementById('alias-input').value = getAlias(d.device_id);
+
+    const existing = getAlias(d.device_id);
+    document.getElementById('alias-modal-info').textContent =
+      'Device: ' + (d.device_name || 'Unknown') + '  ·  ID: ' + d.device_id;
+    document.getElementById('alias-input').value = existing;
     document.getElementById('alias-modal').classList.add('open');
     setTimeout(() => document.getElementById('alias-input').focus(), 100);
   }
-  function closeAliasModal() { document.getElementById('alias-modal').classList.remove('open'); pendingAliasId = ''; }
+
+  function closeAliasModal() {
+    document.getElementById('alias-modal').classList.remove('open');
+    pendingAliasId = '';
+  }
+
   function confirmAlias() {
     const alias = document.getElementById('alias-input').value.trim();
     if (!pendingAliasId) { closeAliasModal(); return; }
     saveAlias(pendingAliasId, alias);
-    closeAliasModal(); renderTable();
-    showToast(alias ? '✅ Label save হয়েছে: ' + alias : '🗑 Label মুছে ফেলা হয়েছে');
+    closeAliasModal();
+    renderTable(); // re-render so alias shows up immediately
+    if (alias) showToast('✅ Label save হয়েছে: ' + alias);
+    else showToast('🗑 Label মুছে ফেলা হয়েছে');
   }
+
   function clearAlias() {
     if (!pendingAliasId) { closeAliasModal(); return; }
-    saveAlias(pendingAliasId, ''); closeAliasModal(); renderTable();
+    saveAlias(pendingAliasId, '');
+    closeAliasModal();
+    renderTable();
     showToast('🗑 Label মুছে ফেলা হয়েছে');
   }
+
   document.getElementById('alias-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmAlias();
     if (e.key === 'Escape') closeAliasModal();
@@ -914,381 +683,90 @@
 
   // ── BLOCK MODAL ───────────────────────────────────────
   function openBlockModal(deviceId, deviceName) {
+    if (!deviceId) { showToast('❌ Device ID পাওয়া যায়নি!', true); return; }
     pendingBlockId = deviceId;
     document.getElementById('modal-device-info').textContent =
-      'Device: ' + (deviceName||'Unknown') + ' (' + deviceId + ')';
+      'Device: ' + (deviceName || 'Unknown') + ' (' + deviceId + ')';
     document.getElementById('block-reason-input').value = '';
     document.getElementById('block-modal').classList.add('open');
     setTimeout(() => document.getElementById('block-reason-input').focus(), 100);
   }
-  function closeModal() { document.getElementById('block-modal').classList.remove('open'); pendingBlockId = ''; }
+
+  function closeModal() {
+    document.getElementById('block-modal').classList.remove('open');
+    pendingBlockId = '';
+  }
+
   document.getElementById('block-reason-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmBlock();
     if (e.key === 'Escape') closeModal();
   });
+
   function confirmBlock() {
-    const info  = document.getElementById('modal-device-info').textContent;
+    const info = document.getElementById('modal-device-info').textContent;
     const match = info.match(/\(([^)]+)\)$/);
     const deviceId = match ? match[1].trim() : pendingBlockId;
-    const reason = document.getElementById('block-reason-input').value.trim() || 'Admin কর্তৃক block করা হয়েছে';
+    if (!deviceId) { showToast('❌ Device ID missing!', true); closeModal(); return; }
+    const reason = document.getElementById('block-reason-input').value.trim()
+      || 'Admin কর্তৃক block করা হয়েছে';
     closeModal();
     blockDevice(deviceId, reason);
   }
 
-  // ── DEVICE API ────────────────────────────────────────
+  // ── API CALLS ─────────────────────────────────────────
   function blockDevice(deviceId, reason) {
     fetch(`${BASE}/api/admin/block?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ device_id: deviceId, reason })
-    }).then(r => r.json()).then(d => {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ device_id: deviceId, reason: reason })
+    })
+    .then(r => r.json())
+    .then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
       showToast('🚫 Device block করা হয়েছে');
       loadDevices();
-      // Refresh license panel if open
-      if (document.getElementById('tab-licenses').classList.contains('active')) loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
+    })
+    .catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function unblockDevice(deviceId) {
     fetch(`${BASE}/api/admin/unblock?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ device_id: deviceId })
-    }).then(r => r.json()).then(d => {
+    })
+    .then(r => r.json())
+    .then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
       showToast('✅ Device unblock করা হয়েছে');
       loadDevices();
-      if (document.getElementById('tab-licenses').classList.contains('active')) loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
+    })
+    .catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function deleteDevice(deviceId) {
     if (!confirm('এই device টা permanently delete করবেন?')) return;
     fetch(`${BASE}/api/admin/delete?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ device_id: deviceId })
-    }).then(r => r.json()).then(d => {
-      if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🗑 Device delete করা হয়েছে'); loadDevices();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  LICENSE KEY SYSTEM
-  // ══════════════════════════════════════════════════════
-
-  function generateKeys() {
-    const label      = document.getElementById('gen-label').value.trim();
-    const maxDevices = parseInt(document.getElementById('gen-max-devices').value);
-    const count      = Math.max(1, Math.min(50, parseInt(document.getElementById('gen-count').value) || 1));
-
-    fetch(`${BASE}/api/admin/licenses/generate?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ label, max_devices: maxDevices, count })
-    }).then(r => r.json()).then(data => {
-      if (data.error) { showToast('❌ ' + data.error, true); return; }
-      lastGenKeys = data.keys || [];
-      const out = document.getElementById('generated-output');
-      const ul  = document.getElementById('key-list');
-      out.style.display = 'block';
-      ul.innerHTML = lastGenKeys.map((k) =>
-        `<li>
-          <span>${k}</span>
-          <button class="btn-copy-key" onclick="copyKey('${k}', this)">📋 Copy</button>
-        </li>`
-      ).join('');
-      showToast(`✅ ${lastGenKeys.length} টি key generate হয়েছে`);
-      loadLicenses();
-    }).catch(() => showToast('❌ Generate করতে পারছি না', true));
-  }
-
-  function copyKey(key, btn) {
-    navigator.clipboard.writeText(key).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = '✓ Copied!';
-      btn.style.background = 'var(--green)';
-      btn.style.color = '#000';
-      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 1500);
-    });
-  }
-
-  function copyAllKeys() {
-    if (!lastGenKeys.length) return;
-    navigator.clipboard.writeText(lastGenKeys.join('\n')).then(() => {
-      showToast(`📋 ${lastGenKeys.length} টি key copy হয়েছে`);
-    });
-  }
-
-  // ── LOAD LICENSES ─────────────────────────────────────
-  function loadLicenses() {
-    fetch(`${BASE}/api/admin/licenses?password=${encodeURIComponent(adminPw)}`)
-    .then(r => r.json())
-    .then(data => {
-      allLicenses = Array.isArray(data) ? data : [];
-      updateLicenseStats(allLicenses);
-      renderLicenseTable();
     })
-    .catch(() => showToast('❌ Licenses load করতে পারছি না', true));
-  }
-
-  function updateLicenseStats(licenses) {
-    const total     = licenses.length;
-    // Count licenses with at least one bound device
-    const activated = licenses.filter(l => {
-      if (Array.isArray(l.bound_devices)) return l.bound_devices.length > 0;
-      return !!l.bound_device;
-    }).length;
-    const unused = total - activated;
-    // Total device slots used across all licenses
-    const slotsUsed = licenses.reduce((acc, l) => {
-      if (Array.isArray(l.bound_devices)) return acc + l.bound_devices.length;
-      return acc + (l.bound_device ? 1 : 0);
-    }, 0);
-    document.getElementById('lic-total').textContent     = total;
-    document.getElementById('lic-activated').textContent = activated;
-    document.getElementById('lic-unused').textContent    = unused;
-    document.getElementById('lic-slots').textContent     = slotsUsed;
-  }
-
-  let currentLicList = [];
-
-  function renderLicenseTable() {
-    const q      = (document.getElementById('lic-search').value || '').toLowerCase();
-    const filter = document.getElementById('lic-filter').value;
-
-    currentLicList = allLicenses.filter(l => {
-      // Support both old single bound_device and new bound_devices array
-      const boundDevStr = Array.isArray(l.bound_devices)
-        ? l.bound_devices.map(d => d.device_id + ' ' + (d.device_name||'')).join(' ')
-        : (l.bound_device || '');
-      const matchQ = !q ||
-        (l.license_key  || '').toLowerCase().includes(q) ||
-        (l.label        || '').toLowerCase().includes(q) ||
-        boundDevStr.toLowerCase().includes(q);
-      if (!matchQ) return false;
-      const hasBound = Array.isArray(l.bound_devices) ? l.bound_devices.length > 0 : !!l.bound_device;
-      if (filter === 'active')   return l.is_active;
-      if (filter === 'inactive') return !l.is_active;
-      if (filter === 'bound')    return hasBound;
-      if (filter === 'unbound')  return !hasBound;
-      return true;
-    });
-
-    const tbody = document.getElementById('license-table-body');
-    if (!currentLicList.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="8">কোনো license key পাওয়া যায়নি।</td></tr>';
-      return;
-    }
-
-    const rows = [];
-    currentLicList.forEach((l, i) => {
-      // Normalise: support both old & new API shape
-      const boundDevices = Array.isArray(l.bound_devices)
-        ? l.bound_devices
-        : (l.bound_device ? [{ device_id: l.bound_device, device_name: l.bound_device }] : []);
-      const maxDev = l.max_devices || 1;
-      const usedSlots = boundDevices.length;
-      const isExpanded = expandedLicKeys.has(l.license_key);
-
-      const statusBadge = l.is_active
-        ? '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>'
-        : '<span class="badge inactive"><span class="badge-dot"></span>INACTIVE</span>';
-
-      // Slot pips
-      const maxShow = Math.min(maxDev, 10);
-      let pipsHtml = '';
-      for (let s = 0; s < maxShow; s++) {
-        const dev = boundDevices[s];
-        if (dev) {
-          const cls = dev.is_blocked ? 'blocked-pip' : 'used';
-          const icon = dev.is_blocked ? '🚫' : '●';
-          pipsHtml += `<span class="slot-pip ${cls}" title="${escHtml(dev.device_name||dev.device_id)}">${icon}</span>`;
-        } else {
-          pipsHtml += `<span class="slot-pip free">○</span>`;
-        }
-      }
-      if (maxDev > 10) pipsHtml += `<span class="slot-label">+${maxDev-10} more</span>`;
-      const slotHtml = `<div class="slot-bar">${pipsHtml}
-        <span class="slot-label" style="margin-left:4px">${usedSlots}/${maxDev === 999 ? '∞' : maxDev}</span>
-        <button onclick="openEditMaxDevModal(${i})" title="Limit পরিবর্তন করুন"
-          style="padding:2px 6px;font-size:9px;font-family:inherit;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;margin-left:4px">✎</button>
-      </div>`;
-
-      const toggleBtn = l.is_active
-        ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, 0)">⛔ Deactivate</button>`
-        : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, 1)">✅ Activate</button>`;
-
-      const viewBtn = boundDevices.length > 0
-        ? `<button class="btn-view-devices" onclick="toggleDeviceExpand('${escHtml(l.license_key)}', ${i})">${isExpanded ? '▲ Hide' : '▼ Devices'} (${usedSlots})</button>`
-        : '';
-
-      const unbindAllBtn = boundDevices.length > 0
-        ? `<button class="btn-unbind" onclick="unbindAll(${i})" title="সব device unbind করুন">🔓 Unbind All</button>`
-        : '';
-
-      // Main row
-      rows.push('<tr id="lic-row-' + i + '">'
-        + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
-        + `<td><div class="key-text">${escHtml(l.license_key)}</div></td>`
-        + `<td style="color:var(--yellow);font-size:11px">${escHtml(l.label||'—')}</td>`
-        + `<td>${slotHtml}</td>`
-        + `<td>${boundDevices.length > 0
-            ? `<span style="color:var(--green);font-size:11px">🔗 ${usedSlots} device${usedSlots>1?'s':''} active</span>`
-            : '<span class="badge unbound">⚪ UNUSED</span>'}</td>`
-        + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.created_at)}</td>`
-        + `<td>${statusBadge}</td>`
-        + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">`
-        + toggleBtn + viewBtn + unbindAllBtn
-        + `<button class="btn-copy-key" onclick="copyKeyDirect('${escHtml(l.license_key)}', this)" style="font-size:9px">📋</button>`
-        + `<button class="btn-delete" onclick="deleteLicense(${i})" title="Delete">🗑</button>`
-        + '</td>'
-        + '</tr>');
-
-      // Expandable bound-devices panel
-      if (isExpanded && boundDevices.length > 0) {
-        const devItems = boundDevices.map((dev, di) => {
-          const isBlocked = dev.is_blocked;
-          const blockBtn = isBlocked
-            ? `<button class="btn-unblock-from-lic" onclick="unblockFromLic('${escHtml(dev.device_id)}', ${i})">✓ Unblock</button>`
-            : `<button class="btn-block-from-lic"   onclick="blockFromLic('${escHtml(dev.device_id)}', '${escHtml(dev.device_name||dev.device_id)}', ${i})">✕ Block</button>`;
-          const unbindBtn = `<button class="btn-unbind" onclick="unbindSingle('${escHtml(l.license_key)}', '${escHtml(dev.device_id)}', ${i})" style="font-size:9px;padding:3px 8px">🔓 Unbind</button>`;
-          return `<li class="bound-device-item ${isBlocked?'device-blocked':''}">
-            <span class="online-dot ${dev.is_online?'yes':'no'}"></span>
-            <span class="bdi-name">${escHtml(dev.device_name||'Unknown')} ${isBlocked?'<span style="color:var(--red);font-size:9px">[BLOCKED]</span>':''}</span>
-            <span class="bdi-id">${escHtml(dev.device_id)}</span>
-            <span class="bdi-seen">${dev.last_seen ? fmtAgo(dev.last_seen) : '—'}</span>
-            ${blockBtn}
-            ${unbindBtn}
-          </li>`;
-        }).join('');
-
-        rows.push(`<tr class="devices-expand-row" id="expand-${i}">
-          <td colspan="8">
-            <div class="devices-expand-inner">
-              <h4>📱 এই License এর Bound Devices (${usedSlots}/${maxDev === 999 ? '∞' : maxDev})</h4>
-              <ul class="bound-device-list">${devItems}</ul>
-            </div>
-          </td>
-        </tr>`);
-      }
-    });
-
-    tbody.innerHTML = rows.join('');
-  }
-
-  // Toggle expand/collapse for a license's device list
-  function toggleDeviceExpand(licKey, i) {
-    if (expandedLicKeys.has(licKey)) {
-      expandedLicKeys.delete(licKey);
-    } else {
-      expandedLicKeys.add(licKey);
-    }
-    renderLicenseTable();
-  }
-
-  // Block a device directly from license panel
-  function blockFromLic(deviceId, deviceName, licIdx) {
-    openBlockModal(deviceId, deviceName);
-  }
-
-  function unblockFromLic(deviceId, licIdx) {
-    unblockDevice(deviceId);
-    setTimeout(() => loadLicenses(), 600);
-  }
-
-  // Unbind a single device from a license
-  function unbindSingle(licKey, deviceId, i) {
-    if (!confirm(`"${deviceId}" কে এই license থেকে unbind করবেন?`)) return;
-    fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: licKey, device_id: deviceId })
-    }).then(r => r.json()).then(d => {
+    .then(r => r.json())
+    .then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🔓 Device unbind হয়েছে');
-      loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
-  // Unbind ALL devices from a license
-  function unbindAll(i) {
-    const l = currentLicList[i]; if (!l) return;
-    if (!confirm(`"${l.license_key}" এর সব device binding মুছে দেবেন?`)) return;
-    fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: l.license_key, unbind_all: true })
-    }).then(r => r.json()).then(d => {
-      if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🔓 সব device unbind হয়েছে');
-      expandedLicKeys.delete(l.license_key);
-      loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
-  // ── EDIT MAX DEVICES MODAL ────────────────────────────
-  function openEditMaxDevModal(i) {
-    const l = currentLicList[i]; if (!l) return;
-    pendingEditMaxDevKey = l.license_key;
-    document.getElementById('edit-maxdev-info').textContent = 'Key: ' + l.license_key;
-    document.getElementById('edit-maxdev-select').value = String(l.max_devices || 1);
-    document.getElementById('edit-maxdev-modal').classList.add('open');
-  }
-  function closeEditMaxDevModal() {
-    document.getElementById('edit-maxdev-modal').classList.remove('open');
-    pendingEditMaxDevKey = '';
-  }
-  function confirmEditMaxDev() {
-    const newMax = parseInt(document.getElementById('edit-maxdev-select').value);
-    if (!pendingEditMaxDevKey) { closeEditMaxDevModal(); return; }
-    fetch(`${BASE}/api/admin/licenses/update?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: pendingEditMaxDevKey, max_devices: newMax })
-    }).then(r => r.json()).then(d => {
-      if (d.error) { showToast('❌ ' + d.error, true); closeEditMaxDevModal(); return; }
-      showToast(`✅ Max devices → ${newMax === 999 ? 'Unlimited' : newMax}`);
-      closeEditMaxDevModal();
-      loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
-  function toggleLicense(i, newState) {
-    const l = currentLicList[i]; if (!l) return;
-    fetch(`${BASE}/api/admin/licenses/toggle?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: l.license_key, is_active: newState })
-    }).then(r => r.json()).then(d => {
-      if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast(newState ? '✅ Key activated' : '⛔ Key deactivated');
-      loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
-  function deleteLicense(i) {
-    const l = currentLicList[i]; if (!l) return;
-    if (!confirm('এই license key permanently delete করবেন?')) return;
-    fetch(`${BASE}/api/admin/licenses/delete?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: l.license_key })
-    }).then(r => r.json()).then(d => {
-      if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🗑 License key delete হয়েছে');
-      expandedLicKeys.delete(l.license_key);
-      loadLicenses();
-    }).catch(() => showToast('❌ Error হয়েছে', true));
-  }
-
-  function copyKeyDirect(key, btn) {
-    navigator.clipboard.writeText(key).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = '✓';
-      setTimeout(() => btn.textContent = orig, 1500);
-      showToast('📋 Key copied!');
-    });
+      showToast('🗑 Device delete করা হয়েছে');
+      loadDevices();
+    })
+    .catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   // ── HELPERS ───────────────────────────────────────────
   function fmtTime(iso) {
     if (!iso) return '—';
     try {
-      return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+      return new Date(iso).toLocaleString('en-GB', {
+        day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'
+      });
     } catch { return iso; }
   }
 
@@ -1296,16 +774,18 @@
     if (!iso) return '—';
     try {
       const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-      if (s < 10)    return 'just now';
-      if (s < 60)    return s + 's ago';
-      if (s < 3600)  return Math.floor(s/60) + ' min ago';
-      if (s < 86400) return Math.floor(s/3600) + ' hr ago';
+      if (s < 10)   return 'just now';
+      if (s < 60)   return s + 's ago';
+      if (s < 3600) return Math.floor(s/60) + ' min ago';
+      if (s < 86400)return Math.floor(s/3600) + ' hr ago';
       return Math.floor(s/86400) + ' day ago';
     } catch { return iso; }
   }
 
   function escHtml(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s||'')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function showToast(msg, isError=false) {
