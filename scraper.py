@@ -5,7 +5,7 @@ import os
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-SERVER_URL = "https://luckyloop-tracker.onrender.com"
+SERVER_URL = "https://luckyloop-position-update-16-05.onrender.com/"
 PHPSESSID  = os.environ.get("MW_PHPSESSID", "tkbhj34s1lc5uu1pqaag4hevvk")
 
 JOB_NAMES = [
