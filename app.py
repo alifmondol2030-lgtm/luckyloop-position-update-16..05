@@ -3,20 +3,19 @@ from flask_cors import CORS
 import sqlite3
 from datetime import datetime
 import os
+import secrets
+import string
 
 app = Flask(__name__)
 CORS(app)
 
-# ── Secret key for session (change this!) ──────────────────
 app.secret_key = os.environ.get("SECRET_KEY", "luckyloop_secret_key_2024_xk92")
 
 DB = os.path.join(os.environ.get("DB_PATH", "."), "jobs.db")
 
-# ── Admin password ──────────────────────────────────────────
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "luckyloop_admin_2024")
-
-# ── Viewer password (for /latest page) ─────────────────────
+ADMIN_PASSWORD  = os.environ.get("ADMIN_PASSWORD", "luckyloop_admin_2024")
 VIEWER_PASSWORD = os.environ.get("VIEWER_PASSWORD", "luckyloop2024")
+
 
 def init_db():
     conn = sqlite3.connect(DB)
@@ -52,20 +51,58 @@ def init_db():
             block_reason TEXT
         )
     """)
-    cols = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
-    if "updated_at" not in cols:
+    # license_keys table — bound_device এখন JSON list (multiple devices support)
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS license_keys (
+            key_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+            license_key   TEXT    UNIQUE NOT NULL,
+            label         TEXT,
+            max_devices   INTEGER DEFAULT 1,
+            bound_devices TEXT    DEFAULT '[]',
+            bound_device  TEXT,
+            created_at    TEXT,
+            activated_at  TEXT,
+            is_active     INTEGER DEFAULT 1
+        )
+    """)
+
+    # ── Migration: পুরনো DB তে bound_devices column না থাকলে add করো ──
+    cols = [row[1] for row in c.execute("PRAGMA table_info(license_keys)")]
+    if "bound_devices" not in cols:
+        c.execute("ALTER TABLE license_keys ADD COLUMN bound_devices TEXT DEFAULT '[]'")
+        # পুরনো bound_device data migrate করো
+        c.execute("UPDATE license_keys SET bound_devices = '[\"' || bound_device || '\"]' WHERE bound_device IS NOT NULL AND bound_device != ''")
+
+    cols2 = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
+    if "updated_at" not in cols2:
         c.execute("ALTER TABLE jobs ADD COLUMN updated_at TEXT")
+
     conn.commit()
     conn.close()
     print("[DB] Ready")
+
 
 def get_db():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def is_viewer_logged_in():
     return session.get("viewer_logged_in") is True
+
+
+def check_admin(req):
+    pw = req.headers.get("X-Admin-Password") or req.args.get("password") or ""
+    return pw == ADMIN_PASSWORD
+
+
+def generate_license_key(label=""):
+    chars  = string.ascii_uppercase + string.digits
+    suffix = ''.join(secrets.choice(chars) for _ in range(16))
+    prefix = label.replace(" ", "-")[:12].upper() if label else "USER"
+    return f"LL-{prefix}-{suffix}"
+
 
 # ══════════════════════════════════════════════════════════
 #  VIEWER LOGIN/LOGOUT
@@ -81,10 +118,12 @@ def viewer_login():
         return jsonify({"ok": True})
     return jsonify({"ok": False, "error": "ভুল পাসওয়ার্ড"}), 401
 
+
 @app.route("/viewer-logout")
 def viewer_logout():
     session.pop("viewer_logged_in", None)
     return redirect("/latest")
+
 
 # ══════════════════════════════════════════════════════════
 #  PROTECTED ROUTES
@@ -96,11 +135,13 @@ def home():
         return render_template("latest.html", locked=True)
     return render_template("index.html")
 
+
 @app.route("/latest")
 def latest():
     if not is_viewer_logged_in():
         return render_template("latest.html", locked=True)
     return render_template("latest.html", locked=False)
+
 
 @app.route("/api/latest")
 def api_latest():
@@ -112,19 +153,20 @@ def api_latest():
         "SELECT * FROM scraper_status WHERE id=1"
     ).fetchone()
     conn.close()
-    scraper_ok = True
+    scraper_ok  = True
     scraper_msg = "OK"
     if status_row:
-        scraper_ok = status_row["status"] == "ok"
+        scraper_ok  = status_row["status"] == "ok"
         scraper_msg = status_row["message"]
     return jsonify({
-        "jobs": [dict(r) for r in rows],
-        "scraper_ok": scraper_ok,
+        "jobs":        [dict(r) for r in rows],
+        "scraper_ok":  scraper_ok,
         "scraper_msg": scraper_msg
     })
 
+
 # ══════════════════════════════════════════════════════════
-#  EXISTING ROUTES (unchanged)
+#  EXISTING ROUTES
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/scraper-status", methods=["POST"])
@@ -146,8 +188,8 @@ def update_scraper_status():
     """, (status, message, now))
     conn.commit()
     conn.close()
-    print(f"[STATUS] {status} | {message}")
     return jsonify({"ok": True})
+
 
 @app.route("/save", methods=["POST", "OPTIONS"])
 def save_job():
@@ -175,11 +217,11 @@ def save_job():
     """, (job_name, position, available, link, now))
     conn.commit()
     conn.close()
-    print(f"[SAVED] {job_name}  |  pos={position}  |  avail={available}  |  {now}")
     return jsonify({"status": "saved", "job_name": job_name})
 
+
 # ══════════════════════════════════════════════════════════
-#  DEVICE MANAGEMENT ROUTES
+#  DEVICE MANAGEMENT
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/heartbeat", methods=["POST"])
@@ -228,10 +270,8 @@ def heartbeat():
     conn.close()
 
     if is_blocked:
-        print(f"[BLOCKED] {device_name} ({device_id}) tried to connect")
         return jsonify({"ok": False, "blocked": True, "reason": block_reason or "আপনার device block করা হয়েছে।"})
 
-    print(f"[HEARTBEAT] {device_name} ({device_id})")
     return jsonify({"ok": True, "blocked": False})
 
 
@@ -245,27 +285,252 @@ def check_device(device_id):
 
     if not row:
         return jsonify({"ok": True, "blocked": False})
-
     if row["is_blocked"]:
         return jsonify({
             "ok": False,
             "blocked": True,
             "reason": row["block_reason"] or "আপনার device block করা হয়েছে।"
         })
-
     return jsonify({"ok": True, "blocked": False})
 
+
 # ══════════════════════════════════════════════════════════
-#  ADMIN ROUTES
+#  ✅ FIXED: LICENSE KEY VERIFY — Multi-device support
 # ══════════════════════════════════════════════════════════
 
-def check_admin(req):
-    pw = req.headers.get("X-Admin-Password") or req.args.get("password") or ""
-    return pw == ADMIN_PASSWORD
+import json as _json
+
+@app.route("/api/license/verify", methods=["POST"])
+def license_verify():
+    data = request.get_json(silent=True) or {}
+    license_key = str(data.get("license_key", "") or "").strip()
+    device_id   = str(data.get("device_id",   "") or "").strip()
+    device_name = str(data.get("device_name", "") or "Unknown").strip()
+
+    if not license_key or not device_id:
+        return jsonify({"ok": False, "valid": False, "message": "❌ Missing license_key or device_id"}), 400
+
+    conn = get_db()
+    row = conn.execute(
+        "SELECT * FROM license_keys WHERE license_key=?", (license_key,)
+    ).fetchone()
+
+    if not row:
+        conn.close()
+        return jsonify({"ok": False, "valid": False, "message": "❌ Invalid License Key!"})
+
+    if not row["is_active"]:
+        conn.close()
+        return jsonify({"ok": False, "valid": False, "message": "❌ This license key has been deactivated!"})
+
+    max_devices = int(row["max_devices"] or 1)
+    now         = datetime.now().isoformat()
+
+    # bound_devices — JSON list of device IDs
+    try:
+        bound_devices = _json.loads(row["bound_devices"] or "[]")
+        if not isinstance(bound_devices, list):
+            bound_devices = []
+    except:
+        bound_devices = []
+
+    # এই device আগে থেকেই bound থাকলে — allow করো
+    if device_id in bound_devices:
+        label = row["label"] or "License Key Active"
+        conn.close()
+        return jsonify({
+            "ok":           True,
+            "valid":        True,
+            "message":      f"✅ License Activated! ({label})",
+            "license_type": label
+        })
+
+    # নতুন device — limit check করো
+    if len(bound_devices) >= max_devices:
+        conn.close()
+        return jsonify({
+            "ok":    False,
+            "valid": False,
+            "message": f"❌ Device limit reached! This key allows max {max_devices} device(s). Contact admin to increase limit."
+        })
+
+    # নতুন device add করো
+    bound_devices.append(device_id)
+    conn.execute(
+        "UPDATE license_keys SET bound_devices=?, bound_device=?, activated_at=? WHERE license_key=?",
+        (_json.dumps(bound_devices), device_id, now, license_key)
+    )
+    conn.commit()
+
+    label = row["label"] or "License Key Active"
+    conn.close()
+
+    return jsonify({
+        "ok":           True,
+        "valid":        True,
+        "message":      f"✅ License Activated! ({label})",
+        "license_type": label
+    })
+
+
+@app.route("/api/license/unbind", methods=["POST"])
+def license_unbind():
+    """Admin: unbind সব device অথবা specific device।"""
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    license_key = str(data.get("license_key", "") or "").strip()
+    device_id   = str(data.get("device_id",   "") or "").strip()  # optional
+
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+
+    conn = get_db()
+
+    if device_id:
+        # Specific device unbind
+        row = conn.execute(
+            "SELECT bound_devices FROM license_keys WHERE license_key=?", (license_key,)
+        ).fetchone()
+        if row:
+            try:
+                bound = _json.loads(row["bound_devices"] or "[]")
+                if device_id in bound:
+                    bound.remove(device_id)
+            except:
+                bound = []
+            conn.execute(
+                "UPDATE license_keys SET bound_devices=? WHERE license_key=?",
+                (_json.dumps(bound), license_key)
+            )
+    else:
+        # সব device unbind
+        conn.execute(
+            "UPDATE license_keys SET bound_devices='[]', bound_device=NULL, activated_at=NULL WHERE license_key=?",
+            (license_key,)
+        )
+
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True, "message": "Unbound successfully"})
+
+
+# ══════════════════════════════════════════════════════════
+#  ADMIN LICENSE ROUTES
+# ══════════════════════════════════════════════════════════
+
+@app.route("/api/admin/licenses", methods=["GET"])
+def admin_get_licenses():
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT * FROM license_keys ORDER BY created_at DESC"
+    ).fetchall()
+    conn.close()
+
+    result = []
+    for r in rows:
+        d = dict(r)
+        try:
+            bound = _json.loads(d.get("bound_devices") or "[]")
+        except:
+            bound = []
+        d["bound_devices_list"] = bound
+        d["bound_count"]        = len(bound)
+        result.append(d)
+
+    return jsonify(result)
+
+
+@app.route("/api/admin/licenses/generate", methods=["POST"])
+def admin_generate_license():
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    label       = str(data.get("label", "") or "").strip()
+    max_devices = int(data.get("max_devices", 1))
+    count       = max(1, min(int(data.get("count", 1)), 50))
+
+    now  = datetime.now().isoformat()
+    conn = get_db()
+    generated = []
+    for _ in range(count):
+        key = generate_license_key(label)
+        while conn.execute("SELECT 1 FROM license_keys WHERE license_key=?", (key,)).fetchone():
+            key = generate_license_key(label)
+        conn.execute(
+            "INSERT INTO license_keys (license_key, label, max_devices, bound_devices, created_at, is_active) VALUES (?,?,?,?,?,1)",
+            (key, label, max_devices, "[]", now)
+        )
+        generated.append(key)
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True, "keys": generated})
+
+
+@app.route("/api/admin/licenses/toggle", methods=["POST"])
+def admin_toggle_license():
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    license_key = str(data.get("license_key", "") or "").strip()
+    is_active   = int(bool(data.get("is_active", True)))
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+    conn = get_db()
+    conn.execute(
+        "UPDATE license_keys SET is_active=? WHERE license_key=?",
+        (is_active, license_key)
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True})
+
+
+@app.route("/api/admin/licenses/update-limit", methods=["POST"])
+def admin_update_limit():
+    """Admin: key এর max_devices limit বাড়ানো/কমানো।"""
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    license_key = str(data.get("license_key", "") or "").strip()
+    max_devices = int(data.get("max_devices", 1))
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+    conn = get_db()
+    conn.execute(
+        "UPDATE license_keys SET max_devices=? WHERE license_key=?",
+        (max_devices, license_key)
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True, "message": f"Limit updated to {max_devices} devices"})
+
+
+@app.route("/api/admin/licenses/delete", methods=["POST"])
+def admin_delete_license():
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    license_key = str(data.get("license_key", "") or "").strip()
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+    conn = get_db()
+    conn.execute("DELETE FROM license_keys WHERE license_key=?", (license_key,))
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True})
+
+
+# ══════════════════════════════════════════════════════════
+#  ADMIN PANEL
+# ══════════════════════════════════════════════════════════
 
 @app.route("/admin")
 def admin_panel():
     return render_template("admin.html")
+
 
 @app.route("/api/admin/devices", methods=["GET"])
 def admin_get_devices():
@@ -277,6 +542,7 @@ def admin_get_devices():
     ).fetchall()
     conn.close()
     return jsonify([dict(r) for r in rows])
+
 
 @app.route("/api/admin/block", methods=["POST"])
 def admin_block():
@@ -294,8 +560,8 @@ def admin_block():
     )
     conn.commit()
     conn.close()
-    print(f"[ADMIN] BLOCKED: {device_id} | reason: {reason}")
     return jsonify({"ok": True, "blocked": True})
+
 
 @app.route("/api/admin/unblock", methods=["POST"])
 def admin_unblock():
@@ -312,8 +578,8 @@ def admin_unblock():
     )
     conn.commit()
     conn.close()
-    print(f"[ADMIN] UNBLOCKED: {device_id}")
     return jsonify({"ok": True, "blocked": False})
+
 
 @app.route("/api/admin/delete", methods=["POST"])
 def admin_delete():
@@ -327,7 +593,6 @@ def admin_delete():
     conn.execute("DELETE FROM devices WHERE device_id=?", (device_id,))
     conn.commit()
     conn.close()
-    print(f"[ADMIN] DELETED: {device_id}")
     return jsonify({"ok": True})
 
 
