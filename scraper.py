@@ -5,9 +5,8 @@ import os
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-SERVER_URL      = "https://luckyloop-position-update-16-05.onrender.com/"
-PHPSESSID       = os.environ.get("MW_PHPSESSID", "nr5b7jhva7vgt1360to0ps7om9")
-SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "5679a283515dfae539ac18d6f3715dd0")
+SERVER_URL = "https://luckyloop-position-update-16-05.onrender.com"
+PHPSESSID  = os.environ.get("MW_PHPSESSID", "7rhu4uktuhkur2j0umvapf6da0")
 
 JOB_NAMES = [
     {"full": "TTV-Data Entry - PC required. Not for mobile phones. (E766-1470)", "short": "1470"},
@@ -20,6 +19,12 @@ JOB_NAMES = [
 ]
 
 TARGET_URL = "https://www.microworkers.com/jobs.php?Filter=no&Sort=NEWEST&Id_category=09"
+
+session = requests.Session()
+session.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+    "Cookie": f"PHPSESSID={PHPSESSID}"
+})
 
 def calc_available(pos_str):
     try:
@@ -34,23 +39,13 @@ def update_status(status, message):
             "status" : status,
             "message": message
         }, timeout=10)
-        print(f"[STATUS] {status} | {message}")
+        print(f"[Status] {status} | {message}")
     except Exception as e:
         print(f"[Status Error] {e}")
 
 def scrape_jobs():
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-            "Cookie": f"PHPSESSID={PHPSESSID}",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Referer": "https://www.microworkers.com/",
-        }
-        r = requests.get(TARGET_URL, headers=headers, timeout=30)
-        print(f"[Scraper] Status code: {r.status_code}")
-        print(f"[Scraper] Response snippet: {r.text[:500]}")
-
+        r = session.get(TARGET_URL, timeout=20)
         soup = BeautifulSoup(r.text, "html.parser")
         listings = soup.select(".jobslist")
         count = len(listings)
@@ -74,6 +69,7 @@ def scrape_jobs():
                     link      = name_el.get("href", TARGET_URL)
                     push(job["short"], position, available, link)
                     break
+
     except Exception as e:
         print(f"[Scraper] Error: {e}")
         update_status("error", f"❌ Error: {str(e)[:80]}")
