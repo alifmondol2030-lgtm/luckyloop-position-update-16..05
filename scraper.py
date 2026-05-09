@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 SERVER_URL      = "https://luckyloop-position-update-16-05.onrender.com/"
-PHPSESSID       = os.environ.get("MW_PHPSESSID", "t7gmqoqmgkdrgcfalotk737ku1")
+PHPSESSID       = os.environ.get("MW_PHPSESSID", "nr5b7jhva7vgt1360to0ps7om9")
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "5679a283515dfae539ac18d6f3715dd0")
 
 JOB_NAMES = [
@@ -49,7 +49,7 @@ def scrape_jobs():
         }
         r = requests.get(TARGET_URL, headers=headers, timeout=30)
         print(f"[Scraper] Status code: {r.status_code}")
-        print(f"[Scraper] Response length: {len(r.text)}")
+        print(f"[Scraper] Response snippet: {r.text[:500]}")
 
         soup = BeautifulSoup(r.text, "html.parser")
         listings = soup.select(".jobslist")
