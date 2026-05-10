@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 SERVER_URL = "https://luckyloop-position-update-16-05.onrender.com"
-PHPSESSID  = os.environ.get("MW_PHPSESSID", "68u6ubf2l7na535n5ettocbpg9")
+PHPSESSID  = os.environ.get("MW_PHPSESSID", "qiq3r72cittqat9q3n4seksut7")
 
 JOB_NAMES = [
     {"full": "TTV-Data Entry - PC required. Not for mobile phones. (E766-1470)", "short": "1470"},
