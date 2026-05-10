@@ -32,6 +32,7 @@
     min-height: 100vh;
   }
 
+  /* ── LOGIN ── */
   #login-screen {
     display: flex;
     align-items: center;
@@ -68,8 +69,10 @@
   .login-box button:hover { opacity: .85; }
   .login-error { color: var(--red); font-size: 11px; margin-top: 10px; min-height: 16px; }
 
+  /* ── MAIN APP ── */
   #app { display: none; }
 
+  /* Header */
   .header {
     background: var(--card);
     border-bottom: 1px solid var(--border);
@@ -98,6 +101,7 @@
   }
   .btn-logout:hover { border-color: var(--red); color: var(--red); }
 
+  /* ── TABS ── */
   .tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -106,10 +110,16 @@
   }
   .tab-btn {
     padding: 14px 22px;
-    font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 1px;
-    color: var(--muted); background: transparent;
-    border: none; border-bottom: 2px solid transparent;
-    cursor: pointer; transition: all .2s;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all .2s;
   }
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -118,12 +128,16 @@
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
+  /* Stats bar */
   .stats-bar {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 1px; background: var(--border);
     border-bottom: 1px solid var(--border);
   }
-  .stat-card { background: var(--card); padding: 20px 24px; }
+  .stat-card {
+    background: var(--card);
+    padding: 20px 24px;
+  }
   .stat-card .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
   .stat-card .value { font-size: 28px; font-weight: 700; }
   .stat-card .value.total   { color: var(--accent); }
@@ -131,6 +145,7 @@
   .stat-card .value.blocked { color: var(--red); }
   .stat-card .value.online  { color: var(--yellow); }
 
+  /* Toolbar */
   .toolbar {
     padding: 16px 28px;
     display: flex; align-items: center; gap: 12px;
@@ -153,11 +168,13 @@
   .btn-refresh {
     padding: 9px 18px; font-size: 11px; font-family: inherit; font-weight: 600;
     background: var(--accent); color: #000;
-    border: none; cursor: pointer; letter-spacing: 1px; transition: opacity .2s;
+    border: none; cursor: pointer; letter-spacing: 1px;
+    transition: opacity .2s;
   }
   .btn-refresh:hover { opacity: .85; }
   .auto-label { font-size: 10px; color: var(--muted); margin-left: auto; }
 
+  /* Table */
   .table-wrap { padding: 0 28px 40px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin-top: 20px; }
   thead tr { border-bottom: 1px solid var(--border); }
@@ -166,10 +183,14 @@
     font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
     color: var(--accent); font-weight: 600;
   }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
   tbody tr:hover { background: var(--card); }
   tbody td { padding: 14px 14px; font-size: 12px; vertical-align: middle; }
 
+  /* Status badge */
   .badge {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
@@ -182,18 +203,28 @@
   .badge.unbound  { background: #1a1a1a; color: var(--muted); }
   .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  .online-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .online-dot {
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+  }
   .online-dot.yes { background: var(--green); box-shadow: 0 0 6px var(--green); }
   .online-dot.no  { background: var(--muted); }
 
   .device-name { color: var(--white); font-weight: 600; font-size: 13px; }
   .device-alias {
-    display: inline-block; background: #1a0f2e; color: var(--purple);
-    border: 1px solid #3b1f6e; font-size: 10px; padding: 1px 7px;
-    margin-left: 6px; border-radius: 2px; letter-spacing: 1px; vertical-align: middle;
+    display: inline-block;
+    background: #1a0f2e;
+    color: var(--purple);
+    border: 1px solid #3b1f6e;
+    font-size: 10px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    vertical-align: middle;
   }
   .device-id   { color: var(--muted); font-size: 10px; margin-top: 2px; font-family: monospace; }
   .device-ip   { color: var(--muted); font-size: 10px; }
+
   .license-tag {
     display: inline-block; padding: 2px 8px;
     font-size: 9px; letter-spacing: 1px;
@@ -203,106 +234,173 @@
   .btn-alias {
     padding: 3px 8px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid #3b1f6e;
-    color: var(--purple); cursor: pointer; transition: all .2s; margin-left: 4px; vertical-align: middle;
+    color: var(--purple); cursor: pointer;
+    transition: all .2s; margin-left: 4px;
+    vertical-align: middle;
   }
   .btn-alias:hover { background: #1a0f2e; border-color: var(--purple); }
+
   .btn-block {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-block:hover { background: var(--red); color: #000; }
   .btn-unblock {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-unblock:hover { background: var(--green); color: #000; }
   .btn-delete {
     padding: 6px 10px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid var(--border);
-    color: var(--muted); cursor: pointer; transition: all .2s; margin-left: 4px;
+    color: var(--muted); cursor: pointer;
+    transition: all .2s; margin-left: 4px;
   }
   .btn-delete:hover { border-color: var(--orange); color: var(--orange); }
 
-  .empty-row td { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; }
-
-  /* LICENSE TAB */
-  .license-panel { padding: 28px; }
-  .license-generator {
-    background: var(--card); border: 1px solid var(--border);
-    border-top: 2px solid var(--yellow); padding: 28px; margin-bottom: 28px;
+  .empty-row td {
+    text-align: center; padding: 60px; color: var(--muted); font-size: 12px;
   }
-  .license-generator h2 { font-size: 14px; font-weight: 700; color: var(--yellow); letter-spacing: 2px; margin-bottom: 20px; }
-  .gen-form { display: grid; grid-template-columns: 1fr 140px 100px auto; gap: 12px; align-items: end; }
-  .form-group label { display: block; font-size: 9px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
-  .form-group input, .form-group select {
-    width: 100%; padding: 10px 14px;
+
+  /* ── LICENSE TAB STYLES ── */
+  .license-panel { padding: 28px; }
+
+  .license-generator {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--yellow);
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+  .license-generator h2 {
+    font-size: 14px; font-weight: 700; color: var(--yellow);
+    letter-spacing: 2px; margin-bottom: 20px;
+  }
+
+  .gen-form {
+    display: grid;
+    grid-template-columns: 1fr 140px 100px auto;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 9px; letter-spacing: 1px; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px 14px;
     background: var(--card2); border: 1px solid var(--border);
     color: var(--text); font-family: inherit; font-size: 12px;
     outline: none; transition: border-color .2s;
   }
-  .form-group input:focus, .form-group select:focus { border-color: var(--yellow); }
+  .form-group input:focus,
+  .form-group select:focus { border-color: var(--yellow); }
+
   .btn-generate {
-    padding: 10px 24px; background: var(--yellow); color: #000;
+    padding: 10px 24px;
+    background: var(--yellow); color: #000;
     font-family: inherit; font-size: 11px; font-weight: 700;
-    border: none; cursor: pointer; letter-spacing: 1px; white-space: nowrap;
-    transition: opacity .2s; height: 40px;
+    border: none; cursor: pointer; letter-spacing: 1px;
+    white-space: nowrap;
+    transition: opacity .2s;
+    height: 40px;
   }
   .btn-generate:hover { opacity: .85; }
 
+  /* Generated keys output */
   .generated-output {
-    display: none; margin-top: 20px; background: var(--card2);
-    border: 1px solid var(--border); border-left: 3px solid var(--yellow); padding: 16px;
+    display: none;
+    margin-top: 20px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    padding: 16px;
   }
-  .generated-output h3 { font-size: 10px; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  .generated-output h3 {
+    font-size: 10px; color: var(--yellow); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
   .key-list { list-style: none; }
   .key-list li {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    font-size: 12px; color: var(--green); font-family: monospace;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; color: var(--green);
+    font-family: monospace;
   }
   .key-list li:last-child { border-bottom: none; }
   .btn-copy-key {
     padding: 4px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; transition: all .2s; margin-left: 8px; white-space: nowrap;
+    color: var(--green); cursor: pointer;
+    transition: all .2s; margin-left: 8px; white-space: nowrap;
   }
   .btn-copy-key:hover { background: var(--green); color: #000; }
   .btn-copy-all {
-    margin-top: 12px; padding: 8px 18px; font-size: 10px; font-family: inherit; font-weight: 600;
+    margin-top: 12px;
+    padding: 8px 18px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--yellow);
-    color: var(--yellow); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--yellow); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-copy-all:hover { background: var(--yellow); color: #000; }
 
-  .license-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 20px; }
-  .lic-stat { background: var(--card); padding: 16px 20px; }
+  /* License stats bar */
+  .license-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    margin-bottom: 20px;
+  }
+  .lic-stat {
+    background: var(--card);
+    padding: 16px 20px;
+  }
   .lic-stat .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
   .lic-stat .value { font-size: 24px; font-weight: 700; }
 
+  /* License table header accent */
   #license-thead th { color: var(--yellow); }
-  .key-text { font-family: monospace; font-size: 11px; color: var(--green); word-break: break-all; }
+
+  .key-text {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--green);
+    word-break: break-all;
+  }
 
   .btn-unbind {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--orange);
-    color: var(--orange); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--orange); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-unbind:hover { background: var(--orange); color: #000; }
+
   .btn-toggle-off {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-toggle-off:hover { background: var(--red); color: #fff; }
+
   .btn-toggle-on {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px;
+    transition: all .2s;
   }
   .btn-toggle-on:hover { background: var(--green); color: #000; }
 
+  /* Toast */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
     padding: 12px 20px; font-size: 12px; font-family: inherit;
@@ -314,6 +412,7 @@
   #toast.show { opacity: 1; transform: translateY(0); }
   #toast.error { border-left-color: var(--red); }
 
+  /* Modals */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,.8); z-index: 200;
@@ -322,7 +421,8 @@
   .modal-overlay.open { display: flex; }
   .modal {
     background: var(--card); border: 1px solid var(--border);
-    border-top: 2px solid var(--red); padding: 32px; width: 420px;
+    border-top: 2px solid var(--red);
+    padding: 32px; width: 420px;
   }
   .modal h3 { font-size: 15px; color: var(--white); margin-bottom: 6px; }
   .modal p  { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
@@ -342,53 +442,45 @@
   #alias-modal .modal input:focus { border-color: var(--purple); }
   .btn-confirm-alias { background: var(--purple) !important; color: #000 !important; }
   .btn-clear-alias {
-    flex: 0 0 auto !important; padding: 11px 14px !important;
-    background: transparent !important; border: 1px solid var(--border) !important;
-    color: var(--muted) !important; font-size: 10px !important;
-    cursor: pointer; font-family: inherit; letter-spacing: 1px;
+    flex: 0 0 auto !important;
+    padding: 11px 14px !important;
+    background: transparent !important;
+    border: 1px solid var(--border) !important;
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 1px;
   }
   .btn-clear-alias:hover { border-color: var(--orange) !important; color: var(--orange) !important; }
 
   .license-toolbar {
-    padding: 14px 0; display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border); margin-bottom: 4px;
+    padding: 14px 0 14px 0;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
   }
   .license-toolbar input {
-    flex: 1; max-width: 280px; padding: 8px 12px;
+    flex: 1; max-width: 280px;
+    padding: 8px 12px;
     background: var(--card); border: 1px solid var(--border);
     color: var(--text); font-family: inherit; font-size: 11px;
     outline: none; transition: border-color .2s;
   }
   .license-toolbar input:focus { border-color: var(--yellow); }
   .license-toolbar select {
-    padding: 8px 12px; background: var(--card); border: 1px solid var(--border);
-    color: var(--text); font-family: inherit; font-size: 11px; outline: none; cursor: pointer;
+    padding: 8px 12px;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); font-family: inherit; font-size: 11px;
+    outline: none; cursor: pointer;
   }
   .btn-refresh-lic {
     padding: 8px 16px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: var(--yellow); color: #000; border: none; cursor: pointer; letter-spacing: 1px; transition: opacity .2s;
+    background: var(--yellow); color: #000;
+    border: none; cursor: pointer; letter-spacing: 1px;
+    transition: opacity .2s;
   }
   .btn-refresh-lic:hover { opacity: .85; }
-
-  /* Export/Import buttons */
-  .btn-export {
-    padding: 8px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: transparent; border: 1px solid var(--accent);
-    color: var(--accent); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-  }
-  .btn-export:hover { background: var(--accent); color: #000; }
-  .btn-import {
-    padding: 8px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: transparent; border: 1px solid var(--purple);
-    color: var(--purple); cursor: pointer; letter-spacing: 1px; transition: all .2s;
-  }
-  .btn-import:hover { background: var(--purple); color: #000; }
-
-  .storage-notice {
-    background: #0a1a0a; border: 1px solid #1a3326; border-left: 3px solid var(--green);
-    padding: 10px 16px; font-size: 11px; color: var(--green);
-    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
-  }
 
   @media (max-width: 900px) {
     .stats-bar { grid-template-columns: repeat(2,1fr); }
@@ -401,7 +493,7 @@
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
     <div class="icon">⚡</div>
@@ -413,9 +505,10 @@
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ══ MAIN APP ════════════════════════════════════════ -->
 <div id="app">
 
+  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <span style="color:var(--yellow);font-size:20px">⚡</span>
@@ -431,19 +524,36 @@
     </div>
   </div>
 
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('devices')">📱 Device Manager</button>
     <button class="tab-btn license-tab" onclick="switchTab('licenses')">🔑 License Keys</button>
   </div>
 
-  <!-- TAB: DEVICES -->
+  <!-- ══ TAB: DEVICES ══════════════════════════════════ -->
   <div id="tab-devices" class="tab-content active">
+
+    <!-- Stats -->
     <div class="stats-bar">
-      <div class="stat-card"><div class="label">Total Devices</div><div class="value total" id="stat-total">0</div></div>
-      <div class="stat-card"><div class="label">Active</div><div class="value active" id="stat-active">0</div></div>
-      <div class="stat-card"><div class="label">Blocked</div><div class="value blocked" id="stat-blocked">0</div></div>
-      <div class="stat-card"><div class="label">Online (5 min)</div><div class="value online" id="stat-online">0</div></div>
+      <div class="stat-card">
+        <div class="label">Total Devices</div>
+        <div class="value total" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Active</div>
+        <div class="value active" id="stat-active">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Blocked</div>
+        <div class="value blocked" id="stat-blocked">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Online (5 min)</div>
+        <div class="value online" id="stat-online">0</div>
+      </div>
     </div>
+
+    <!-- Toolbar -->
     <div class="toolbar">
       <input type="text" id="search-box" placeholder="🔍  Device name বা ID দিয়ে খুঁজুন…" oninput="renderTable()"/>
       <select id="filter-status" onchange="renderTable()">
@@ -455,12 +565,20 @@
       <button class="btn-refresh" onclick="loadDevices()">↻ Refresh</button>
       <span class="auto-label" id="auto-label">Auto refresh: 15s</span>
     </div>
+
+    <!-- Table -->
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th><th>Device</th><th>License</th><th>IP Address</th>
-            <th>First Seen</th><th>Last Seen</th><th>Status</th><th>Actions</th>
+            <th>#</th>
+            <th>Device</th>
+            <th>License</th>
+            <th>IP Address</th>
+            <th>First Seen</th>
+            <th>Last Seen</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="device-table-body">
@@ -470,16 +588,11 @@
     </div>
   </div>
 
-  <!-- TAB: LICENSES -->
+  <!-- ══ TAB: LICENSES ══════════════════════════════════ -->
   <div id="tab-licenses" class="tab-content">
     <div class="license-panel">
 
-      <div class="storage-notice">
-        💾 License keys localStorage এ permanently save হয় — server restart হলেও থাকবে।
-        <button class="btn-export" onclick="exportKeys()" style="margin-left:auto">📤 Export</button>
-        <button class="btn-import" onclick="importKeys()">📥 Import</button>
-      </div>
-
+      <!-- Generator card -->
       <div class="license-generator">
         <h2>🔑 LICENSE KEY GENERATOR</h2>
         <div class="gen-form">
@@ -502,6 +615,8 @@
           </div>
           <button class="btn-generate" onclick="generateKeys()">⚡ Generate</button>
         </div>
+
+        <!-- Output -->
         <div class="generated-output" id="generated-output">
           <h3>✅ Generated Keys</h3>
           <ul class="key-list" id="key-list"></ul>
@@ -509,12 +624,23 @@
         </div>
       </div>
 
+      <!-- License stats -->
       <div class="license-stats">
-        <div class="lic-stat"><div class="label">Total Keys</div><div class="value total" id="lic-total">0</div></div>
-        <div class="lic-stat"><div class="label">Activated</div><div class="value active" id="lic-activated">0</div></div>
-        <div class="lic-stat"><div class="label">Unused</div><div class="value online" id="lic-unused">0</div></div>
+        <div class="lic-stat">
+          <div class="label">Total Keys</div>
+          <div class="value total" id="lic-total">0</div>
+        </div>
+        <div class="lic-stat">
+          <div class="label">Activated</div>
+          <div class="value active" id="lic-activated">0</div>
+        </div>
+        <div class="lic-stat">
+          <div class="label">Unused</div>
+          <div class="value online" id="lic-unused">0</div>
+        </div>
       </div>
 
+      <!-- License toolbar -->
       <div class="license-toolbar">
         <input type="text" id="lic-search" placeholder="🔍 Key বা Label খুঁজুন…" oninput="renderLicenseTable()"/>
         <select id="lic-filter" onchange="renderLicenseTable()">
@@ -527,12 +653,19 @@
         <button class="btn-refresh-lic" onclick="loadLicenses()">↻ Refresh</button>
       </div>
 
+      <!-- License table -->
       <div style="overflow-x:auto">
         <table>
           <thead id="license-thead">
             <tr>
-              <th>#</th><th>License Key</th><th>Label</th><th>Bound Device</th>
-              <th>Created</th><th>Activated</th><th>Status</th><th>Actions</th>
+              <th>#</th>
+              <th>License Key</th>
+              <th>Label</th>
+              <th>Bound Device</th>
+              <th>Created</th>
+              <th>Activated</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="license-table-body">
@@ -543,9 +676,10 @@
 
     </div>
   </div>
-</div>
 
-<!-- Block Modal -->
+</div><!-- /#app -->
+
+<!-- Block Reason Modal -->
 <div class="modal-overlay" id="block-modal">
   <div class="modal">
     <h3>🚫 Device Block করুন</h3>
@@ -578,63 +712,17 @@
 <div id="toast"></div>
 
 <script>
-  // ══════════════════════════════════════════════
-  // LOCAL STORAGE KEYS
-  // ══════════════════════════════════════════════
-  const LS_LICENSES   = 'luckyloop_licenses_v1';
-  const LS_DEVICES    = 'luckyloop_devices_v1';
-  const LS_ALIASES    = 'luckyloop_aliases';
-  const LS_ADMIN_PW   = 'luckyloop_admin_pw';
-
-  const ADMIN_PASSWORD = 'admin123'; // ← এখানে আপনার password দিন
-
-  let adminPw      = '';
-  let allDevices   = [];
-  let allLicenses  = [];
-  let lastGenKeys  = [];
+  const BASE = window.location.origin;
+  let adminPw   = '';
+  let allDevices  = [];
+  let allLicenses = [];
+  let lastGenKeys = [];
   let pendingBlockId  = '';
   let pendingAliasId  = '';
-  let autoTimer    = null;
-  let countdown    = 15;
-  let currentList    = [];
-  let currentLicList = [];
+  let autoTimer  = null;
+  let countdown  = 15;
 
-  // ══════════════════════════════════════════════
-  // LICENSE localStorage HELPERS
-  // ══════════════════════════════════════════════
-  function loadLicensesFromStorage() {
-    try { return JSON.parse(localStorage.getItem(LS_LICENSES) || '[]'); } catch { return []; }
-  }
-  function saveLicensesToStorage(licenses) {
-    localStorage.setItem(LS_LICENSES, JSON.stringify(licenses));
-  }
-
-  // ══════════════════════════════════════════════
-  // DEVICE localStorage HELPERS
-  // ══════════════════════════════════════════════
-  function loadDevicesFromStorage() {
-    try { return JSON.parse(localStorage.getItem(LS_DEVICES) || '[]'); } catch { return []; }
-  }
-  function saveDevicesToStorage(devices) {
-    localStorage.setItem(LS_DEVICES, JSON.stringify(devices));
-  }
-
-  // ══════════════════════════════════════════════
-  // ALIAS HELPERS
-  // ══════════════════════════════════════════════
-  function loadAliases() {
-    try { return JSON.parse(localStorage.getItem(LS_ALIASES) || '{}'); } catch { return {}; }
-  }
-  function saveAlias(deviceId, alias) {
-    const aliases = loadAliases();
-    if (alias) aliases[deviceId] = alias; else delete aliases[deviceId];
-    localStorage.setItem(LS_ALIASES, JSON.stringify(aliases));
-  }
-  function getAlias(deviceId) { return loadAliases()[deviceId] || ''; }
-
-  // ══════════════════════════════════════════════
-  // TABS
-  // ══════════════════════════════════════════════
+  // ── TABS ──────────────────────────────────────────────
   function switchTab(name) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -644,9 +732,19 @@
     if (name === 'licenses') { btns[1].classList.add('active'); loadLicenses(); }
   }
 
-  // ══════════════════════════════════════════════
-  // LOGIN
-  // ══════════════════════════════════════════════
+  // ── ALIAS ─────────────────────────────────────────────
+  const ALIAS_KEY = 'luckyloop_aliases';
+  function loadAliases() {
+    try { return JSON.parse(localStorage.getItem(ALIAS_KEY) || '{}'); } catch { return {}; }
+  }
+  function saveAlias(deviceId, alias) {
+    const aliases = loadAliases();
+    if (alias) aliases[deviceId] = alias; else delete aliases[deviceId];
+    localStorage.setItem(ALIAS_KEY, JSON.stringify(aliases));
+  }
+  function getAlias(deviceId) { return loadAliases()[deviceId] || ''; }
+
+  // ── LOGIN ─────────────────────────────────────────────
   document.getElementById('pw-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') doLogin();
   });
@@ -654,12 +752,16 @@
   function doLogin() {
     const pw = document.getElementById('pw-input').value.trim();
     if (!pw) { showLoginErr('Password দিন!'); return; }
-    if (pw !== ADMIN_PASSWORD) { showLoginErr('❌ Wrong password!'); return; }
     adminPw = pw;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadDevices();
-    startAutoRefresh();
+    fetch(`${BASE}/api/admin/devices`, {
+      headers: { 'X-Admin-Password': adminPw }
+    }).then(r => {
+      if (r.status === 401) { showLoginErr('❌ Wrong password!'); adminPw = ''; return; }
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadDevices();
+      startAutoRefresh();
+    }).catch(() => showLoginErr('❌ Server error!'));
   }
 
   function showLoginErr(msg) {
@@ -675,31 +777,18 @@
     document.getElementById('pw-input').value = '';
   }
 
-  // ══════════════════════════════════════════════
-  // DEVICES — localStorage + optional server sync
-  // ══════════════════════════════════════════════
+  // ── LOAD DEVICES ──────────────────────────────────────
   function loadDevices() {
-    // প্রথমে localStorage থেকে দেখাও
-    allDevices = loadDevicesFromStorage();
-    updateStats(allDevices);
-    renderTable();
-
-    // তারপর server থেকে sync করার চেষ্টা
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/devices`, { headers: { 'X-Admin-Password': adminPw } })
-    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(r => r.json())
     .then(data => {
       allDevices = data;
-      saveDevicesToStorage(data); // server data localStorage এ save
       updateStats(data);
       renderTable();
       document.getElementById('last-sync').textContent =
         'Last sync: ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
     })
-    .catch(() => {
-      // server না থাকলে localStorage থেকেই চালাও
-      document.getElementById('last-sync').textContent = '⚠️ Offline (local data)';
-    });
+    .catch(() => showToast('❌ Server connect করতে পারছি না', true));
   }
 
   function startAutoRefresh() {
@@ -712,6 +801,7 @@
     }, 1000);
   }
 
+  // ── STATS ─────────────────────────────────────────────
   function updateStats(devices) {
     const now = Date.now();
     const total   = devices.length;
@@ -726,6 +816,9 @@
     document.getElementById('stat-blocked').textContent = blocked;
     document.getElementById('stat-online').textContent  = online;
   }
+
+  // ── RENDER DEVICE TABLE ───────────────────────────────
+  let currentList = [];
 
   function renderTable() {
     const q      = document.getElementById('search-box').value.toLowerCase();
@@ -757,7 +850,8 @@
     }
 
     tbody.innerHTML = currentList.map((d, i) => {
-      const isOnline = d.last_seen ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
+      const isOnline = d.last_seen
+        ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
       const alias = aliases[d.device_id] || '';
       const aliasBadge = alias ? `<span class="device-alias">👤 ${escHtml(alias)}</span>` : '';
       const statusBadge = d.is_blocked
@@ -765,27 +859,28 @@
         : '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>';
       const actionBtn = d.is_blocked
         ? `<button class="btn-unblock" onclick="unblockByIndex(${i})">✓ Unblock</button>`
-        : `<button class="btn-block" onclick="openBlockByIndex(${i})">✕ Block</button>`;
+        : `<button class="btn-block"   onclick="openBlockByIndex(${i})">✕ Block</button>`;
       const blockReasonHtml = d.is_blocked && d.block_reason
-        ? `<div style="font-size:10px;color:var(--red);margin-top:3px">💬 ${escHtml(d.block_reason)}</div>` : '';
+        ? `<div style="font-size:10px;color:var(--red);margin-top:3px">💬 ${escHtml(d.block_reason)}</div>`
+        : '';
 
       return '<tr>'
-        + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
-        + `<td><div style="display:flex;align-items:flex-start;gap:8px">
-            <span class="online-dot ${isOnline?'yes':'no'}" style="margin-top:3px"></span>
-            <div>
-              <div class="device-name">${escHtml(d.device_name||'Unknown')}${aliasBadge}
-                <button class="btn-alias" onclick="openAliasModal(${i})" title="Label">✏️</button></div>
-              <div class="device-id">${escHtml(d.device_id||'—')}</div>
-              ${blockReasonHtml}
-            </div></div></td>`
+        + '<td style="color:var(--muted);font-size:11px">' + (i+1) + '</td>'
+        + '<td><div style="display:flex;align-items:flex-start;gap:8px">'
+        + `<span class="online-dot ${isOnline?'yes':'no'}" style="margin-top:3px"></span>`
+        + '<div>'
+        + `<div class="device-name">${escHtml(d.device_name||'Unknown')}${aliasBadge}`
+        + `<button class="btn-alias" onclick="openAliasModal(${i})" title="Label">✏️</button></div>`
+        + `<div class="device-id">${escHtml(d.device_id||'—')}</div>`
+        + blockReasonHtml
+        + '</div></div></td>'
         + `<td><span class="license-tag">${escHtml((d.license_type||'').split('(')[0].trim()||'Unknown')}</span></td>`
         + `<td class="device-ip">${escHtml(d.ip_address||'—')}</td>`
         + `<td style="color:var(--muted);font-size:11px">${fmtTime(d.first_seen)}</td>`
         + `<td style="color:${isOnline?'var(--green)':'var(--muted)'};font-size:11px">${fmtAgo(d.last_seen)}</td>`
-        + `<td>${statusBadge}</td>`
-        + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">${actionBtn}
-            <button class="btn-delete" onclick="deleteByIndex(${i})" title="Delete">🗑</button></td>`
+        + '<td>' + statusBadge + '</td>'
+        + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">${actionBtn}`
+        + `<button class="btn-delete" onclick="deleteByIndex(${i})" title="Delete">🗑</button></td>`
         + '</tr>';
     }).join('');
   }
@@ -794,9 +889,7 @@
   function unblockByIndex(i)   { const d = currentList[i]; if (d) unblockDevice(d.device_id); }
   function deleteByIndex(i)    { const d = currentList[i]; if (d) deleteDevice(d.device_id); }
 
-  // ══════════════════════════════════════════════
-  // ALIAS MODAL
-  // ══════════════════════════════════════════════
+  // ── ALIAS MODAL ───────────────────────────────────────
   function openAliasModal(i) {
     const d = currentList[i]; if (!d) return;
     pendingAliasId = d.device_id;
@@ -823,9 +916,7 @@
     if (e.key === 'Escape') closeAliasModal();
   });
 
-  // ══════════════════════════════════════════════
-  // BLOCK MODAL
-  // ══════════════════════════════════════════════
+  // ── BLOCK MODAL ───────────────────────────────────────
   function openBlockModal(deviceId, deviceName) {
     pendingBlockId = deviceId;
     document.getElementById('modal-device-info').textContent =
@@ -848,127 +939,94 @@
     blockDevice(deviceId, reason);
   }
 
-  // ══════════════════════════════════════════════
-  // DEVICE API (server + localStorage fallback)
-  // ══════════════════════════════════════════════
+  // ── DEVICE API ────────────────────────────────────────
   function blockDevice(deviceId, reason) {
-    // localStorage এ update
-    allDevices = allDevices.map(d => d.device_id === deviceId ? {...d, is_blocked: true, block_reason: reason} : d);
-    saveDevicesToStorage(allDevices);
-    updateStats(allDevices); renderTable();
-    showToast('🚫 Device block করা হয়েছে');
-
-    // server sync try
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/block?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ device_id: deviceId, reason })
-    }).catch(() => {});
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('🚫 Device block করা হয়েছে'); loadDevices();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function unblockDevice(deviceId) {
-    allDevices = allDevices.map(d => d.device_id === deviceId ? {...d, is_blocked: false, block_reason: ''} : d);
-    saveDevicesToStorage(allDevices);
-    updateStats(allDevices); renderTable();
-    showToast('✅ Device unblock করা হয়েছে');
-
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/unblock?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ device_id: deviceId })
-    }).catch(() => {});
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('✅ Device unblock করা হয়েছে'); loadDevices();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function deleteDevice(deviceId) {
     if (!confirm('এই device টা permanently delete করবেন?')) return;
-    allDevices = allDevices.filter(d => d.device_id !== deviceId);
-    saveDevicesToStorage(allDevices);
-    updateStats(allDevices); renderTable();
-    showToast('🗑 Device delete করা হয়েছে');
-
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/delete?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ device_id: deviceId })
-    }).catch(() => {});
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('🗑 Device delete করা হয়েছে'); loadDevices();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
-  // ══════════════════════════════════════════════
-  // LICENSE — সম্পূর্ণ localStorage এ save
-  // ══════════════════════════════════════════════
-  function generateRandomKey(label) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const rand = (n) => Array.from({length: n}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-    const prefix = label
-      ? label.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 6).padEnd(4, 'X')
-      : 'LUCKY';
-    return `LL-${prefix}-${rand(4)}-${rand(4)}-${rand(6)}`;
-  }
+  // ══════════════════════════════════════════════════════
+  //  LICENSE KEY SYSTEM
+  // ══════════════════════════════════════════════════════
 
   function generateKeys() {
     const label      = document.getElementById('gen-label').value.trim();
     const maxDevices = parseInt(document.getElementById('gen-max-devices').value);
     const count      = Math.max(1, Math.min(50, parseInt(document.getElementById('gen-count').value) || 1));
 
-    const licenses = loadLicensesFromStorage();
-    const newKeys  = [];
-
-    for (let i = 0; i < count; i++) {
-      const key = generateRandomKey(label);
-      const entry = {
-        license_key:  key,
-        label:        label || '',
-        max_devices:  maxDevices,
-        bound_device: null,
-        is_active:    true,
-        created_at:   new Date().toISOString(),
-        activated_at: null
-      };
-      licenses.push(entry);
-      newKeys.push(key);
-    }
-
-    saveLicensesToStorage(licenses);
-    lastGenKeys = newKeys;
-
-    const out = document.getElementById('generated-output');
-    const ul  = document.getElementById('key-list');
-    out.style.display = 'block';
-    ul.innerHTML = newKeys.map(k =>
-      `<li><span>${k}</span><button class="btn-copy-key" onclick="copyKeyDirect('${k}', this)">📋 Copy</button></li>`
-    ).join('');
-
-    showToast(`✅ ${newKeys.length} টি key generate ও save হয়েছে`);
-    loadLicenses();
-
-    // server sync try (optional)
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/licenses/generate?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ label, max_devices: maxDevices, count })
-    }).catch(() => {});
+    }).then(r => r.json()).then(data => {
+      if (data.error) { showToast('❌ ' + data.error, true); return; }
+      lastGenKeys = data.keys || [];
+      const out = document.getElementById('generated-output');
+      const ul  = document.getElementById('key-list');
+      out.style.display = 'block';
+      ul.innerHTML = lastGenKeys.map((k, i) =>
+        `<li>
+          <span>${k}</span>
+          <button class="btn-copy-key" onclick="copyKey('${k}', this)">📋 Copy</button>
+        </li>`
+      ).join('');
+      showToast(`✅ ${lastGenKeys.length} টি key generate হয়েছে`);
+      loadLicenses();
+    }).catch(() => showToast('❌ Generate করতে পারছি না', true));
   }
 
-  function loadLicenses() {
-    allLicenses = loadLicensesFromStorage();
+  function copyKey(key, btn) {
+    navigator.clipboard.writeText(key).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.style.background = 'var(--green)';
+      btn.style.color = '#000';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 1500);
+    });
+  }
 
-    // server থেকে sync করার চেষ্টা
-    const BASE = window.location.origin;
+  function copyAllKeys() {
+    if (!lastGenKeys.length) return;
+    navigator.clipboard.writeText(lastGenKeys.join('\n')).then(() => {
+      showToast(`📋 ${lastGenKeys.length} টি key copy হয়েছে`);
+    });
+  }
+
+  // ── LOAD LICENSES ─────────────────────────────────────
+  function loadLicenses() {
     fetch(`${BASE}/api/admin/licenses?password=${encodeURIComponent(adminPw)}`)
-    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(r => r.json())
     .then(data => {
-      if (Array.isArray(data) && data.length > 0) {
-        // server এ নতুন কিছু থাকলে merge করো
-        const localKeys = new Set(allLicenses.map(l => l.license_key));
-        data.forEach(l => { if (!localKeys.has(l.license_key)) allLicenses.push(l); });
-        saveLicensesToStorage(allLicenses);
-      }
-    })
-    .catch(() => {})
-    .finally(() => {
+      allLicenses = Array.isArray(data) ? data : [];
       updateLicenseStats(allLicenses);
       renderLicenseTable();
-    });
+    })
+    .catch(() => showToast('❌ Licenses load করতে পারছি না', true));
   }
 
   function updateLicenseStats(licenses) {
@@ -979,6 +1037,8 @@
     document.getElementById('lic-activated').textContent = activated;
     document.getElementById('lic-unused').textContent    = unused;
   }
+
+  let currentLicList = [];
 
   function renderLicenseTable() {
     const q      = (document.getElementById('lic-search').value || '').toLowerCase();
@@ -1007,14 +1067,18 @@
       const statusBadge = l.is_active
         ? '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>'
         : '<span class="badge inactive"><span class="badge-dot"></span>INACTIVE</span>';
+
       const boundBadge = l.bound_device
-        ? `<span class="badge bound" title="${escHtml(l.bound_device)}">🔗 BOUND</span><br><span style="font-size:9px;color:var(--muted)">${escHtml((l.bound_device||'').substring(0,12))}…</span>`
+        ? `<span class="badge bound" title="${escHtml(l.bound_device)}">🔗 BOUND</span><br><span style="font-size:9px;color:var(--muted)">${escHtml(l.bound_device.substring(0,12))}…</span>`
         : '<span class="badge unbound">⚪ UNUSED</span>';
+
       const toggleBtn = l.is_active
-        ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, false)">⛔ Deactivate</button>`
-        : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, true)">✅ Activate</button>`;
+        ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, 0)">⛔ Deactivate</button>`
+        : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, 1)">✅ Activate</button>`;
+
       const unbindBtn = l.bound_device
-        ? `<button class="btn-unbind" onclick="unbindLicense(${i})">🔓 Unbind</button>` : '';
+        ? `<button class="btn-unbind" onclick="unbindLicense(${i})" title="Unbind from device">🔓 Unbind</button>`
+        : '';
 
       return '<tr>'
         + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
@@ -1024,106 +1088,53 @@
         + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.created_at)}</td>`
         + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.activated_at)}</td>`
         + `<td>${statusBadge}</td>`
-        + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">${toggleBtn}${unbindBtn}
-            <button class="btn-copy-key" onclick="copyKeyDirect('${escHtml(l.license_key)}', this)" style="font-size:9px">📋</button>
-            <button class="btn-delete" onclick="deleteLicense(${i})" title="Delete">🗑</button></td>`
+        + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">`
+        + toggleBtn + unbindBtn
+        + `<button class="btn-copy-key" onclick="copyKeyDirect('${escHtml(l.license_key)}', this)" style="font-size:9px">📋</button>`
+        + `<button class="btn-delete" onclick="deleteLicense(${i})" title="Delete">🗑</button>`
+        + '</td>'
         + '</tr>';
     }).join('');
   }
 
   function toggleLicense(i, newState) {
     const l = currentLicList[i]; if (!l) return;
-    const licenses = loadLicensesFromStorage();
-    const idx = licenses.findIndex(x => x.license_key === l.license_key);
-    if (idx !== -1) { licenses[idx].is_active = newState; saveLicensesToStorage(licenses); }
-    showToast(newState ? '✅ Key activated' : '⛔ Key deactivated');
-    loadLicenses();
-
-    // server sync
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/licenses/toggle?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: l.license_key, is_active: newState ? 1 : 0 })
-    }).catch(() => {});
+      body: JSON.stringify({ license_key: l.license_key, is_active: newState })
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast(newState ? '✅ Key activated' : '⛔ Key deactivated');
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function unbindLicense(i) {
     const l = currentLicList[i]; if (!l) return;
-    if (!confirm(`"${l.license_key}" এর device binding মুছে দেবেন?`)) return;
-    const licenses = loadLicensesFromStorage();
-    const idx = licenses.findIndex(x => x.license_key === l.license_key);
-    if (idx !== -1) { licenses[idx].bound_device = null; licenses[idx].activated_at = null; saveLicensesToStorage(licenses); }
-    showToast('🔓 Key unbound হয়েছে');
-    loadLicenses();
-
-    const BASE = window.location.origin;
+    if (!confirm(`"${l.license_key}" এর device binding মুছে দেবেন?\nএর পরে এই key অন্য device এ use করা যাবে।`)) return;
     fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ license_key: l.license_key })
-    }).catch(() => {});
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('🔓 Key unbound হয়েছে। এখন অন্য device এ use করা যাবে।');
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
   function deleteLicense(i) {
     const l = currentLicList[i]; if (!l) return;
     if (!confirm('এই license key permanently delete করবেন?')) return;
-    let licenses = loadLicensesFromStorage();
-    licenses = licenses.filter(x => x.license_key !== l.license_key);
-    saveLicensesToStorage(licenses);
-    showToast('🗑 License key delete হয়েছে');
-    loadLicenses();
-
-    const BASE = window.location.origin;
     fetch(`${BASE}/api/admin/licenses/delete?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ license_key: l.license_key })
-    }).catch(() => {});
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('🗑 License key delete হয়েছে');
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
-  // ══════════════════════════════════════════════
-  // EXPORT / IMPORT
-  // ══════════════════════════════════════════════
-  function exportKeys() {
-    const licenses = loadLicensesFromStorage();
-    const blob = new Blob([JSON.stringify(licenses, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'luckyloop_licenses_' + new Date().toISOString().slice(0,10) + '.json';
-    a.click();
-    showToast('📤 ' + licenses.length + ' টি key export হয়েছে');
-  }
-
-  function importKeys() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = (e) => {
-      const file = e.target.files[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const imported = JSON.parse(ev.target.result);
-          if (!Array.isArray(imported)) { showToast('❌ Invalid file format', true); return; }
-          const existing = loadLicensesFromStorage();
-          const existingKeys = new Set(existing.map(l => l.license_key));
-          let added = 0;
-          imported.forEach(l => {
-            if (l.license_key && !existingKeys.has(l.license_key)) {
-              existing.push(l); added++;
-            }
-          });
-          saveLicensesToStorage(existing);
-          showToast(`✅ ${added} টি নতুন key import হয়েছে`);
-          loadLicenses();
-        } catch { showToast('❌ File read error', true); }
-      };
-      reader.readAsText(file);
-    };
-    input.click();
-  }
-
-  // ══════════════════════════════════════════════
-  // COPY HELPERS
-  // ══════════════════════════════════════════════
   function copyKeyDirect(key, btn) {
     navigator.clipboard.writeText(key).then(() => {
       const orig = btn.textContent;
@@ -1133,29 +1144,21 @@
     });
   }
 
-  function copyAllKeys() {
-    if (!lastGenKeys.length) return;
-    navigator.clipboard.writeText(lastGenKeys.join('\n')).then(() => {
-      showToast(`📋 ${lastGenKeys.length} টি key copy হয়েছে`);
-    });
-  }
-
-  // ══════════════════════════════════════════════
-  // HELPERS
-  // ══════════════════════════════════════════════
+  // ── HELPERS ───────────────────────────────────────────
   function fmtTime(iso) {
     if (!iso) return '—';
-    try { return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }); }
-    catch { return iso; }
+    try {
+      return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+    } catch { return iso; }
   }
 
   function fmtAgo(iso) {
     if (!iso) return '—';
     try {
       const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-      if (s < 10) return 'just now';
-      if (s < 60) return s + 's ago';
-      if (s < 3600) return Math.floor(s/60) + ' min ago';
+      if (s < 10)    return 'just now';
+      if (s < 60)    return s + 's ago';
+      if (s < 3600)  return Math.floor(s/60) + ' min ago';
       if (s < 86400) return Math.floor(s/3600) + ' hr ago';
       return Math.floor(s/86400) + ' day ago';
     } catch { return iso; }
