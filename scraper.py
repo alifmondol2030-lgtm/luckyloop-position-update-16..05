@@ -5,8 +5,8 @@ import os
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-SERVER_URL = "https://luckyloop-position-update-16-05.onrender.com"
-PHPSESSID  = os.environ.get("MW_PHPSESSID", "oa0ku9vl1ls6fr4relga9orfk6")
+SERVER_URL      = "https://luckyloop-position-update-16-05.onrender.com"
+SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "")
 
 JOB_NAMES = [
     {"full": "TTV-Data Entry - PC required. Not for mobile phones. (E766-1470)", "short": "1470"},
@@ -20,31 +20,64 @@ JOB_NAMES = [
 
 TARGET_URL = "https://www.microworkers.com/jobs.php?Filter=no&Sort=NEWEST&Id_category=09"
 
-session = requests.Session()
-session.headers.update({
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-    "Cookie": f"PHPSESSID={PHPSESSID}"
-})
+
+def get_session():
+    """প্রতিবার fresh PHPSESSID দিয়ে নতুন session তৈরি করে"""
+    phpsessid = os.environ.get("MW_PHPSESSID", "oa0ku9vl1ls6fr4relga9orfk6")
+    s = requests.Session()
+    s.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+    })
+    s.cookies.set("PHPSESSID", phpsessid, domain="www.microworkers.com")
+    return s
+
+
+def server_headers():
+    return {"X-API-Key": SCRAPER_API_KEY}
+
 
 def calc_available(pos_str):
     try:
         cur, total = pos_str.split("/")
-        return str(max(int(total) - int(cur), 0))
+        return str(max(int(total.strip()) - int(cur.strip()), 0))
     except:
         return "-"
 
+
 def update_status(status, message):
     try:
-        requests.post(f"{SERVER_URL}/api/scraper-status", json={
-            "status" : status,
-            "message": message
-        }, timeout=10)
+        requests.post(
+            f"{SERVER_URL}/api/scraper-status",
+            json={"status": status, "message": message},
+            headers=server_headers(),
+            timeout=10
+        )
         print(f"[Status] {status} | {message}")
     except Exception as e:
         print(f"[Status Error] {e}")
 
+
+def push(cid, position, available, link):
+    try:
+        requests.post(
+            f"{SERVER_URL}/save",
+            json={
+                "job_name" : cid,
+                "position" : position,
+                "available": available,
+                "link"     : link
+            },
+            headers=server_headers(),
+            timeout=10
+        )
+        print(f"[Scraper] Pushed {cid} pos={position} avail={available}")
+    except Exception as e:
+        print(f"[Scraper] Push error: {e}")
+
+
 def scrape_jobs():
     try:
+        session = get_session()
         r = session.get(TARGET_URL, timeout=20)
         soup = BeautifulSoup(r.text, "html.parser")
         listings = soup.select(".jobslist")
@@ -63,7 +96,7 @@ def scrape_jobs():
                 pos_el  = item.select_one(".jobdone p")
                 if not name_el or not pos_el:
                     continue
-                if name_el.get_text(strip=True) == job["full"]:
+                if job["full"].strip() == name_el.get_text(strip=True):
                     position  = pos_el.get_text(strip=True)
                     available = calc_available(position)
                     link      = name_el.get("href", TARGET_URL)
@@ -74,23 +107,13 @@ def scrape_jobs():
         print(f"[Scraper] Error: {e}")
         update_status("error", f"❌ Error: {str(e)[:80]}")
 
-def push(cid, position, available, link):
-    try:
-        requests.post(f"{SERVER_URL}/save", json={
-            "job_name" : cid,
-            "position" : position,
-            "available": available,
-            "link"     : link
-        }, timeout=10)
-        print(f"[Scraper] Pushed {cid} pos={position} avail={available}")
-    except Exception as e:
-        print(f"[Scraper] Push error: {e}")
 
 def scrape_loop():
     print("[Scraper] Starting — checking at sec 2, 4, 33, 35...")
     time.sleep(5)
-    CHECK_SECONDS = {2, 4, 33, 35}
+    CHECK_SECONDS    = {2, 4, 33, 35}
     last_checked_sec = -1
+
     while True:
         sec = datetime.now().second
         if sec in CHECK_SECONDS and sec != last_checked_sec:
@@ -98,6 +121,7 @@ def scrape_loop():
             print(f"[Scraper] Checking at :{sec:02d}")
             scrape_jobs()
         time.sleep(0.5)
+
 
 def start_scraper():
     t = threading.Thread(target=scrape_loop, daemon=True)
