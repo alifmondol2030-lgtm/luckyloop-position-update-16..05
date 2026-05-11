@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 SERVER_URL = "https://luckyloop-position-update-16-05.onrender.com"
-PHPSESSID  = os.environ.get("MW_PHPSESSID", "631bqoub1qggjnes5lm91kcb3l")
+PHPSESSID  = os.environ.get("MW_PHPSESSID", "q9k927td6apmhjpkm23o4vvute")
 
 JOB_NAMES = [
     {"full": "TTV-Data Entry - PC required. Not for mobile phones. (E766-1470)", "short": "1470"},
@@ -87,9 +87,9 @@ def push(cid, position, available, link):
         print(f"[Scraper] Push error: {e}")
 
 def scrape_loop():
-    print("[Scraper] Starting — checking at sec 2, 4, 33, 35...")
+    print("[Scraper] Starting — checking at sec 3, 33...")
     time.sleep(5)
-    CHECK_SECONDS = {2, 4, 33, 35}
+    CHECK_SECONDS = {3, 33}
     last_checked_sec = -1
     while True:
         sec = datetime.now().second
