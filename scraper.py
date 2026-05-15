@@ -87,9 +87,9 @@ def push(cid, position, available, link):
         print(f"[Scraper] Push error: {e}")
 
 def scrape_loop():
-    print("[Scraper] Starting — checking at sec 2, 4, 33, 35...")
+    print("[Scraper] Starting — checking at sec 2, 4, 33...")
     time.sleep(5)
-    CHECK_SECONDS = {2, 4, 33, 35}
+    CHECK_SECONDS = {2, 4, 33}
     last_checked_sec = -1
     while True:
         sec = datetime.now().second
