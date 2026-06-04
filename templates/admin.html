@@ -32,7 +32,6 @@
     min-height: 100vh;
   }
 
-  /* ── LOGIN ── */
   #login-screen {
     display: flex;
     align-items: center;
@@ -69,10 +68,8 @@
   .login-box button:hover { opacity: .85; }
   .login-error { color: var(--red); font-size: 11px; margin-top: 10px; min-height: 16px; }
 
-  /* ── MAIN APP ── */
   #app { display: none; }
 
-  /* Header */
   .header {
     background: var(--card);
     border-bottom: 1px solid var(--border);
@@ -101,7 +98,6 @@
   }
   .btn-logout:hover { border-color: var(--red); color: var(--red); }
 
-  /* ── TABS ── */
   .tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -124,20 +120,17 @@
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-btn.license-tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+  .tab-btn.ann-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
 
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
-  /* Stats bar */
   .stats-bar {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 1px; background: var(--border);
     border-bottom: 1px solid var(--border);
   }
-  .stat-card {
-    background: var(--card);
-    padding: 20px 24px;
-  }
+  .stat-card { background: var(--card); padding: 20px 24px; }
   .stat-card .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
   .stat-card .value { font-size: 28px; font-weight: 700; }
   .stat-card .value.total   { color: var(--accent); }
@@ -145,7 +138,6 @@
   .stat-card .value.blocked { color: var(--red); }
   .stat-card .value.online  { color: var(--yellow); }
 
-  /* Toolbar */
   .toolbar {
     padding: 16px 28px;
     display: flex; align-items: center; gap: 12px;
@@ -174,7 +166,6 @@
   .btn-refresh:hover { opacity: .85; }
   .auto-label { font-size: 10px; color: var(--muted); margin-left: auto; }
 
-  /* Table */
   .table-wrap { padding: 0 28px 40px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin-top: 20px; }
   thead tr { border-bottom: 1px solid var(--border); }
@@ -183,14 +174,10 @@
     font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
     color: var(--accent); font-weight: 600;
   }
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background .15s;
-  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
   tbody tr:hover { background: var(--card); }
   tbody td { padding: 14px 14px; font-size: 12px; vertical-align: middle; }
 
-  /* Status badge */
   .badge {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
@@ -203,27 +190,20 @@
   .badge.unbound  { background: #1a1a1a; color: var(--muted); }
   .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  .online-dot {
-    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
-  }
+  .online-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .online-dot.yes { background: var(--green); box-shadow: 0 0 6px var(--green); }
   .online-dot.no  { background: var(--muted); }
 
   .device-name { color: var(--white); font-weight: 600; font-size: 13px; }
   .device-alias {
     display: inline-block;
-    background: #1a0f2e;
-    color: var(--purple);
+    background: #1a0f2e; color: var(--purple);
     border: 1px solid #3b1f6e;
-    font-size: 10px;
-    padding: 1px 7px;
-    margin-left: 6px;
-    border-radius: 2px;
-    letter-spacing: 1px;
-    vertical-align: middle;
+    font-size: 10px; padding: 1px 7px; margin-left: 6px;
+    border-radius: 2px; letter-spacing: 1px; vertical-align: middle;
   }
-  .device-id   { color: var(--muted); font-size: 10px; margin-top: 2px; font-family: monospace; }
-  .device-ip   { color: var(--muted); font-size: 10px; }
+  .device-id  { color: var(--muted); font-size: 10px; margin-top: 2px; font-family: monospace; }
+  .device-ip  { color: var(--muted); font-size: 10px; }
 
   .license-tag {
     display: inline-block; padding: 2px 8px;
@@ -235,38 +215,31 @@
     padding: 3px 8px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid #3b1f6e;
     color: var(--purple); cursor: pointer;
-    transition: all .2s; margin-left: 4px;
-    vertical-align: middle;
+    transition: all .2s; margin-left: 4px; vertical-align: middle;
   }
   .btn-alias:hover { background: #1a0f2e; border-color: var(--purple); }
 
   .btn-block {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-block:hover { background: var(--red); color: #000; }
   .btn-unblock {
     padding: 6px 14px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-unblock:hover { background: var(--green); color: #000; }
   .btn-delete {
     padding: 6px 10px; font-size: 10px; font-family: inherit;
     background: transparent; border: 1px solid var(--border);
-    color: var(--muted); cursor: pointer;
-    transition: all .2s; margin-left: 4px;
+    color: var(--muted); cursor: pointer; transition: all .2s; margin-left: 4px;
   }
   .btn-delete:hover { border-color: var(--orange); color: var(--orange); }
 
-  .empty-row td {
-    text-align: center; padding: 60px; color: var(--muted); font-size: 12px;
-  }
+  .empty-row td { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; }
 
-  /* ── LICENSE TAB STYLES ── */
   .license-panel { padding: 28px; }
 
   .license-generator {
@@ -309,20 +282,14 @@
     background: var(--yellow); color: #000;
     font-family: inherit; font-size: 11px; font-weight: 700;
     border: none; cursor: pointer; letter-spacing: 1px;
-    white-space: nowrap;
-    transition: opacity .2s;
-    height: 40px;
+    white-space: nowrap; transition: opacity .2s; height: 40px;
   }
   .btn-generate:hover { opacity: .85; }
 
-  /* Generated keys output */
   .generated-output {
-    display: none;
-    margin-top: 20px;
-    background: var(--card2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--yellow);
-    padding: 16px;
+    display: none; margin-top: 20px;
+    background: var(--card2); border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow); padding: 16px;
   }
   .generated-output h3 {
     font-size: 10px; color: var(--yellow); letter-spacing: 2px;
@@ -331,76 +298,58 @@
   .key-list { list-style: none; }
   .key-list li {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px; color: var(--green);
-    font-family: monospace;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-size: 12px; color: var(--green); font-family: monospace;
   }
   .key-list li:last-child { border-bottom: none; }
   .btn-copy-key {
     padding: 4px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer;
-    transition: all .2s; margin-left: 8px; white-space: nowrap;
+    color: var(--green); cursor: pointer; transition: all .2s;
+    margin-left: 8px; white-space: nowrap;
   }
   .btn-copy-key:hover { background: var(--green); color: #000; }
   .btn-copy-all {
     margin-top: 12px;
     padding: 8px 18px; font-size: 10px; font-family: inherit; font-weight: 600;
     background: transparent; border: 1px solid var(--yellow);
-    color: var(--yellow); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--yellow); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-copy-all:hover { background: var(--yellow); color: #000; }
 
-  /* License stats bar */
   .license-stats {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--border);
-    margin-bottom: 20px;
+    gap: 1px; background: var(--border); margin-bottom: 20px;
   }
-  .lic-stat {
-    background: var(--card);
-    padding: 16px 20px;
-  }
+  .lic-stat { background: var(--card); padding: 16px 20px; }
   .lic-stat .label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
   .lic-stat .value { font-size: 24px; font-weight: 700; }
 
-  /* License table header accent */
   #license-thead th { color: var(--yellow); }
 
-  .key-text {
-    font-family: monospace;
-    font-size: 11px;
-    color: var(--green);
-    word-break: break-all;
-  }
+  .key-text { font-family: monospace; font-size: 11px; color: var(--green); word-break: break-all; }
 
   .btn-unbind {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--orange);
-    color: var(--orange); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--orange); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-unbind:hover { background: var(--orange); color: #000; }
 
   .btn-toggle-off {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--red);
-    color: var(--red); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--red); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-toggle-off:hover { background: var(--red); color: #fff; }
 
   .btn-toggle-on {
     padding: 5px 10px; font-size: 9px; font-family: inherit;
     background: transparent; border: 1px solid var(--green);
-    color: var(--green); cursor: pointer; letter-spacing: 1px;
-    transition: all .2s;
+    color: var(--green); cursor: pointer; letter-spacing: 1px; transition: all .2s;
   }
   .btn-toggle-on:hover { background: var(--green); color: #000; }
 
-  /* Toast */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
     padding: 12px 20px; font-size: 12px; font-family: inherit;
@@ -412,7 +361,6 @@
   #toast.show { opacity: 1; transform: translateY(0); }
   #toast.error { border-left-color: var(--red); }
 
-  /* Modals */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,.8); z-index: 200;
@@ -421,8 +369,7 @@
   .modal-overlay.open { display: flex; }
   .modal {
     background: var(--card); border: 1px solid var(--border);
-    border-top: 2px solid var(--red);
-    padding: 32px; width: 420px;
+    border-top: 2px solid var(--red); padding: 32px; width: 420px;
   }
   .modal h3 { font-size: 15px; color: var(--white); margin-bottom: 6px; }
   .modal p  { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
@@ -442,27 +389,19 @@
   #alias-modal .modal input:focus { border-color: var(--purple); }
   .btn-confirm-alias { background: var(--purple) !important; color: #000 !important; }
   .btn-clear-alias {
-    flex: 0 0 auto !important;
-    padding: 11px 14px !important;
-    background: transparent !important;
-    border: 1px solid var(--border) !important;
-    color: var(--muted) !important;
-    font-size: 10px !important;
-    cursor: pointer;
-    font-family: inherit;
-    letter-spacing: 1px;
+    flex: 0 0 auto !important; padding: 11px 14px !important;
+    background: transparent !important; border: 1px solid var(--border) !important;
+    color: var(--muted) !important; font-size: 10px !important;
+    cursor: pointer; font-family: inherit; letter-spacing: 1px;
   }
   .btn-clear-alias:hover { border-color: var(--orange) !important; color: var(--orange) !important; }
 
   .license-toolbar {
-    padding: 14px 0 14px 0;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
+    padding: 14px 0; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border); margin-bottom: 4px;
   }
   .license-toolbar input {
-    flex: 1; max-width: 280px;
-    padding: 8px 12px;
+    flex: 1; max-width: 280px; padding: 8px 12px;
     background: var(--card); border: 1px solid var(--border);
     color: var(--text); font-family: inherit; font-size: 11px;
     outline: none; transition: border-color .2s;
@@ -476,24 +415,85 @@
   }
   .btn-refresh-lic {
     padding: 8px 16px; font-size: 10px; font-family: inherit; font-weight: 600;
-    background: var(--yellow); color: #000;
-    border: none; cursor: pointer; letter-spacing: 1px;
-    transition: opacity .2s;
+    background: var(--yellow); color: #000; border: none; cursor: pointer;
+    letter-spacing: 1px; transition: opacity .2s;
   }
   .btn-refresh-lic:hover { opacity: .85; }
+
+  /* ══ ANNOUNCEMENT TAB ══ */
+  .ann-panel { padding: 28px; }
+  .ann-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--orange);
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .ann-card h2 { font-size: 14px; font-weight: 700; color: var(--orange); letter-spacing: 2px; margin-bottom: 8px; }
+  .ann-card .desc { font-size: 11px; color: var(--muted); margin-bottom: 24px; line-height: 1.7; }
+  .ann-status-box {
+    background: var(--card2); border: 1px solid var(--border);
+    padding: 16px 20px; margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .ann-status-label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .ann-status-text  { font-size: 14px; font-weight: 700; color: var(--muted); }
+  .ann-badge {
+    padding: 8px 20px; font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; background: #1a1a1a; color: var(--muted);
+  }
+  .ann-form-label {
+    font-size: 9px; color: var(--muted); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 8px; display: block;
+  }
+  .ann-textarea {
+    width: 100%; padding: 12px 14px;
+    background: var(--card2); border: 1px solid var(--border);
+    color: var(--text); font-family: inherit; font-size: 13px;
+    outline: none; resize: vertical; transition: border-color .2s;
+    min-height: 90px;
+  }
+  .ann-textarea:focus { border-color: var(--orange); }
+  .ann-preview-wrap { margin: 20px 0; }
+  .ann-preview-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .ann-preview-box {
+    background: #3d1a00; border-left: 3px solid var(--orange);
+    padding: 13px 16px; display: flex; align-items: flex-start; gap: 10px;
+  }
+  .ann-preview-icon { color: #fdba74; font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+  .ann-preview-text { color: #fed7aa; font-size: 12px; font-family: 'JetBrains Mono', monospace; line-height: 1.5; }
+  .ann-btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+  .btn-ann-on {
+    padding: 11px 28px; font-family: inherit; font-size: 11px; font-weight: 700;
+    background: var(--green); color: #000; border: none; cursor: pointer; letter-spacing: 1px;
+    transition: opacity .2s;
+  }
+  .btn-ann-on:hover { opacity: .85; }
+  .btn-ann-off {
+    padding: 11px 28px; font-family: inherit; font-size: 11px; font-weight: 700;
+    background: transparent; border: 1px solid var(--red); color: var(--red);
+    cursor: pointer; letter-spacing: 1px; transition: all .2s;
+  }
+  .btn-ann-off:hover { background: var(--red); color: #fff; }
+  .btn-ann-refresh {
+    padding: 11px 18px; font-family: inherit; font-size: 11px;
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    cursor: pointer; letter-spacing: 1px; transition: all .2s;
+  }
+  .btn-ann-refresh:hover { border-color: var(--accent); color: var(--accent); }
 
   @media (max-width: 900px) {
     .stats-bar { grid-template-columns: repeat(2,1fr); }
     .gen-form { grid-template-columns: 1fr 1fr; }
     .table-wrap { padding: 0 12px 40px; }
-    .toolbar, .license-panel { padding: 12px; }
+    .toolbar, .license-panel, .ann-panel { padding: 12px; }
     .header { padding: 0 14px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="icon">⚡</div>
@@ -505,10 +505,9 @@
   </div>
 </div>
 
-<!-- ══ MAIN APP ════════════════════════════════════════ -->
+<!-- MAIN APP -->
 <div id="app">
 
-  <!-- Header -->
   <div class="header">
     <div class="header-left">
       <span style="color:var(--yellow);font-size:20px">⚡</span>
@@ -524,16 +523,15 @@
     </div>
   </div>
 
-  <!-- Tabs -->
+  <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('devices')">📱 Device Manager</button>
+    <button class="tab-btn active"      onclick="switchTab('devices')">📱 Device Manager</button>
     <button class="tab-btn license-tab" onclick="switchTab('licenses')">🔑 License Keys</button>
+    <button class="tab-btn ann-tab"     onclick="switchTab('announcement')">📢 Announcement</button>
   </div>
 
-  <!-- ══ TAB: DEVICES ══════════════════════════════════ -->
+  <!-- TAB: DEVICES -->
   <div id="tab-devices" class="tab-content active">
-
-    <!-- Stats -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="label">Total Devices</div>
@@ -552,8 +550,6 @@
         <div class="value online" id="stat-online">0</div>
       </div>
     </div>
-
-    <!-- Toolbar -->
     <div class="toolbar">
       <input type="text" id="search-box" placeholder="🔍  Device name বা ID দিয়ে খুঁজুন…" oninput="renderTable()"/>
       <select id="filter-status" onchange="renderTable()">
@@ -565,20 +561,12 @@
       <button class="btn-refresh" onclick="loadDevices()">↻ Refresh</button>
       <span class="auto-label" id="auto-label">Auto refresh: 15s</span>
     </div>
-
-    <!-- Table -->
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Device</th>
-            <th>License</th>
-            <th>IP Address</th>
-            <th>First Seen</th>
-            <th>Last Seen</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>#</th><th>Device</th><th>License</th><th>IP Address</th>
+            <th>First Seen</th><th>Last Seen</th><th>Status</th><th>Actions</th>
           </tr>
         </thead>
         <tbody id="device-table-body">
@@ -588,11 +576,9 @@
     </div>
   </div>
 
-  <!-- ══ TAB: LICENSES ══════════════════════════════════ -->
+  <!-- TAB: LICENSES -->
   <div id="tab-licenses" class="tab-content">
     <div class="license-panel">
-
-      <!-- Generator card -->
       <div class="license-generator">
         <h2>🔑 LICENSE KEY GENERATOR</h2>
         <div class="gen-form">
@@ -615,8 +601,6 @@
           </div>
           <button class="btn-generate" onclick="generateKeys()">⚡ Generate</button>
         </div>
-
-        <!-- Output -->
         <div class="generated-output" id="generated-output">
           <h3>✅ Generated Keys</h3>
           <ul class="key-list" id="key-list"></ul>
@@ -624,7 +608,6 @@
         </div>
       </div>
 
-      <!-- License stats -->
       <div class="license-stats">
         <div class="lic-stat">
           <div class="label">Total Keys</div>
@@ -640,7 +623,6 @@
         </div>
       </div>
 
-      <!-- License toolbar -->
       <div class="license-toolbar">
         <input type="text" id="lic-search" placeholder="🔍 Key বা Label খুঁজুন…" oninput="renderLicenseTable()"/>
         <select id="lic-filter" onchange="renderLicenseTable()">
@@ -653,19 +635,12 @@
         <button class="btn-refresh-lic" onclick="loadLicenses()">↻ Refresh</button>
       </div>
 
-      <!-- License table -->
       <div style="overflow-x:auto">
         <table>
           <thead id="license-thead">
             <tr>
-              <th>#</th>
-              <th>License Key</th>
-              <th>Label</th>
-              <th>Bound Device</th>
-              <th>Created</th>
-              <th>Activated</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>#</th><th>License Key</th><th>Label</th><th>Bound Device</th>
+              <th>Created</th><th>Activated</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody id="license-table-body">
@@ -673,13 +648,56 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
 
+  <!-- TAB: ANNOUNCEMENT -->
+  <div id="tab-announcement" class="tab-content">
+    <div class="ann-panel">
+      <div class="ann-card">
+        <h2>📢 APP ANNOUNCEMENT BANNER</h2>
+        <p class="desc">
+          এই message <strong style="color:var(--green)">ON</strong> করলে সব user-এর app-এ task list-এর উপরে দেখাবে।<br>
+          <strong style="color:var(--red)">OFF</strong> করলে app আবার স্বাভাবিকভাবে চলবে, কোনো banner দেখাবে না।
+        </p>
+
+        <!-- Current status -->
+        <div class="ann-status-box">
+          <div>
+            <div class="ann-status-label">Current Status</div>
+            <div class="ann-status-text" id="ann-status-text">Loading...</div>
+          </div>
+          <div class="ann-badge" id="ann-badge">OFF</div>
+        </div>
+
+        <!-- Message input -->
+        <label class="ann-form-label">Banner Message (User-রা এটা দেখবে)</label>
+        <textarea class="ann-textarea" id="ann-message"
+          oninput="updateAnnPreview()"
+          placeholder="যেমন: Server Is Down! Please wait a moment... আমরা ঠিক করছি।"></textarea>
+
+        <!-- Live preview -->
+        <div class="ann-preview-wrap">
+          <div class="ann-preview-label">App-এ যেভাবে দেখাবে (Preview)</div>
+          <div class="ann-preview-box">
+            <span class="ann-preview-icon">⚠</span>
+            <span class="ann-preview-text" id="ann-preview">এখানে আপনার message দেখাবে...</span>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="ann-btn-row">
+          <button class="btn-ann-on"      onclick="saveAnnouncement(true)">✅ Save &amp; Turn ON</button>
+          <button class="btn-ann-off"     onclick="saveAnnouncement(false)">⛔ Turn OFF</button>
+          <button class="btn-ann-refresh" onclick="loadAnnouncement()">↻ Refresh Status</button>
+        </div>
+      </div>
     </div>
   </div>
 
 </div><!-- /#app -->
 
-<!-- Block Reason Modal -->
+<!-- Block Modal -->
 <div class="modal-overlay" id="block-modal">
   <div class="modal">
     <h3>🚫 Device Block করুন</h3>
@@ -713,12 +731,12 @@
 
 <script>
   const BASE = window.location.origin;
-  let adminPw   = '';
-  let allDevices  = [];
-  let allLicenses = [];
-  let lastGenKeys = [];
-  let pendingBlockId  = '';
-  let pendingAliasId  = '';
+  let adminPw      = '';
+  let allDevices   = [];
+  let allLicenses  = [];
+  let lastGenKeys  = [];
+  let pendingBlockId = '';
+  let pendingAliasId = '';
   let autoTimer  = null;
   let countdown  = 15;
 
@@ -728,8 +746,9 @@
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     const btns = document.querySelectorAll('.tab-btn');
-    if (name === 'devices')  btns[0].classList.add('active');
-    if (name === 'licenses') { btns[1].classList.add('active'); loadLicenses(); }
+    if (name === 'devices')      { btns[0].classList.add('active'); }
+    if (name === 'licenses')     { btns[1].classList.add('active'); loadLicenses(); }
+    if (name === 'announcement') { btns[2].classList.add('active'); loadAnnouncement(); }
   }
 
   // ── ALIAS ─────────────────────────────────────────────
@@ -801,9 +820,8 @@
     }, 1000);
   }
 
-  // ── STATS ─────────────────────────────────────────────
   function updateStats(devices) {
-    const now = Date.now();
+    const now     = Date.now();
     const total   = devices.length;
     const blocked = devices.filter(d => d.is_blocked).length;
     const active  = total - blocked;
@@ -817,7 +835,6 @@
     document.getElementById('stat-online').textContent  = online;
   }
 
-  // ── RENDER DEVICE TABLE ───────────────────────────────
   let currentList = [];
 
   function renderTable() {
@@ -827,7 +844,7 @@
     const aliases = loadAliases();
 
     currentList = allDevices.filter(d => {
-      const alias = aliases[d.device_id] || '';
+      const alias  = aliases[d.device_id] || '';
       const matchQ = !q ||
         (d.device_name || '').toLowerCase().includes(q) ||
         (d.device_id   || '').toLowerCase().includes(q) ||
@@ -850,9 +867,8 @@
     }
 
     tbody.innerHTML = currentList.map((d, i) => {
-      const isOnline = d.last_seen
-        ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
-      const alias = aliases[d.device_id] || '';
+      const isOnline   = d.last_seen ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
+      const alias      = aliases[d.device_id] || '';
       const aliasBadge = alias ? `<span class="device-alias">👤 ${escHtml(alias)}</span>` : '';
       const statusBadge = d.is_blocked
         ? '<span class="badge blocked"><span class="badge-dot"></span>BLOCKED</span>'
@@ -865,15 +881,14 @@
         : '';
 
       return '<tr>'
-        + '<td style="color:var(--muted);font-size:11px">' + (i+1) + '</td>'
+        + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
         + '<td><div style="display:flex;align-items:flex-start;gap:8px">'
         + `<span class="online-dot ${isOnline?'yes':'no'}" style="margin-top:3px"></span>`
         + '<div>'
         + `<div class="device-name">${escHtml(d.device_name||'Unknown')}${aliasBadge}`
         + `<button class="btn-alias" onclick="openAliasModal(${i})" title="Label">✏️</button></div>`
         + `<div class="device-id">${escHtml(d.device_id||'—')}</div>`
-        + blockReasonHtml
-        + '</div></div></td>'
+        + blockReasonHtml + '</div></div></td>'
         + `<td><span class="license-tag">${escHtml((d.license_type||'').split('(')[0].trim()||'Unknown')}</span></td>`
         + `<td class="device-ip">${escHtml(d.ip_address||'—')}</td>`
         + `<td style="color:var(--muted);font-size:11px">${fmtTime(d.first_seen)}</td>`
@@ -885,11 +900,10 @@
     }).join('');
   }
 
-  function openBlockByIndex(i) { const d = currentList[i]; if (d) openBlockModal(d.device_id, d.device_name); }
-  function unblockByIndex(i)   { const d = currentList[i]; if (d) unblockDevice(d.device_id); }
-  function deleteByIndex(i)    { const d = currentList[i]; if (d) deleteDevice(d.device_id); }
+  function openBlockByIndex(i)  { const d = currentList[i]; if (d) openBlockModal(d.device_id, d.device_name); }
+  function unblockByIndex(i)    { const d = currentList[i]; if (d) unblockDevice(d.device_id); }
+  function deleteByIndex(i)     { const d = currentList[i]; if (d) deleteDevice(d.device_id); }
 
-  // ── ALIAS MODAL ───────────────────────────────────────
   function openAliasModal(i) {
     const d = currentList[i]; if (!d) return;
     pendingAliasId = d.device_id;
@@ -916,7 +930,6 @@
     if (e.key === 'Escape') closeAliasModal();
   });
 
-  // ── BLOCK MODAL ───────────────────────────────────────
   function openBlockModal(deviceId, deviceName) {
     pendingBlockId = deviceId;
     document.getElementById('modal-device-info').textContent =
@@ -939,7 +952,6 @@
     blockDevice(deviceId, reason);
   }
 
-  // ── DEVICE API ────────────────────────────────────────
   function blockDevice(deviceId, reason) {
     fetch(`${BASE}/api/admin/block?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -971,15 +983,11 @@
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
-  // ══════════════════════════════════════════════════════
-  //  LICENSE KEY SYSTEM
-  // ══════════════════════════════════════════════════════
-
+  // ── LICENSE SYSTEM ────────────────────────────────────
   function generateKeys() {
     const label      = document.getElementById('gen-label').value.trim();
     const maxDevices = parseInt(document.getElementById('gen-max-devices').value);
     const count      = Math.max(1, Math.min(50, parseInt(document.getElementById('gen-count').value) || 1));
-
     fetch(`${BASE}/api/admin/licenses/generate?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ label, max_devices: maxDevices, count })
@@ -989,11 +997,8 @@
       const out = document.getElementById('generated-output');
       const ul  = document.getElementById('key-list');
       out.style.display = 'block';
-      ul.innerHTML = lastGenKeys.map((k, i) =>
-        `<li>
-          <span>${k}</span>
-          <button class="btn-copy-key" onclick="copyKey('${k}', this)">📋 Copy</button>
-        </li>`
+      ul.innerHTML = lastGenKeys.map(k =>
+        `<li><span>${k}</span><button class="btn-copy-key" onclick="copyKey('${k}', this)">📋 Copy</button></li>`
       ).join('');
       showToast(`✅ ${lastGenKeys.length} টি key generate হয়েছে`);
       loadLicenses();
@@ -1004,8 +1009,7 @@
     navigator.clipboard.writeText(key).then(() => {
       const orig = btn.textContent;
       btn.textContent = '✓ Copied!';
-      btn.style.background = 'var(--green)';
-      btn.style.color = '#000';
+      btn.style.background = 'var(--green)'; btn.style.color = '#000';
       setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 1500);
     });
   }
@@ -1017,7 +1021,6 @@
     });
   }
 
-  // ── LOAD LICENSES ─────────────────────────────────────
   function loadLicenses() {
     fetch(`${BASE}/api/admin/licenses?password=${encodeURIComponent(adminPw)}`)
     .then(r => r.json())
@@ -1067,18 +1070,14 @@
       const statusBadge = l.is_active
         ? '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>'
         : '<span class="badge inactive"><span class="badge-dot"></span>INACTIVE</span>';
-
       const boundBadge = l.bound_device
         ? `<span class="badge bound" title="${escHtml(l.bound_device)}">🔗 BOUND</span><br><span style="font-size:9px;color:var(--muted)">${escHtml(l.bound_device.substring(0,12))}…</span>`
         : '<span class="badge unbound">⚪ UNUSED</span>';
-
       const toggleBtn = l.is_active
         ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, 0)">⛔ Deactivate</button>`
         : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, 1)">✅ Activate</button>`;
-
       const unbindBtn = l.bound_device
-        ? `<button class="btn-unbind" onclick="unbindLicense(${i})" title="Unbind from device">🔓 Unbind</button>`
-        : '';
+        ? `<button class="btn-unbind" onclick="unbindLicense(${i})">🔓 Unbind</button>` : '';
 
       return '<tr>'
         + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
@@ -1091,9 +1090,8 @@
         + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">`
         + toggleBtn + unbindBtn
         + `<button class="btn-copy-key" onclick="copyKeyDirect('${escHtml(l.license_key)}', this)" style="font-size:9px">📋</button>`
-        + `<button class="btn-delete" onclick="deleteLicense(${i})" title="Delete">🗑</button>`
-        + '</td>'
-        + '</tr>';
+        + `<button class="btn-delete" onclick="deleteLicense(${i})">🗑</button>`
+        + '</td></tr>';
     }).join('');
   }
 
@@ -1111,14 +1109,13 @@
 
   function unbindLicense(i) {
     const l = currentLicList[i]; if (!l) return;
-    if (!confirm(`"${l.license_key}" এর device binding মুছে দেবেন?\nএর পরে এই key অন্য device এ use করা যাবে।`)) return;
+    if (!confirm(`"${l.license_key}" এর device binding মুছে দেবেন?`)) return;
     fetch(`${BASE}/api/license/unbind?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ license_key: l.license_key })
     }).then(r => r.json()).then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🔓 Key unbound হয়েছে। এখন অন্য device এ use করা যাবে।');
-      loadLicenses();
+      showToast('🔓 Key unbound হয়েছে।'); loadLicenses();
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
@@ -1130,8 +1127,7 @@
       body: JSON.stringify({ license_key: l.license_key })
     }).then(r => r.json()).then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
-      showToast('🗑 License key delete হয়েছে');
-      loadLicenses();
+      showToast('🗑 License key delete হয়েছে'); loadLicenses();
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
@@ -1142,6 +1138,59 @@
       setTimeout(() => btn.textContent = orig, 1500);
       showToast('📋 Key copied!');
     });
+  }
+
+  // ══ ANNOUNCEMENT SYSTEM ═══════════════════════════════
+
+  function updateAnnPreview() {
+    const v = document.getElementById('ann-message').value;
+    document.getElementById('ann-preview').textContent = v || 'এখানে আপনার message দেখাবে...';
+  }
+
+  function loadAnnouncement() {
+    fetch(`${BASE}/api/announcement`)
+      .then(r => r.json())
+      .then(data => {
+        const on  = data.enabled === true;
+        const msg = data.message || '';
+
+        const statusEl = document.getElementById('ann-status-text');
+        const badgeEl  = document.getElementById('ann-badge');
+
+        statusEl.textContent = on
+          ? '🟢 Banner চালু আছে — সব user দেখছে'
+          : '⚪ Banner বন্ধ আছে — app স্বাভাবিক';
+        statusEl.style.color = on ? 'var(--green)' : 'var(--muted)';
+
+        badgeEl.textContent       = on ? 'ON' : 'OFF';
+        badgeEl.style.background  = on ? '#052e16' : '#1a1a1a';
+        badgeEl.style.color       = on ? 'var(--green)' : 'var(--muted)';
+        badgeEl.style.border      = on ? '1px solid #166534' : '1px solid #2a2a2a';
+
+        if (msg) {
+          document.getElementById('ann-message').value = msg;
+          document.getElementById('ann-preview').textContent = msg;
+        }
+      })
+      .catch(() => {});
+  }
+
+  function saveAnnouncement(enable) {
+    const message = document.getElementById('ann-message').value.trim();
+    if (enable && !message) {
+      showToast('❌ Message লিখুন আগে!', true);
+      document.getElementById('ann-message').focus();
+      return;
+    }
+    fetch(`${BASE}/api/admin/announcement?password=${encodeURIComponent(adminPw)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled: enable, message: message })
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast(enable ? '✅ Banner চালু! সব user দেখবে।' : '⛔ Banner বন্ধ করা হয়েছে।');
+      loadAnnouncement();
+    }).catch(() => showToast('❌ Server error!', true));
   }
 
   // ── HELPERS ───────────────────────────────────────────
