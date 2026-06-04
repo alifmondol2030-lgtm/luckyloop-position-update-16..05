@@ -51,7 +51,6 @@ def init_db():
             block_reason TEXT
         )
     """)
-    # ── NEW: license_keys table ──────────────────────────
     c.execute("""
         CREATE TABLE IF NOT EXISTS license_keys (
             key_id       INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,6 +62,19 @@ def init_db():
             activated_at TEXT,
             is_active    INTEGER DEFAULT 1
         )
+    """)
+    # ══ NEW: announcement table ══
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS announcement (
+            id         INTEGER PRIMARY KEY,
+            enabled    INTEGER DEFAULT 0,
+            message    TEXT    DEFAULT '',
+            updated_at TEXT    DEFAULT ''
+        )
+    """)
+    c.execute("""
+        INSERT OR IGNORE INTO announcement (id, enabled, message, updated_at)
+        VALUES (1, 0, '', '')
     """)
     cols = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
     if "updated_at" not in cols:
@@ -88,7 +100,6 @@ def check_admin(req):
 
 
 def generate_license_key(label=""):
-    """Generate a unique LuckyLoop license key."""
     chars  = string.ascii_uppercase + string.digits
     suffix = ''.join(secrets.choice(chars) for _ in range(16))
     prefix = label.replace(" ", "-")[:12].upper() if label else "USER"
@@ -157,7 +168,7 @@ def api_latest():
 
 
 # ══════════════════════════════════════════════════════════
-#  EXISTING ROUTES (unchanged)
+#  EXISTING ROUTES
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/scraper-status", methods=["POST"])
@@ -286,15 +297,11 @@ def check_device(device_id):
 
 
 # ══════════════════════════════════════════════════════════
-#  ✅ NEW: LICENSE KEY API
+#  LICENSE KEY API
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/license/verify", methods=["POST"])
 def license_verify():
-    """
-    App calls this to verify a license key and bind it to a device.
-    Returns: { ok, valid, message, license_type }
-    """
     data = request.get_json(silent=True) or {}
     license_key = str(data.get("license_key", "") or "").strip()
     device_id   = str(data.get("device_id",   "") or "").strip()
@@ -319,7 +326,6 @@ def license_verify():
     bound = row["bound_device"]
     now   = datetime.now().isoformat()
 
-    # Key already bound to a DIFFERENT device
     if bound and bound != device_id:
         conn.close()
         return jsonify({
@@ -328,7 +334,6 @@ def license_verify():
             "message": "❌ This license key is already activated on another device! Contact admin."
         })
 
-    # First activation — bind key to this device
     if not bound:
         conn.execute(
             "UPDATE license_keys SET bound_device=?, activated_at=? WHERE license_key=?",
@@ -349,7 +354,6 @@ def license_verify():
 
 @app.route("/api/license/unbind", methods=["POST"])
 def license_unbind():
-    """Admin: unbind a license key from its device (reset binding)."""
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     data = request.get_json(silent=True) or {}
@@ -367,7 +371,7 @@ def license_unbind():
 
 
 # ══════════════════════════════════════════════════════════
-#  ✅ NEW: ADMIN LICENSE ROUTES
+#  ADMIN LICENSE ROUTES
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/admin/licenses", methods=["GET"])
@@ -389,14 +393,13 @@ def admin_generate_license():
     data = request.get_json(silent=True) or {}
     label       = str(data.get("label", "") or "").strip()
     max_devices = int(data.get("max_devices", 1))
-    count       = max(1, min(int(data.get("count", 1)), 50))  # max 50 at once
+    count       = max(1, min(int(data.get("count", 1)), 50))
 
     now  = datetime.now().isoformat()
     conn = get_db()
     generated = []
     for _ in range(count):
         key = generate_license_key(label)
-        # ensure uniqueness
         while conn.execute("SELECT 1 FROM license_keys WHERE license_key=?", (key,)).fetchone():
             key = generate_license_key(label)
         conn.execute(
@@ -441,6 +444,44 @@ def admin_delete_license():
     conn.execute("DELETE FROM license_keys WHERE license_key=?", (license_key,))
     conn.commit()
     conn.close()
+    return jsonify({"ok": True})
+
+
+# ══════════════════════════════════════════════════════════
+#  ✅ NEW: ANNOUNCEMENT API
+# ══════════════════════════════════════════════════════════
+
+@app.route("/api/announcement", methods=["GET"])
+def get_announcement():
+    """Public endpoint — app polls this every refresh."""
+    conn = get_db()
+    row = conn.execute("SELECT * FROM announcement WHERE id=1").fetchone()
+    conn.close()
+    if not row:
+        return jsonify({"enabled": False, "message": ""})
+    return jsonify({
+        "enabled": bool(row["enabled"]),
+        "message": row["message"] or ""
+    })
+
+
+@app.route("/api/admin/announcement", methods=["POST"])
+def set_announcement():
+    """Admin endpoint — save message and toggle on/off."""
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data    = request.get_json(silent=True) or {}
+    enabled = 1 if data.get("enabled") else 0
+    message = str(data.get("message", "") or "").strip()
+    now     = datetime.now().isoformat()
+    conn = get_db()
+    conn.execute(
+        "UPDATE announcement SET enabled=?, message=?, updated_at=? WHERE id=1",
+        (enabled, message, now)
+    )
+    conn.commit()
+    conn.close()
+    print(f"[ANN] enabled={enabled} msg={message[:60]}")
     return jsonify({"ok": True})
 
 
