@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 import secrets
 import string
@@ -63,6 +63,7 @@ def init_db():
             is_active    INTEGER DEFAULT 1
         )
     """)
+    # ══ NEW: announcement table ══
     c.execute("""
         CREATE TABLE IF NOT EXISTS announcement (
             id         INTEGER PRIMARY KEY,
@@ -75,20 +76,6 @@ def init_db():
         INSERT OR IGNORE INTO announcement (id, enabled, message, updated_at)
         VALUES (1, 0, '', '')
     """)
-
-    # ══ NEW: users validity table ══
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id           INTEGER PRIMARY KEY AUTOINCREMENT,
-            username     TEXT    UNIQUE NOT NULL,
-            display_name TEXT,
-            license_key  TEXT,
-            expires_at   TEXT,
-            created_at   TEXT,
-            note         TEXT
-        )
-    """)
-
     cols = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
     if "updated_at" not in cols:
         c.execute("ALTER TABLE jobs ADD COLUMN updated_at TEXT")
@@ -354,29 +341,15 @@ def license_verify():
         )
         conn.commit()
 
-    # ── Check if user validity info is linked to this license ──
-    user_row = conn.execute(
-        "SELECT * FROM users WHERE license_key=?", (license_key,)
-    ).fetchone()
-
     label = row["label"] or "License Key Active"
     conn.close()
 
-    response = {
+    return jsonify({
         "ok":           True,
         "valid":        True,
         "message":      f"✅ License Activated! ({label})",
         "license_type": label
-    }
-
-    if user_row:
-        response["user_info"] = {
-            "display_name": user_row["display_name"] or user_row["username"],
-            "username":     user_row["username"],
-            "expires_at":   user_row["expires_at"] or "",
-        }
-
-    return jsonify(response)
+    })
 
 
 @app.route("/api/license/unbind", methods=["POST"])
@@ -395,51 +368,6 @@ def license_unbind():
     conn.commit()
     conn.close()
     return jsonify({"ok": True, "message": "Key unbound successfully"})
-
-
-# ══════════════════════════════════════════════════════════
-#  USER VALIDITY API  (app polls this)
-# ══════════════════════════════════════════════════════════
-
-@app.route("/api/user/info", methods=["POST"])
-def user_info():
-    """App sends license_key → gets display_name + days remaining."""
-    data        = request.get_json(silent=True) or {}
-    license_key = str(data.get("license_key", "") or "").strip()
-
-    if not license_key:
-        return jsonify({"ok": False, "message": "license_key required"}), 400
-
-    conn = get_db()
-    user = conn.execute(
-        "SELECT * FROM users WHERE license_key=?", (license_key,)
-    ).fetchone()
-    conn.close()
-
-    if not user:
-        return jsonify({"ok": False, "message": "User not found"})
-
-    expires_at   = user["expires_at"] or ""
-    days_left    = None
-    is_expired   = False
-
-    if expires_at:
-        try:
-            exp_dt    = datetime.fromisoformat(expires_at)
-            delta     = exp_dt - datetime.now()
-            days_left = max(0, delta.days)
-            is_expired = delta.total_seconds() <= 0
-        except:
-            pass
-
-    return jsonify({
-        "ok":          True,
-        "display_name": user["display_name"] or user["username"],
-        "username":    user["username"],
-        "expires_at":  expires_at,
-        "days_left":   days_left,
-        "is_expired":  is_expired,
-    })
 
 
 # ══════════════════════════════════════════════════════════
@@ -520,129 +448,12 @@ def admin_delete_license():
 
 
 # ══════════════════════════════════════════════════════════
-#  ADMIN USER VALIDITY ROUTES
-# ══════════════════════════════════════════════════════════
-
-@app.route("/api/admin/users", methods=["GET"])
-def admin_get_users():
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
-    conn = get_db()
-    rows = conn.execute(
-        "SELECT * FROM users ORDER BY created_at DESC"
-    ).fetchall()
-    conn.close()
-
-    result = []
-    for r in rows:
-        d = dict(r)
-        expires_at = d.get("expires_at") or ""
-        days_left  = None
-        is_expired = False
-        if expires_at:
-            try:
-                exp_dt    = datetime.fromisoformat(expires_at)
-                delta     = exp_dt - datetime.now()
-                days_left = max(0, delta.days)
-                is_expired = delta.total_seconds() <= 0
-            except:
-                pass
-        d["days_left"]  = days_left
-        d["is_expired"] = is_expired
-        result.append(d)
-    return jsonify(result)
-
-
-@app.route("/api/admin/users/add", methods=["POST"])
-def admin_add_user():
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
-    data         = request.get_json(silent=True) or {}
-    username     = str(data.get("username",     "") or "").strip()
-    display_name = str(data.get("display_name", "") or "").strip()
-    license_key  = str(data.get("license_key",  "") or "").strip()
-    days         = int(data.get("days", 30))
-    note         = str(data.get("note", "") or "").strip()
-
-    if not username or not license_key:
-        return jsonify({"error": "username and license_key required"}), 400
-
-    expires_at = (datetime.now() + timedelta(days=days)).isoformat()
-    now        = datetime.now().isoformat()
-
-    conn = get_db()
-    try:
-        conn.execute("""
-            INSERT INTO users (username, display_name, license_key, expires_at, created_at, note)
-            VALUES (?, ?, ?, ?, ?, ?)
-            ON CONFLICT(username) DO UPDATE SET
-                display_name = excluded.display_name,
-                license_key  = excluded.license_key,
-                expires_at   = excluded.expires_at,
-                note         = excluded.note
-        """, (username, display_name or username, license_key, expires_at, now, note))
-        conn.commit()
-    except Exception as e:
-        conn.close()
-        return jsonify({"error": str(e)}), 500
-    conn.close()
-    return jsonify({"ok": True, "username": username, "expires_at": expires_at})
-
-
-@app.route("/api/admin/users/extend", methods=["POST"])
-def admin_extend_user():
-    """Add more days to existing user's validity."""
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
-    data     = request.get_json(silent=True) or {}
-    username = str(data.get("username", "") or "").strip()
-    days     = int(data.get("days", 30))
-
-    if not username:
-        return jsonify({"error": "username required"}), 400
-
-    conn = get_db()
-    row  = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
-    if not row:
-        conn.close()
-        return jsonify({"error": "User not found"}), 404
-
-    existing_exp = row["expires_at"]
-    try:
-        base = datetime.fromisoformat(existing_exp) if existing_exp else datetime.now()
-        if base < datetime.now():
-            base = datetime.now()
-    except:
-        base = datetime.now()
-
-    new_exp = (base + timedelta(days=days)).isoformat()
-    conn.execute("UPDATE users SET expires_at=? WHERE username=?", (new_exp, username))
-    conn.commit()
-    conn.close()
-    return jsonify({"ok": True, "username": username, "new_expires_at": new_exp})
-
-
-@app.route("/api/admin/users/delete", methods=["POST"])
-def admin_delete_user():
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
-    data     = request.get_json(silent=True) or {}
-    username = str(data.get("username", "") or "").strip()
-    if not username:
-        return jsonify({"error": "username required"}), 400
-    conn = get_db()
-    conn.execute("DELETE FROM users WHERE username=?", (username,))
-    conn.commit()
-    conn.close()
-    return jsonify({"ok": True})
-
-
-# ══════════════════════════════════════════════════════════
-#  ANNOUNCEMENT API
+#  ✅ NEW: ANNOUNCEMENT API
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/announcement", methods=["GET"])
 def get_announcement():
+    """Public endpoint — app polls this every refresh."""
     conn = get_db()
     row = conn.execute("SELECT * FROM announcement WHERE id=1").fetchone()
     conn.close()
@@ -656,6 +467,7 @@ def get_announcement():
 
 @app.route("/api/admin/announcement", methods=["POST"])
 def set_announcement():
+    """Admin endpoint — save message and toggle on/off."""
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     data    = request.get_json(silent=True) or {}
