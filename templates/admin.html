@@ -188,6 +188,9 @@
   .badge.inactive { background: #1a1000; color: var(--orange); }
   .badge.bound    { background: #0f1f14; color: var(--green); }
   .badge.unbound  { background: #1a1a1a; color: var(--muted); }
+  .badge.expired  { background: #2d0707; color: var(--red); }
+  .badge.expiring { background: #1a1000; color: var(--orange); }
+  .badge.lifetime { background: #0a1a2e; color: var(--accent); }
   .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
   .online-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
@@ -240,6 +243,7 @@
 
   .empty-row td { text-align: center; padding: 60px; color: var(--muted); font-size: 12px; }
 
+  /* ══ LICENSE PANEL ══ */
   .license-panel { padding: 28px; }
 
   .license-generator {
@@ -256,7 +260,7 @@
 
   .gen-form {
     display: grid;
-    grid-template-columns: 1fr 140px 100px auto;
+    grid-template-columns: 1fr 1fr 100px 130px 100px auto;
     gap: 12px;
     align-items: end;
   }
@@ -318,7 +322,7 @@
   .btn-copy-all:hover { background: var(--yellow); color: #000; }
 
   .license-stats {
-    display: grid; grid-template-columns: repeat(3, 1fr);
+    display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 1px; background: var(--border); margin-bottom: 20px;
   }
   .lic-stat { background: var(--card); padding: 16px 20px; }
@@ -350,6 +354,13 @@
   }
   .btn-toggle-on:hover { background: var(--green); color: #000; }
 
+  .btn-edit {
+    padding: 5px 10px; font-size: 9px; font-family: inherit;
+    background: transparent; border: 1px solid var(--purple);
+    color: var(--purple); cursor: pointer; letter-spacing: 1px; transition: all .2s;
+  }
+  .btn-edit:hover { background: var(--purple); color: #000; }
+
   #toast {
     position: fixed; bottom: 28px; right: 28px;
     padding: 12px 20px; font-size: 12px; font-family: inherit;
@@ -373,14 +384,15 @@
   }
   .modal h3 { font-size: 15px; color: var(--white); margin-bottom: 6px; }
   .modal p  { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
-  .modal input {
+  .modal input, .modal select {
     width: 100%; padding: 12px 14px;
     background: var(--card2); border: 1px solid var(--border);
     color: var(--text); font-family: inherit; font-size: 12px;
-    outline: none; margin-bottom: 16px;
+    outline: none; margin-bottom: 12px;
   }
-  .modal input:focus { border-color: var(--red); }
-  .modal-btns { display: flex; gap: 10px; }
+  .modal input:focus, .modal select:focus { border-color: var(--red); }
+  .modal label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .modal-btns { display: flex; gap: 10px; margin-top: 8px; }
   .modal-btns button { flex: 1; padding: 11px; font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer; border: none; letter-spacing: 1px; }
   .btn-confirm-block { background: var(--red); color: #fff; }
   .btn-cancel { background: var(--card2); color: var(--muted); border: 1px solid var(--border) !important; }
@@ -395,6 +407,13 @@
     cursor: pointer; font-family: inherit; letter-spacing: 1px;
   }
   .btn-clear-alias:hover { border-color: var(--orange) !important; color: var(--orange) !important; }
+
+  /* Edit license modal */
+  #edit-lic-modal .modal { border-top-color: var(--yellow); width: 500px; }
+  #edit-lic-modal .modal input:focus,
+  #edit-lic-modal .modal select:focus { border-color: var(--yellow); }
+  .btn-confirm-edit { background: var(--yellow) !important; color: #000 !important; }
+  .validity-help { font-size: 10px; color: var(--muted); margin-top: -6px; margin-bottom: 12px; }
 
   .license-toolbar {
     padding: 14px 0; display: flex; align-items: center; gap: 12px;
@@ -419,6 +438,18 @@
     letter-spacing: 1px; transition: opacity .2s;
   }
   .btn-refresh-lic:hover { opacity: .85; }
+
+  /* Days remaining pill */
+  .days-pill {
+    display: inline-block; padding: 2px 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    border-radius: 2px;
+  }
+  .days-pill.ok       { background: #052e16; color: var(--green);  border: 1px solid #166534; }
+  .days-pill.warn     { background: #1a1000; color: var(--orange); border: 1px solid #7c3a00; }
+  .days-pill.danger   { background: #2d0707; color: var(--red);    border: 1px solid #7f1d1d; }
+  .days-pill.lifetime { background: #0a1a2e; color: var(--accent); border: 1px solid #0e4f6b; }
+  .days-pill.expired  { background: #2d0707; color: #888;          border: 1px solid #400; }
 
   /* ══ ANNOUNCEMENT TAB ══ */
   .ann-panel { padding: 28px; }
@@ -482,6 +513,9 @@
   }
   .btn-ann-refresh:hover { border-color: var(--accent); color: var(--accent); }
 
+  @media (max-width: 1100px) {
+    .gen-form { grid-template-columns: 1fr 1fr 1fr; }
+  }
   @media (max-width: 900px) {
     .stats-bar { grid-template-columns: repeat(2,1fr); }
     .gen-form { grid-template-columns: 1fr 1fr; }
@@ -533,22 +567,10 @@
   <!-- TAB: DEVICES -->
   <div id="tab-devices" class="tab-content active">
     <div class="stats-bar">
-      <div class="stat-card">
-        <div class="label">Total Devices</div>
-        <div class="value total" id="stat-total">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Active</div>
-        <div class="value active" id="stat-active">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Blocked</div>
-        <div class="value blocked" id="stat-blocked">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Online (5 min)</div>
-        <div class="value online" id="stat-online">0</div>
-      </div>
+      <div class="stat-card"><div class="label">Total Devices</div><div class="value total" id="stat-total">0</div></div>
+      <div class="stat-card"><div class="label">Active</div><div class="value active" id="stat-active">0</div></div>
+      <div class="stat-card"><div class="label">Blocked</div><div class="value blocked" id="stat-blocked">0</div></div>
+      <div class="stat-card"><div class="label">Online (5 min)</div><div class="value online" id="stat-online">0</div></div>
     </div>
     <div class="toolbar">
       <input type="text" id="search-box" placeholder="🔍  Device name বা ID দিয়ে খুঁজুন…" oninput="renderTable()"/>
@@ -579,12 +601,21 @@
   <!-- TAB: LICENSES -->
   <div id="tab-licenses" class="tab-content">
     <div class="license-panel">
+
       <div class="license-generator">
         <h2>🔑 LICENSE KEY GENERATOR</h2>
         <div class="gen-form">
           <div class="form-group">
-            <label>Label / Name (optional)</label>
-            <input type="text" id="gen-label" placeholder="যেমন: Rahim, Office01…" maxlength="40"/>
+            <label>Display Name (App-এ দেখাবে) *</label>
+            <input type="text" id="gen-display-name" placeholder="যেমন: Rahim Uddin, emdadul2962…" maxlength="40"/>
+          </div>
+          <div class="form-group">
+            <label>Label / Internal Note</label>
+            <input type="text" id="gen-label" placeholder="যেমন: Office01, Premium…" maxlength="40"/>
+          </div>
+          <div class="form-group">
+            <label>Validity (Days)</label>
+            <input type="number" id="gen-validity" placeholder="খালি = Lifetime" min="1" max="3650"/>
           </div>
           <div class="form-group">
             <label>Max Devices</label>
@@ -601,6 +632,10 @@
           </div>
           <button class="btn-generate" onclick="generateKeys()">⚡ Generate</button>
         </div>
+        <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+          💡 <strong style="color:var(--yellow)">Display Name</strong> = App-এ "Hi Rahim Uddin" হিসেবে দেখাবে।
+          <strong style="color:var(--accent)">Validity</strong> = activate করার দিন থেকে count শুরু। খালি রাখলে Lifetime।
+        </div>
         <div class="generated-output" id="generated-output">
           <h3>✅ Generated Keys</h3>
           <ul class="key-list" id="key-list"></ul>
@@ -609,28 +644,22 @@
       </div>
 
       <div class="license-stats">
-        <div class="lic-stat">
-          <div class="label">Total Keys</div>
-          <div class="value total" id="lic-total">0</div>
-        </div>
-        <div class="lic-stat">
-          <div class="label">Activated</div>
-          <div class="value active" id="lic-activated">0</div>
-        </div>
-        <div class="lic-stat">
-          <div class="label">Unused</div>
-          <div class="value online" id="lic-unused">0</div>
-        </div>
+        <div class="lic-stat"><div class="label">Total Keys</div><div class="value total" id="lic-total">0</div></div>
+        <div class="lic-stat"><div class="label">Activated</div><div class="value active" id="lic-activated">0</div></div>
+        <div class="lic-stat"><div class="label">Unused</div><div class="value online" id="lic-unused">0</div></div>
+        <div class="lic-stat"><div class="label">Expired</div><div class="value blocked" id="lic-expired">0</div></div>
       </div>
 
       <div class="license-toolbar">
-        <input type="text" id="lic-search" placeholder="🔍 Key বা Label খুঁজুন…" oninput="renderLicenseTable()"/>
+        <input type="text" id="lic-search" placeholder="🔍 Key, Name বা Label খুঁজুন…" oninput="renderLicenseTable()"/>
         <select id="lic-filter" onchange="renderLicenseTable()">
           <option value="all">সব দেখান</option>
           <option value="active">শুধু Active</option>
           <option value="inactive">Inactive</option>
           <option value="bound">Activated (Bound)</option>
           <option value="unbound">Unused (Unbound)</option>
+          <option value="expired">Expired</option>
+          <option value="expiring">Expiring Soon (≤7 days)</option>
         </select>
         <button class="btn-refresh-lic" onclick="loadLicenses()">↻ Refresh</button>
       </div>
@@ -639,12 +668,13 @@
         <table>
           <thead id="license-thead">
             <tr>
-              <th>#</th><th>License Key</th><th>Label</th><th>Bound Device</th>
-              <th>Created</th><th>Activated</th><th>Status</th><th>Actions</th>
+              <th>#</th><th>License Key</th><th>Display Name</th><th>Label</th>
+              <th>Validity</th><th>Bound Device</th>
+              <th>Created</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody id="license-table-body">
-            <tr class="empty-row"><td colspan="8">⏳ Loading…</td></tr>
+            <tr class="empty-row"><td colspan="9">⏳ Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -660,8 +690,6 @@
           এই message <strong style="color:var(--green)">ON</strong> করলে সব user-এর app-এ task list-এর উপরে দেখাবে।<br>
           <strong style="color:var(--red)">OFF</strong> করলে app আবার স্বাভাবিকভাবে চলবে, কোনো banner দেখাবে না।
         </p>
-
-        <!-- Current status -->
         <div class="ann-status-box">
           <div>
             <div class="ann-status-label">Current Status</div>
@@ -669,14 +697,9 @@
           </div>
           <div class="ann-badge" id="ann-badge">OFF</div>
         </div>
-
-        <!-- Message input -->
         <label class="ann-form-label">Banner Message (User-রা এটা দেখবে)</label>
-        <textarea class="ann-textarea" id="ann-message"
-          oninput="updateAnnPreview()"
-          placeholder="যেমন: Server Is Down! Please wait a moment... আমরা ঠিক করছি।"></textarea>
-
-        <!-- Live preview -->
+        <textarea class="ann-textarea" id="ann-message" oninput="updateAnnPreview()"
+          placeholder="যেমন: Server Is Down! Please wait a moment..."></textarea>
         <div class="ann-preview-wrap">
           <div class="ann-preview-label">App-এ যেভাবে দেখাবে (Preview)</div>
           <div class="ann-preview-box">
@@ -684,8 +707,6 @@
             <span class="ann-preview-text" id="ann-preview">এখানে আপনার message দেখাবে...</span>
           </div>
         </div>
-
-        <!-- Buttons -->
         <div class="ann-btn-row">
           <button class="btn-ann-on"      onclick="saveAnnouncement(true)">✅ Save &amp; Turn ON</button>
           <button class="btn-ann-off"     onclick="saveAnnouncement(false)">⛔ Turn OFF</button>
@@ -702,7 +723,8 @@
   <div class="modal">
     <h3>🚫 Device Block করুন</h3>
     <p id="modal-device-info">Device: —</p>
-    <input type="text" id="block-reason-input" placeholder="Block করার কারণ (optional)" maxlength="200"/>
+    <label>Block করার কারণ (optional)</label>
+    <input type="text" id="block-reason-input" placeholder="কারণ লিখুন…" maxlength="200"/>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">বাতিল</button>
       <button class="btn-confirm-block" onclick="confirmBlock()">Block করুন</button>
@@ -716,7 +738,7 @@
     <h3>✏️ Device Label দিন</h3>
     <p id="alias-modal-info" style="color:var(--muted);font-size:11px;margin-bottom:20px">Device: —</p>
     <input type="text" id="alias-input" placeholder="যেমন: Alif, Rahim, Office PC…" maxlength="40"/>
-    <div style="font-size:10px;color:var(--muted);margin-top:-10px;margin-bottom:16px">
+    <div style="font-size:10px;color:var(--muted);margin-top:-6px;margin-bottom:16px">
       💡 এই label শুধু আপনার browser এ save হবে।
     </div>
     <div class="modal-btns">
@@ -727,18 +749,46 @@
   </div>
 </div>
 
+<!-- Edit License Modal -->
+<div class="modal-overlay" id="edit-lic-modal">
+  <div class="modal" style="border-top-color:var(--yellow);width:500px">
+    <h3>✏️ License Edit করুন</h3>
+    <p id="edit-lic-key-info" style="color:var(--muted);font-size:10px;margin-bottom:16px;word-break:break-all">Key: —</p>
+
+    <label>Display Name (App-এ "Hi ___" হিসেবে দেখাবে)</label>
+    <input type="text" id="edit-display-name" placeholder="যেমন: Rahim Uddin" maxlength="40"
+           style="border-color:var(--yellow)"/>
+
+    <label>Label / Internal Note</label>
+    <input type="text" id="edit-label" placeholder="যেমন: Premium, Office01" maxlength="40"/>
+
+    <label>Validity Days (activate করার দিন থেকে)</label>
+    <input type="number" id="edit-validity-days" placeholder="খালি = Lifetime" min="1" max="3650"/>
+    <div class="validity-help">💡 যদি ইতিমধ্যে activate হয়ে থাকে, expires_at সরাসরি দিন নিচে।</div>
+
+    <label>Fixed Expiry Date (optional, YYYY-MM-DD)</label>
+    <input type="date" id="edit-expires-at"/>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeEditModal()">বাতিল</button>
+      <button class="btn-confirm-edit" onclick="confirmEditLicense()">✓ Save করুন</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
   const BASE = window.location.origin;
-  let adminPw      = '';
-  let allDevices   = [];
-  let allLicenses  = [];
-  let lastGenKeys  = [];
+  let adminPw        = '';
+  let allDevices     = [];
+  let allLicenses    = [];
+  let lastGenKeys    = [];
   let pendingBlockId = '';
   let pendingAliasId = '';
-  let autoTimer  = null;
-  let countdown  = 15;
+  let pendingEditKey = '';
+  let autoTimer      = null;
+  let countdown      = 15;
 
   // ── TABS ──────────────────────────────────────────────
   function switchTab(name) {
@@ -753,9 +803,7 @@
 
   // ── ALIAS ─────────────────────────────────────────────
   const ALIAS_KEY = 'luckyloop_aliases';
-  function loadAliases() {
-    try { return JSON.parse(localStorage.getItem(ALIAS_KEY) || '{}'); } catch { return {}; }
-  }
+  function loadAliases() { try { return JSON.parse(localStorage.getItem(ALIAS_KEY) || '{}'); } catch { return {}; } }
   function saveAlias(deviceId, alias) {
     const aliases = loadAliases();
     if (alias) aliases[deviceId] = alias; else delete aliases[deviceId];
@@ -764,17 +812,14 @@
   function getAlias(deviceId) { return loadAliases()[deviceId] || ''; }
 
   // ── LOGIN ─────────────────────────────────────────────
-  document.getElementById('pw-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  });
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
   function doLogin() {
     const pw = document.getElementById('pw-input').value.trim();
     if (!pw) { showLoginErr('Password দিন!'); return; }
     adminPw = pw;
-    fetch(`${BASE}/api/admin/devices`, {
-      headers: { 'X-Admin-Password': adminPw }
-    }).then(r => {
+    fetch(`${BASE}/api/admin/devices`, { headers: { 'X-Admin-Password': adminPw } })
+    .then(r => {
       if (r.status === 401) { showLoginErr('❌ Wrong password!'); adminPw = ''; return; }
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
@@ -789,8 +834,7 @@
   }
 
   function doLogout() {
-    adminPw = '';
-    clearInterval(autoTimer);
+    adminPw = ''; clearInterval(autoTimer);
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('app').style.display = 'none';
     document.getElementById('pw-input').value = '';
@@ -811,8 +855,7 @@
   }
 
   function startAutoRefresh() {
-    countdown = 15;
-    clearInterval(autoTimer);
+    countdown = 15; clearInterval(autoTimer);
     autoTimer = setInterval(() => {
       countdown--;
       document.getElementById('auto-label').textContent = `Auto refresh: ${countdown}s`;
@@ -825,10 +868,7 @@
     const total   = devices.length;
     const blocked = devices.filter(d => d.is_blocked).length;
     const active  = total - blocked;
-    const online  = devices.filter(d => {
-      if (!d.last_seen) return false;
-      return (now - new Date(d.last_seen).getTime()) / 1000 < 300;
-    }).length;
+    const online  = devices.filter(d => d.last_seen && (now - new Date(d.last_seen).getTime()) / 1000 < 300).length;
     document.getElementById('stat-total').textContent   = total;
     document.getElementById('stat-active').textContent  = active;
     document.getElementById('stat-blocked').textContent = blocked;
@@ -853,10 +893,7 @@
       if (!matchQ) return false;
       if (filter === 'blocked') return d.is_blocked;
       if (filter === 'active')  return !d.is_blocked;
-      if (filter === 'online') {
-        if (!d.last_seen) return false;
-        return (now - new Date(d.last_seen).getTime()) / 1000 < 300;
-      }
+      if (filter === 'online')  return d.last_seen && (now - new Date(d.last_seen).getTime()) / 1000 < 300;
       return true;
     });
 
@@ -867,18 +904,17 @@
     }
 
     tbody.innerHTML = currentList.map((d, i) => {
-      const isOnline   = d.last_seen ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
-      const alias      = aliases[d.device_id] || '';
-      const aliasBadge = alias ? `<span class="device-alias">👤 ${escHtml(alias)}</span>` : '';
+      const isOnline    = d.last_seen ? (now - new Date(d.last_seen).getTime()) / 1000 < 300 : false;
+      const alias       = aliases[d.device_id] || '';
+      const aliasBadge  = alias ? `<span class="device-alias">👤 ${escHtml(alias)}</span>` : '';
       const statusBadge = d.is_blocked
         ? '<span class="badge blocked"><span class="badge-dot"></span>BLOCKED</span>'
         : '<span class="badge active"><span class="badge-dot"></span>ACTIVE</span>';
-      const actionBtn = d.is_blocked
+      const actionBtn   = d.is_blocked
         ? `<button class="btn-unblock" onclick="unblockByIndex(${i})">✓ Unblock</button>`
         : `<button class="btn-block"   onclick="openBlockByIndex(${i})">✕ Block</button>`;
       const blockReasonHtml = d.is_blocked && d.block_reason
-        ? `<div style="font-size:10px;color:var(--red);margin-top:3px">💬 ${escHtml(d.block_reason)}</div>`
-        : '';
+        ? `<div style="font-size:10px;color:var(--red);margin-top:3px">💬 ${escHtml(d.block_reason)}</div>` : '';
 
       return '<tr>'
         + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
@@ -947,7 +983,7 @@
     const info  = document.getElementById('modal-device-info').textContent;
     const match = info.match(/\(([^)]+)\)$/);
     const deviceId = match ? match[1].trim() : pendingBlockId;
-    const reason = document.getElementById('block-reason-input').value.trim() || 'Admin কর্তৃক block করা হয়েছে';
+    const reason   = document.getElementById('block-reason-input').value.trim() || 'Admin কর্তৃক block করা হয়েছে';
     closeModal();
     blockDevice(deviceId, reason);
   }
@@ -983,14 +1019,21 @@
     }).catch(() => showToast('❌ Error হয়েছে', true));
   }
 
-  // ── LICENSE SYSTEM ────────────────────────────────────
+  // ══════════════════════════════════════════════════════
+  //  LICENSE SYSTEM
+  // ══════════════════════════════════════════════════════
+
   function generateKeys() {
-    const label      = document.getElementById('gen-label').value.trim();
-    const maxDevices = parseInt(document.getElementById('gen-max-devices').value);
-    const count      = Math.max(1, Math.min(50, parseInt(document.getElementById('gen-count').value) || 1));
+    const displayName  = document.getElementById('gen-display-name').value.trim();
+    const label        = document.getElementById('gen-label').value.trim();
+    const maxDevices   = parseInt(document.getElementById('gen-max-devices').value);
+    const count        = Math.max(1, Math.min(50, parseInt(document.getElementById('gen-count').value) || 1));
+    const validityRaw  = document.getElementById('gen-validity').value.trim();
+    const validityDays = validityRaw ? parseInt(validityRaw) : null;
+
     fetch(`${BASE}/api/admin/licenses/generate?password=${encodeURIComponent(adminPw)}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ label, max_devices: maxDevices, count })
+      body: JSON.stringify({ label, display_name: displayName, max_devices: maxDevices, count, validity_days: validityDays })
     }).then(r => r.json()).then(data => {
       if (data.error) { showToast('❌ ' + data.error, true); return; }
       lastGenKeys = data.keys || [];
@@ -1036,9 +1079,11 @@
     const total     = licenses.length;
     const activated = licenses.filter(l => l.bound_device).length;
     const unused    = total - activated;
+    const expired   = licenses.filter(l => l.days_left !== null && l.days_left !== undefined && l.days_left < 0).length;
     document.getElementById('lic-total').textContent     = total;
     document.getElementById('lic-activated').textContent = activated;
     document.getElementById('lic-unused').textContent    = unused;
+    document.getElementById('lic-expired').textContent   = expired;
   }
 
   let currentLicList = [];
@@ -1049,20 +1094,25 @@
 
     currentLicList = allLicenses.filter(l => {
       const matchQ = !q ||
-        (l.license_key  || '').toLowerCase().includes(q) ||
-        (l.label        || '').toLowerCase().includes(q) ||
-        (l.bound_device || '').toLowerCase().includes(q);
+        (l.license_key   || '').toLowerCase().includes(q) ||
+        (l.label         || '').toLowerCase().includes(q) ||
+        (l.display_name  || '').toLowerCase().includes(q) ||
+        (l.bound_device  || '').toLowerCase().includes(q);
       if (!matchQ) return false;
-      if (filter === 'active')   return l.is_active;
-      if (filter === 'inactive') return !l.is_active;
-      if (filter === 'bound')    return l.bound_device;
-      if (filter === 'unbound')  return !l.bound_device;
+      const isExpired  = l.days_left !== null && l.days_left !== undefined && l.days_left < 0;
+      const isExpiring = l.days_left !== null && l.days_left !== undefined && l.days_left >= 0 && l.days_left <= 7;
+      if (filter === 'active')    return l.is_active;
+      if (filter === 'inactive')  return !l.is_active;
+      if (filter === 'bound')     return l.bound_device;
+      if (filter === 'unbound')   return !l.bound_device;
+      if (filter === 'expired')   return isExpired;
+      if (filter === 'expiring')  return isExpiring;
       return true;
     });
 
     const tbody = document.getElementById('license-table-body');
     if (!currentLicList.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="8">কোনো license key পাওয়া যায়নি।</td></tr>';
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="9">কোনো license key পাওয়া যায়নি।</td></tr>';
       return;
     }
 
@@ -1073,27 +1123,103 @@
       const boundBadge = l.bound_device
         ? `<span class="badge bound" title="${escHtml(l.bound_device)}">🔗 BOUND</span><br><span style="font-size:9px;color:var(--muted)">${escHtml(l.bound_device.substring(0,12))}…</span>`
         : '<span class="badge unbound">⚪ UNUSED</span>';
+
+      // Validity pill
+      let validityHtml = '';
+      if (l.days_left === null || l.days_left === undefined) {
+        validityHtml = '<span class="days-pill lifetime">♾ Lifetime</span>';
+      } else if (l.days_left < 0) {
+        validityHtml = `<span class="days-pill expired">Expired</span>`;
+        if (l.expires_at) validityHtml += `<br><span style="font-size:9px;color:#666">${fmtDate(l.expires_at)}</span>`;
+      } else if (l.days_left <= 7) {
+        validityHtml = `<span class="days-pill warn">⚠ ${l.days_left}d left</span>`;
+        if (l.expires_at) validityHtml += `<br><span style="font-size:9px;color:var(--muted)">${fmtDate(l.expires_at)}</span>`;
+      } else {
+        validityHtml = `<span class="days-pill ok">✓ ${l.days_left}d left</span>`;
+        if (l.expires_at) validityHtml += `<br><span style="font-size:9px;color:var(--muted)">${fmtDate(l.expires_at)}</span>`;
+      }
+
+      const displayName = l.display_name || '—';
+
       const toggleBtn = l.is_active
-        ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, 0)">⛔ Deactivate</button>`
-        : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, 1)">✅ Activate</button>`;
+        ? `<button class="btn-toggle-off" onclick="toggleLicense(${i}, 0)">⛔ Off</button>`
+        : `<button class="btn-toggle-on"  onclick="toggleLicense(${i}, 1)">✅ On</button>`;
       const unbindBtn = l.bound_device
-        ? `<button class="btn-unbind" onclick="unbindLicense(${i})">🔓 Unbind</button>` : '';
+        ? `<button class="btn-unbind" onclick="unbindLicense(${i})">🔓</button>` : '';
 
       return '<tr>'
         + `<td style="color:var(--muted);font-size:11px">${i+1}</td>`
         + `<td><div class="key-text">${escHtml(l.license_key)}</div></td>`
-        + `<td style="color:var(--yellow);font-size:11px">${escHtml(l.label||'—')}</td>`
+        + `<td><span style="color:var(--yellow);font-size:12px;font-weight:700">${escHtml(displayName)}</span></td>`
+        + `<td style="color:var(--muted);font-size:11px">${escHtml(l.label||'—')}</td>`
+        + `<td>${validityHtml}</td>`
         + `<td>${boundBadge}</td>`
         + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.created_at)}</td>`
-        + `<td style="color:var(--muted);font-size:11px">${fmtTime(l.activated_at)}</td>`
         + `<td>${statusBadge}</td>`
         + `<td style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">`
+        + `<button class="btn-edit" onclick="openEditModal(${i})">✏️ Edit</button>`
         + toggleBtn + unbindBtn
         + `<button class="btn-copy-key" onclick="copyKeyDirect('${escHtml(l.license_key)}', this)" style="font-size:9px">📋</button>`
         + `<button class="btn-delete" onclick="deleteLicense(${i})">🗑</button>`
         + '</td></tr>';
     }).join('');
   }
+
+  // ── Edit License Modal ─────────────────────────────────
+  function openEditModal(i) {
+    const l = currentLicList[i]; if (!l) return;
+    pendingEditKey = l.license_key;
+    document.getElementById('edit-lic-key-info').textContent = 'Key: ' + l.license_key;
+    document.getElementById('edit-display-name').value = l.display_name || '';
+    document.getElementById('edit-label').value        = l.label        || '';
+    document.getElementById('edit-validity-days').value = l.validity_days || '';
+    // Set date input if expires_at present
+    if (l.expires_at) {
+      try {
+        const d = new Date(l.expires_at);
+        document.getElementById('edit-expires-at').value = d.toISOString().split('T')[0];
+      } catch { document.getElementById('edit-expires-at').value = ''; }
+    } else {
+      document.getElementById('edit-expires-at').value = '';
+    }
+    document.getElementById('edit-lic-modal').classList.add('open');
+    setTimeout(() => document.getElementById('edit-display-name').focus(), 100);
+  }
+  function closeEditModal() { document.getElementById('edit-lic-modal').classList.remove('open'); pendingEditKey = ''; }
+
+  function confirmEditLicense() {
+    if (!pendingEditKey) { closeEditModal(); return; }
+    const displayName  = document.getElementById('edit-display-name').value.trim();
+    const label        = document.getElementById('edit-label').value.trim();
+    const validityDays = document.getElementById('edit-validity-days').value.trim();
+    const expiresAt    = document.getElementById('edit-expires-at').value.trim();
+
+    fetch(`${BASE}/api/admin/licenses/update?password=${encodeURIComponent(adminPw)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        license_key:   pendingEditKey,
+        display_name:  displayName,
+        label:         label,
+        validity_days: validityDays ? parseInt(validityDays) : null,
+        expires_at:    expiresAt || null,
+      })
+    }).then(r => r.json()).then(d => {
+      if (d.error) { showToast('❌ ' + d.error, true); return; }
+      showToast('✅ License updated!');
+      closeEditModal();
+      loadLicenses();
+    }).catch(() => showToast('❌ Error হয়েছে', true));
+  }
+
+  document.getElementById('edit-lic-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
+  document.getElementById('block-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.getElementById('alias-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeAliasModal();
+  });
 
   function toggleLicense(i, newState) {
     const l = currentLicList[i]; if (!l) return;
@@ -1141,7 +1267,6 @@
   }
 
   // ══ ANNOUNCEMENT SYSTEM ═══════════════════════════════
-
   function updateAnnPreview() {
     const v = document.getElementById('ann-message').value;
     document.getElementById('ann-preview').textContent = v || 'এখানে আপনার message দেখাবে...';
@@ -1153,39 +1278,27 @@
       .then(data => {
         const on  = data.enabled === true;
         const msg = data.message || '';
-
         const statusEl = document.getElementById('ann-status-text');
         const badgeEl  = document.getElementById('ann-badge');
-
-        statusEl.textContent = on
-          ? '🟢 Banner চালু আছে — সব user দেখছে'
-          : '⚪ Banner বন্ধ আছে — app স্বাভাবিক';
+        statusEl.textContent = on ? '🟢 Banner চালু আছে — সব user দেখছে' : '⚪ Banner বন্ধ আছে — app স্বাভাবিক';
         statusEl.style.color = on ? 'var(--green)' : 'var(--muted)';
-
-        badgeEl.textContent       = on ? 'ON' : 'OFF';
-        badgeEl.style.background  = on ? '#052e16' : '#1a1a1a';
-        badgeEl.style.color       = on ? 'var(--green)' : 'var(--muted)';
-        badgeEl.style.border      = on ? '1px solid #166534' : '1px solid #2a2a2a';
-
+        badgeEl.textContent      = on ? 'ON' : 'OFF';
+        badgeEl.style.background = on ? '#052e16' : '#1a1a1a';
+        badgeEl.style.color      = on ? 'var(--green)' : 'var(--muted)';
+        badgeEl.style.border     = on ? '1px solid #166534' : '1px solid #2a2a2a';
         if (msg) {
           document.getElementById('ann-message').value = msg;
           document.getElementById('ann-preview').textContent = msg;
         }
-      })
-      .catch(() => {});
+      }).catch(() => {});
   }
 
   function saveAnnouncement(enable) {
     const message = document.getElementById('ann-message').value.trim();
-    if (enable && !message) {
-      showToast('❌ Message লিখুন আগে!', true);
-      document.getElementById('ann-message').focus();
-      return;
-    }
+    if (enable && !message) { showToast('❌ Message লিখুন আগে!', true); document.getElementById('ann-message').focus(); return; }
     fetch(`${BASE}/api/admin/announcement?password=${encodeURIComponent(adminPw)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ enabled: enable, message: message })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled: enable, message })
     }).then(r => r.json()).then(d => {
       if (d.error) { showToast('❌ ' + d.error, true); return; }
       showToast(enable ? '✅ Banner চালু! সব user দেখবে।' : '⛔ Banner বন্ধ করা হয়েছে।');
@@ -1196,9 +1309,14 @@
   // ── HELPERS ───────────────────────────────────────────
   function fmtTime(iso) {
     if (!iso) return '—';
-    try {
-      return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
-    } catch { return iso; }
+    try { return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }); }
+    catch { return iso; }
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    try { return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }); }
+    catch { return iso; }
   }
 
   function fmtAgo(iso) {
