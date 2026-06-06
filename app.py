@@ -186,23 +186,18 @@ def api_latest():
         scraper_ok  = status_row["status"] == "ok"
         scraper_msg = status_row["message"]
     return jsonify({
-        "jobs":       [dict(r) for r in rows],
-        "scraper_ok": scraper_ok,
+        "jobs":        [dict(r) for r in rows],
+        "scraper_ok":  scraper_ok,
         "scraper_msg": scraper_msg
     })
 
 
 # ══════════════════════════════════════════════════════════
-#  ✅ NEW: USER INFO API — called by the desktop app
+#  USER INFO API
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/user-info", methods=["POST"])
 def user_info():
-    """
-    Desktop app sends device_id + license_key.
-    Returns display_name, days remaining, total_submitted (placeholder),
-    and whether the license is still valid.
-    """
     data        = request.get_json(silent=True) or {}
     device_id   = str(data.get("device_id",   "") or "").strip()
     license_key = str(data.get("license_key", "") or "").strip()
@@ -224,13 +219,12 @@ def user_info():
 
     remaining = days_remaining(row["expires_at"])
 
-    # If expiry is set and expired
     if remaining is not None and remaining < 0:
         return jsonify({
-            "ok":          False,
-            "expired":     True,
-            "message":     "Your license has expired. Please contact admin.",
-            "days_left":   0,
+            "ok":           False,
+            "expired":      True,
+            "message":      "Your license has expired. Please contact admin.",
+            "days_left":    0,
             "display_name": row["display_name"] or row["label"] or "User",
         })
 
@@ -238,14 +232,14 @@ def user_info():
         "ok":           True,
         "expired":      False,
         "display_name": row["display_name"] or row["label"] or "User",
-        "days_left":    remaining,          # None = lifetime, int = days left
+        "days_left":    remaining,
         "label":        row["label"] or "",
         "expires_at":   row["expires_at"] or None,
     })
 
 
 # ══════════════════════════════════════════════════════════
-#  EXISTING ROUTES
+#  SCRAPER STATUS
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/scraper-status", methods=["POST"])
@@ -300,7 +294,7 @@ def save_job():
 
 
 # ══════════════════════════════════════════════════════════
-#  DEVICE MANAGEMENT ROUTES
+#  DEVICE MANAGEMENT
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/heartbeat", methods=["POST"])
@@ -350,7 +344,6 @@ def heartbeat():
 
     if is_blocked:
         return jsonify({"ok": False, "blocked": True, "reason": block_reason or "আপনার device block করা হয়েছে।"})
-
     return jsonify({"ok": True, "blocked": False})
 
 
@@ -361,13 +354,11 @@ def check_device(device_id):
         "SELECT is_blocked, block_reason FROM devices WHERE device_id=?", (device_id,)
     ).fetchone()
     conn.close()
-
     if not row:
         return jsonify({"ok": True, "blocked": False})
     if row["is_blocked"]:
         return jsonify({
-            "ok": False,
-            "blocked": True,
+            "ok": False, "blocked": True,
             "reason": row["block_reason"] or "আপনার device block করা হয়েছে।"
         })
     return jsonify({"ok": True, "blocked": False})
@@ -406,28 +397,20 @@ def license_verify():
     if bound and bound != device_id:
         conn.close()
         return jsonify({
-            "ok":      False,
-            "valid":   False,
+            "ok": False, "valid": False,
             "message": "❌ This license key is already activated on another device! Contact admin."
         })
 
-    # Check expiry at activation time too
     remaining = days_remaining(row["expires_at"])
     if remaining is not None and remaining < 0:
         conn.close()
-        return jsonify({
-            "ok":    False,
-            "valid": False,
-            "message": "❌ This license key has expired! Contact admin."
-        })
+        return jsonify({"ok": False, "valid": False, "message": "❌ This license key has expired! Contact admin."})
 
     if not bound:
-        # First activation — set expires_at based on validity_days
-        expires_at = None
+        expires_at    = None
         validity_days = row["validity_days"]
         if validity_days:
             expires_at = (datetime.now() + timedelta(days=validity_days)).isoformat()
-
         conn.execute(
             "UPDATE license_keys SET bound_device=?, activated_at=?, expires_at=COALESCE(expires_at, ?) WHERE license_key=?",
             (device_id, now, expires_at, license_key)
@@ -474,9 +457,7 @@ def admin_get_licenses():
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     conn = get_db()
-    rows = conn.execute(
-        "SELECT * FROM license_keys ORDER BY created_at DESC"
-    ).fetchall()
+    rows = conn.execute("SELECT * FROM license_keys ORDER BY created_at DESC").fetchall()
     conn.close()
     result = []
     for r in rows:
@@ -495,18 +476,15 @@ def admin_generate_license():
     display_name  = str(data.get("display_name", "") or "").strip()
     max_devices   = int(data.get("max_devices", 1))
     count         = max(1, min(int(data.get("count", 1)), 50))
-    validity_days = data.get("validity_days")   # None = lifetime
+    validity_days = data.get("validity_days")
     expires_at    = None
 
     if validity_days:
         try:
             validity_days = int(validity_days)
-            # expires_at is set at activation time (not generation time)
-            # But admin can also pre-set it from a fixed date
         except:
             validity_days = None
 
-    # Check if admin passed a fixed expiry date instead
     fixed_expires = str(data.get("expires_at", "") or "").strip()
     if fixed_expires:
         try:
@@ -532,7 +510,7 @@ def admin_generate_license():
         generated.append(key)
     conn.commit()
     conn.close()
-    print(f"[LICENSE] Generated {count} key(s) — label: {label or 'none'}, validity: {validity_days or 'lifetime'}")
+    print(f"[LICENSE] Generated {count} key(s) — label:{label or 'none'} validity:{validity_days or 'lifetime'}")
     return jsonify({"ok": True, "keys": generated})
 
 
@@ -546,10 +524,7 @@ def admin_toggle_license():
     if not license_key:
         return jsonify({"error": "license_key required"}), 400
     conn = get_db()
-    conn.execute(
-        "UPDATE license_keys SET is_active=? WHERE license_key=?",
-        (is_active, license_key)
-    )
+    conn.execute("UPDATE license_keys SET is_active=? WHERE license_key=?", (is_active, license_key))
     conn.commit()
     conn.close()
     return jsonify({"ok": True})
@@ -557,19 +532,17 @@ def admin_toggle_license():
 
 @app.route("/api/admin/licenses/update", methods=["POST"])
 def admin_update_license():
-    """Update display_name, label, validity_days, or expires_at of a key."""
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     data = request.get_json(silent=True) or {}
-    license_key  = str(data.get("license_key", "") or "").strip()
-    display_name = str(data.get("display_name", "") or "").strip()
-    label        = str(data.get("label", "") or "").strip()
-    expires_at   = str(data.get("expires_at", "") or "").strip() or None
+    license_key   = str(data.get("license_key",  "") or "").strip()
+    display_name  = str(data.get("display_name", "") or "").strip()
+    label         = str(data.get("label",        "") or "").strip()
+    expires_at    = str(data.get("expires_at",   "") or "").strip() or None
     validity_days = data.get("validity_days")
 
     if not license_key:
         return jsonify({"error": "license_key required"}), 400
-
     if validity_days is not None:
         try:
             validity_days = int(validity_days)
@@ -607,6 +580,61 @@ def admin_delete_license():
 
 
 # ══════════════════════════════════════════════════════════
+#  ✅ NEW: RESTORE ENDPOINT (localStorage backup → server)
+# ══════════════════════════════════════════════════════════
+
+@app.route("/api/admin/licenses/restore", methods=["POST"])
+def admin_restore_license():
+    """Restore a single license from browser localStorage backup."""
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json(silent=True) or {}
+
+    license_key   = str(data.get("license_key",  "") or "").strip()
+    label         = str(data.get("label",         "") or "").strip()
+    display_name  = str(data.get("display_name",  "") or "").strip()
+    max_devices   = int(data.get("max_devices",   1)  or 1)
+    bound_device  = str(data.get("bound_device",  "") or "").strip() or None
+    created_at    = str(data.get("created_at",    "") or "").strip() or datetime.now().isoformat()
+    activated_at  = str(data.get("activated_at",  "") or "").strip() or None
+    expires_at    = str(data.get("expires_at",    "") or "").strip() or None
+    validity_days = data.get("validity_days")
+    is_active     = int(data.get("is_active", 1))
+
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+
+    if validity_days is not None:
+        try:
+            validity_days = int(validity_days)
+        except:
+            validity_days = None
+
+    conn = get_db()
+    existing = conn.execute(
+        "SELECT 1 FROM license_keys WHERE license_key=?", (license_key,)
+    ).fetchone()
+
+    if existing:
+        conn.close()
+        return jsonify({"ok": True, "skipped": True, "message": "Already exists"})
+
+    conn.execute(
+        """INSERT INTO license_keys
+           (license_key, label, display_name, max_devices, bound_device,
+            created_at, activated_at, expires_at, validity_days, is_active)
+           VALUES (?,?,?,?,?,?,?,?,?,?)""",
+        (license_key, label, display_name, max_devices, bound_device,
+         created_at, activated_at, expires_at, validity_days, is_active)
+    )
+    conn.commit()
+    conn.close()
+    print(f"[RESTORE] Key restored: {license_key[:24]}... label={label}")
+    return jsonify({"ok": True, "restored": True})
+
+
+# ══════════════════════════════════════════════════════════
 #  ANNOUNCEMENT API
 # ══════════════════════════════════════════════════════════
 
@@ -617,10 +645,7 @@ def get_announcement():
     conn.close()
     if not row:
         return jsonify({"enabled": False, "message": ""})
-    return jsonify({
-        "enabled": bool(row["enabled"]),
-        "message": row["message"] or ""
-    })
+    return jsonify({"enabled": bool(row["enabled"]), "message": row["message"] or ""})
 
 
 @app.route("/api/admin/announcement", methods=["POST"])
@@ -643,7 +668,7 @@ def set_announcement():
 
 
 # ══════════════════════════════════════════════════════════
-#  ADMIN PANEL ROUTE
+#  ADMIN PANEL & DEVICE ROUTES
 # ══════════════════════════════════════════════════════════
 
 @app.route("/admin")
@@ -656,9 +681,7 @@ def admin_get_devices():
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     conn = get_db()
-    rows = conn.execute(
-        "SELECT * FROM devices ORDER BY last_seen DESC"
-    ).fetchall()
+    rows = conn.execute("SELECT * FROM devices ORDER BY last_seen DESC").fetchall()
     conn.close()
     return jsonify([dict(r) for r in rows])
 
@@ -673,10 +696,7 @@ def admin_block():
     if not device_id:
         return jsonify({"error": "device_id required"}), 400
     conn = get_db()
-    conn.execute(
-        "UPDATE devices SET is_blocked=1, block_reason=? WHERE device_id=?",
-        (reason, device_id)
-    )
+    conn.execute("UPDATE devices SET is_blocked=1, block_reason=? WHERE device_id=?", (reason, device_id))
     conn.commit()
     conn.close()
     return jsonify({"ok": True, "blocked": True})
@@ -691,10 +711,7 @@ def admin_unblock():
     if not device_id:
         return jsonify({"error": "device_id required"}), 400
     conn = get_db()
-    conn.execute(
-        "UPDATE devices SET is_blocked=0, block_reason='' WHERE device_id=?",
-        (device_id,)
-    )
+    conn.execute("UPDATE devices SET is_blocked=0, block_reason='' WHERE device_id=?", (device_id,))
     conn.commit()
     conn.close()
     return jsonify({"ok": True, "blocked": False})
