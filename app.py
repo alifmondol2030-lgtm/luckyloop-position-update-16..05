@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import secrets
 import string
@@ -53,17 +53,19 @@ def init_db():
     """)
     c.execute("""
         CREATE TABLE IF NOT EXISTS license_keys (
-            key_id       INTEGER PRIMARY KEY AUTOINCREMENT,
-            license_key  TEXT    UNIQUE NOT NULL,
-            label        TEXT,
-            max_devices  INTEGER DEFAULT 1,
-            bound_device TEXT,
-            created_at   TEXT,
-            activated_at TEXT,
-            is_active    INTEGER DEFAULT 1
+            key_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            license_key    TEXT    UNIQUE NOT NULL,
+            label          TEXT,
+            display_name   TEXT    DEFAULT '',
+            max_devices    INTEGER DEFAULT 1,
+            bound_device   TEXT,
+            created_at     TEXT,
+            activated_at   TEXT,
+            expires_at     TEXT    DEFAULT NULL,
+            validity_days  INTEGER DEFAULT NULL,
+            is_active      INTEGER DEFAULT 1
         )
     """)
-    # ══ NEW: announcement table ══
     c.execute("""
         CREATE TABLE IF NOT EXISTS announcement (
             id         INTEGER PRIMARY KEY,
@@ -76,9 +78,20 @@ def init_db():
         INSERT OR IGNORE INTO announcement (id, enabled, message, updated_at)
         VALUES (1, 0, '', '')
     """)
+
+    # ── Migrate existing tables if columns missing ──
     cols = [row[1] for row in c.execute("PRAGMA table_info(jobs)")]
     if "updated_at" not in cols:
         c.execute("ALTER TABLE jobs ADD COLUMN updated_at TEXT")
+
+    lic_cols = [row[1] for row in c.execute("PRAGMA table_info(license_keys)")]
+    if "expires_at" not in lic_cols:
+        c.execute("ALTER TABLE license_keys ADD COLUMN expires_at TEXT DEFAULT NULL")
+    if "validity_days" not in lic_cols:
+        c.execute("ALTER TABLE license_keys ADD COLUMN validity_days INTEGER DEFAULT NULL")
+    if "display_name" not in lic_cols:
+        c.execute("ALTER TABLE license_keys ADD COLUMN display_name TEXT DEFAULT ''")
+
     conn.commit()
     conn.close()
     print("[DB] Ready")
@@ -104,6 +117,18 @@ def generate_license_key(label=""):
     suffix = ''.join(secrets.choice(chars) for _ in range(16))
     prefix = label.replace(" ", "-")[:12].upper() if label else "USER"
     return f"LL-{prefix}-{suffix}"
+
+
+def days_remaining(expires_at_str):
+    """Return days remaining until expiry. None if no expiry set. Negative if expired."""
+    if not expires_at_str:
+        return None
+    try:
+        expires = datetime.fromisoformat(expires_at_str)
+        delta = expires - datetime.now()
+        return delta.days
+    except:
+        return None
 
 
 # ══════════════════════════════════════════════════════════
@@ -164,6 +189,58 @@ def api_latest():
         "jobs":       [dict(r) for r in rows],
         "scraper_ok": scraper_ok,
         "scraper_msg": scraper_msg
+    })
+
+
+# ══════════════════════════════════════════════════════════
+#  ✅ NEW: USER INFO API — called by the desktop app
+# ══════════════════════════════════════════════════════════
+
+@app.route("/api/user-info", methods=["POST"])
+def user_info():
+    """
+    Desktop app sends device_id + license_key.
+    Returns display_name, days remaining, total_submitted (placeholder),
+    and whether the license is still valid.
+    """
+    data        = request.get_json(silent=True) or {}
+    device_id   = str(data.get("device_id",   "") or "").strip()
+    license_key = str(data.get("license_key", "") or "").strip()
+
+    if not license_key:
+        return jsonify({"ok": False, "expired": False, "message": "No license key"}), 400
+
+    conn = get_db()
+    row = conn.execute(
+        "SELECT * FROM license_keys WHERE license_key=?", (license_key,)
+    ).fetchone()
+    conn.close()
+
+    if not row:
+        return jsonify({"ok": False, "expired": True, "message": "License not found"})
+
+    if not row["is_active"]:
+        return jsonify({"ok": False, "expired": True, "message": "License deactivated"})
+
+    remaining = days_remaining(row["expires_at"])
+
+    # If expiry is set and expired
+    if remaining is not None and remaining < 0:
+        return jsonify({
+            "ok":          False,
+            "expired":     True,
+            "message":     "Your license has expired. Please contact admin.",
+            "days_left":   0,
+            "display_name": row["display_name"] or row["label"] or "User",
+        })
+
+    return jsonify({
+        "ok":           True,
+        "expired":      False,
+        "display_name": row["display_name"] or row["label"] or "User",
+        "days_left":    remaining,          # None = lifetime, int = days left
+        "label":        row["label"] or "",
+        "expires_at":   row["expires_at"] or None,
     })
 
 
@@ -334,21 +411,39 @@ def license_verify():
             "message": "❌ This license key is already activated on another device! Contact admin."
         })
 
+    # Check expiry at activation time too
+    remaining = days_remaining(row["expires_at"])
+    if remaining is not None and remaining < 0:
+        conn.close()
+        return jsonify({
+            "ok":    False,
+            "valid": False,
+            "message": "❌ This license key has expired! Contact admin."
+        })
+
     if not bound:
+        # First activation — set expires_at based on validity_days
+        expires_at = None
+        validity_days = row["validity_days"]
+        if validity_days:
+            expires_at = (datetime.now() + timedelta(days=validity_days)).isoformat()
+
         conn.execute(
-            "UPDATE license_keys SET bound_device=?, activated_at=? WHERE license_key=?",
-            (device_id, now, license_key)
+            "UPDATE license_keys SET bound_device=?, activated_at=?, expires_at=COALESCE(expires_at, ?) WHERE license_key=?",
+            (device_id, now, expires_at, license_key)
         )
         conn.commit()
 
-    label = row["label"] or "License Key Active"
+    label        = row["label"] or "License Key Active"
+    display_name = row["display_name"] or label
     conn.close()
 
     return jsonify({
         "ok":           True,
         "valid":        True,
         "message":      f"✅ License Activated! ({label})",
-        "license_type": label
+        "license_type": label,
+        "display_name": display_name,
     })
 
 
@@ -383,7 +478,12 @@ def admin_get_licenses():
         "SELECT * FROM license_keys ORDER BY created_at DESC"
     ).fetchall()
     conn.close()
-    return jsonify([dict(r) for r in rows])
+    result = []
+    for r in rows:
+        d = dict(r)
+        d["days_left"] = days_remaining(r["expires_at"])
+        result.append(d)
+    return jsonify(result)
 
 
 @app.route("/api/admin/licenses/generate", methods=["POST"])
@@ -391,9 +491,30 @@ def admin_generate_license():
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     data = request.get_json(silent=True) or {}
-    label       = str(data.get("label", "") or "").strip()
-    max_devices = int(data.get("max_devices", 1))
-    count       = max(1, min(int(data.get("count", 1)), 50))
+    label         = str(data.get("label", "") or "").strip()
+    display_name  = str(data.get("display_name", "") or "").strip()
+    max_devices   = int(data.get("max_devices", 1))
+    count         = max(1, min(int(data.get("count", 1)), 50))
+    validity_days = data.get("validity_days")   # None = lifetime
+    expires_at    = None
+
+    if validity_days:
+        try:
+            validity_days = int(validity_days)
+            # expires_at is set at activation time (not generation time)
+            # But admin can also pre-set it from a fixed date
+        except:
+            validity_days = None
+
+    # Check if admin passed a fixed expiry date instead
+    fixed_expires = str(data.get("expires_at", "") or "").strip()
+    if fixed_expires:
+        try:
+            datetime.fromisoformat(fixed_expires)
+            expires_at    = fixed_expires
+            validity_days = None
+        except:
+            pass
 
     now  = datetime.now().isoformat()
     conn = get_db()
@@ -403,13 +524,15 @@ def admin_generate_license():
         while conn.execute("SELECT 1 FROM license_keys WHERE license_key=?", (key,)).fetchone():
             key = generate_license_key(label)
         conn.execute(
-            "INSERT INTO license_keys (license_key, label, max_devices, created_at, is_active) VALUES (?,?,?,?,1)",
-            (key, label, max_devices, now)
+            """INSERT INTO license_keys
+               (license_key, label, display_name, max_devices, validity_days, expires_at, created_at, is_active)
+               VALUES (?,?,?,?,?,?,?,1)""",
+            (key, label, display_name, max_devices, validity_days, expires_at, now)
         )
         generated.append(key)
     conn.commit()
     conn.close()
-    print(f"[LICENSE] Generated {count} key(s) — label: {label or 'none'}")
+    print(f"[LICENSE] Generated {count} key(s) — label: {label or 'none'}, validity: {validity_days or 'lifetime'}")
     return jsonify({"ok": True, "keys": generated})
 
 
@@ -432,6 +555,42 @@ def admin_toggle_license():
     return jsonify({"ok": True})
 
 
+@app.route("/api/admin/licenses/update", methods=["POST"])
+def admin_update_license():
+    """Update display_name, label, validity_days, or expires_at of a key."""
+    if not check_admin(request):
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    license_key  = str(data.get("license_key", "") or "").strip()
+    display_name = str(data.get("display_name", "") or "").strip()
+    label        = str(data.get("label", "") or "").strip()
+    expires_at   = str(data.get("expires_at", "") or "").strip() or None
+    validity_days = data.get("validity_days")
+
+    if not license_key:
+        return jsonify({"error": "license_key required"}), 400
+
+    if validity_days is not None:
+        try:
+            validity_days = int(validity_days)
+        except:
+            validity_days = None
+
+    conn = get_db()
+    conn.execute(
+        """UPDATE license_keys SET
+            display_name  = ?,
+            label         = CASE WHEN ? != '' THEN ? ELSE label END,
+            expires_at    = ?,
+            validity_days = ?
+           WHERE license_key = ?""",
+        (display_name, label, label, expires_at, validity_days, license_key)
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True})
+
+
 @app.route("/api/admin/licenses/delete", methods=["POST"])
 def admin_delete_license():
     if not check_admin(request):
@@ -448,12 +607,11 @@ def admin_delete_license():
 
 
 # ══════════════════════════════════════════════════════════
-#  ✅ NEW: ANNOUNCEMENT API
+#  ANNOUNCEMENT API
 # ══════════════════════════════════════════════════════════
 
 @app.route("/api/announcement", methods=["GET"])
 def get_announcement():
-    """Public endpoint — app polls this every refresh."""
     conn = get_db()
     row = conn.execute("SELECT * FROM announcement WHERE id=1").fetchone()
     conn.close()
@@ -467,7 +625,6 @@ def get_announcement():
 
 @app.route("/api/admin/announcement", methods=["POST"])
 def set_announcement():
-    """Admin endpoint — save message and toggle on/off."""
     if not check_admin(request):
         return jsonify({"error": "Unauthorized"}), 401
     data    = request.get_json(silent=True) or {}
